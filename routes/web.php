@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Models\Authentification;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,47 +15,19 @@ use App\Models\Authentification;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//routes concernant authentification
+// 1er paramètre : chemin de l'URL, 2ème paramètre : la vue à afficher
+Route::get('/', 'CompteController@afficherFormulaire');
+Route::post('/', 'CompteController@traiterFormulaire');
 
-Route::get('/a-propos', function () {
-    return view('a-propos');
-});
-
-Route::get('/bonjour/{nom}', function () {
-    return view('bonjour', [
-        'prenom' => request('nom')
-    ]);
-});
 // Route qui répond aux requêtes de type POST
-Route::get('/inscription', function () {
-    return view('inscription');
-});
+Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
 // Route qui répond aux requêtes de type POST
-Route::post('/inscription', function () {
-    // on récupère toute la requête et on appelle la fonction validate pour valider les données
-    request()->validate([
-        // tableau de règles
-        'user' => ['required'],
-        'password' => ['required', 'confirmed', 'min:3'],
-        'password_confirmation' => ['required'],
-    ]);
-    // fonction create de Eloquent qui permet de faire un new et un save
-    $authentification = Authentification::create([
-        'user' => request('user'),
-        // bcrypt : fonction de hashing | mot de passe hashé
-        'password' => bcrypt(request('password'))
-    ]);
+Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
 
-    return "Nous avons reçu votre e-mail qui est " . request('email') . " et votre mot de passe est " . request('password');
-});
+Route::get('/utilisateurs', 'CompteController@liste');
 
-Route::get('/utilisateurs', function () {
-    // fonction Eloquent qui récupère tous les Authentifications (utilisateurs)
-    $authentifications = Authentification::all();
+//route concernant authentification connecté
+Route::get('/mon-compte', 'CompteController@accueil');
 
-    return view('utilisateurs', [
-        'authentifications' => $authentifications,
-    ]);
-});
+Route::get('/deconnexion', 'CompteController@deconnexion');
