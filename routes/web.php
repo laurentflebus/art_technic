@@ -27,7 +27,20 @@ Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
 
 Route::get('/utilisateurs', 'CompteController@liste');
 
-//route concernant authentification connecté
-Route::get('/mon-compte', 'CompteController@accueil');
+// Groupe de routes 
+Route::group([
+    'middleware' => 'App\Http\Middleware\Auth',
+], function () {
+    //routes concernant authentification connecté
+    Route::get('/mon-compte', 'CompteController@accueil');
+    Route::get('/deconnexion', 'CompteController@deconnexion');
+    Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
+});
 
-Route::get('/deconnexion', 'CompteController@deconnexion');
+
+
+
+
+
+// route générique
+//Route::get('/{nomclient}', 'ClientController@voir');

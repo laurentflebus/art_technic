@@ -8,14 +8,20 @@ class CompteController extends Controller
 {
     public function accueil() 
     {
-        // si l'utilisateur n'est pas connecté / est un invité
-        if (auth()->guest()) {
-            return redirect('/')->withErrors([
-                'user' => 'Vous devez être connecté pour voir cette page.',
-            ]);
-        }
         return view('/mon-compte');
     }
+
+    public function deconnexion()
+    {
+
+        flash('Vous êtes deconnecté.')->success();
+
+        // Déconnecter l'utilisateur
+        auth()->logout();
+
+        return redirect('/');
+    }
+    
     // afficher le formulaire d'inscription
     public function visualiserFormulaire()
     {
@@ -77,6 +83,7 @@ class CompteController extends Controller
         // Rediriger vers la page mon-compte si connexion réussie
         if($resultat)
         {
+            flash('Vous êtes connecté.')->success();
             return redirect('/mon-compte');
         }
         // Sinon retour vers la page précédente et renvoit également les données qui ont été envoyées par l'utilisateur
@@ -85,12 +92,22 @@ class CompteController extends Controller
         ]);
     }
 
-    public function deconnexion()
+    public function modificationMotDePasse()
     {
-        // Déconnecter l'utilisateur
-        auth()->logout();
+        request()->validate([
+            'password' => ['required', 'confirmed', 'min:3'],
+            'password_confirmation' => ['required'],
+        ]);
 
-        return redirect('/');
+        // 
+        auth()->user()->update([
+            // nom colonne bd | name input formulaire, requête client
+            'password' => bcrypt(request('password')),
+        ]);
+
+        flash('Votre mot de passe a bien été mis à jour.')->success();
+
+        return redirect('/mon-compte');
     }
     
 }

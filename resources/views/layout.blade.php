@@ -11,8 +11,11 @@
     <body>
         <div class="container-fluid">
             <div class="container">
+                @include('flash::message')
+
                 {{-- directive yield --}}
                 @yield('contenu') 
+                
             </div> 
         </div>   
     </body>
