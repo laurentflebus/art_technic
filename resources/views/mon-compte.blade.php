@@ -6,7 +6,6 @@
 
         <p>Vous êtes bien connecté.</p>
 
-        <a href="/deconnexion" class="btn btn-primary">Déconnexion</a>
     </div>
 
     {{-- Formulaire de modification de mot de passe --}}
