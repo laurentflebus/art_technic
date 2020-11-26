@@ -18,12 +18,8 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">ART TECHNIC</div>
                 <div class="list-group list-group-flush">
-                <a href="/" class="list-group-item list-group-item-action bg-light">Accueil</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+                <a href="/mon-compte" class="list-group-item list-group-item-action bg-light">Accueil</a>
+                
                 </div>
             </div>
 
@@ -39,21 +35,18 @@
                     <div id="navbarSupportedContent" class="collapse navbar-collapse">
                         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                             {{-- Si l'utilisateur est connecté --}}
-                            @if (auth()->check())
-                                <li class="nav-item {{ request()->is('mon-compte') ? 'active' : '' }}">
-                                    <a class="nav-link" href="/mon-compte">Mon compte</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/deconnexion">Déconnexion</a>
-                                </li> 
+                            {{-- @if (auth()->check()) --}}
+                            @auth
+                                @include('partials.nav-item', ['lien' => 'mon-compte', 'texte' => 'Mon compte'])
+                                
+                                @include('partials.nav-item', ['lien' => 'deconnexion', 'texte' => 'Deconnexion'])
+                               
                             @else
-                                <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
-                                    <a class="nav-link" href="/">Connexion</a>
-                                </li>
-                                <li class="nav-item {{ request()->is('inscriptionAuthentification') ? 'active' : '' }}">
-                                    <a class="nav-link" href="/inscriptionAuthentification">Inscription</a>
-                                </li> 
-                            @endif
+                                @include('partials.nav-item', ['lien' => '/', 'texte' => 'Connexion'])
+
+                                @include('partials.nav-item', ['lien' => 'inscriptionAuthentification', 'texte' => 'Inscription'])
+                                
+                            @endauth
                         </ul>
                             
                     </div>

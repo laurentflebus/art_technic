@@ -2,8 +2,8 @@
 
 @section('contenu')
     <form action="/inscription" method="post">
-        <fieldset>
-            <legend>Formulaire d'inscription utilisateur</legend>
+        <br>
+            
         {{-- Ajoute un input de type hidden avec un nombre aléatoire généré qui permet à Laravel
              de vérifier que le formulaire est bien envoyé depuis le site --}}
         {{ csrf_field() }}
@@ -37,7 +37,7 @@
         </div>
         
         <button type="submit" class="btn btn-primary">Valider</button>
-        </fieldset>
+        
     </form>
 
 @endsection

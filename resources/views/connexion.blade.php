@@ -2,8 +2,7 @@
 
 @section('contenu')
     <form action="/" method="post">
-        <fieldset>
-            <legend>Formulaire de connexion</legend>
+        <br>
         {{-- Ajoute un input de type hidden avec un nombre aléatoire généré qui permet à Laravel
              de vérifier que le formulaire est bien envoyé depuis le site --}}
         {{ csrf_field() }}
@@ -29,7 +28,7 @@
         
         
         <button type="submit" class="btn btn-primary">Se connecter</button>
-        </fieldset>
+        
     </form>
 
 @endsection
