@@ -39,12 +39,18 @@
                             @auth
                                 @include('partials.nav-item', ['lien' => 'mon-compte', 'texte' => 'Mon compte'])
                                 
+                                {{-- Si administrateur, affiche le lien Inscription --}}
+                                @if (auth()->user()->admin)
+                                    @include('partials.nav-item', ['lien' => 'inscriptionAuthentification', 'texte' => 'Inscription'])
+                                @endif
+                                
+                                
                                 @include('partials.nav-item', ['lien' => 'deconnexion', 'texte' => 'Deconnexion'])
                                
                             @else
                                 @include('partials.nav-item', ['lien' => '/', 'texte' => 'Connexion'])
 
-                                @include('partials.nav-item', ['lien' => 'inscriptionAuthentification', 'texte' => 'Inscription'])
+                                
                                 
                             @endauth
                         </ul>

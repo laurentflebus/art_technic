@@ -12,7 +12,7 @@ class Authentification extends Model implements Authenticatable // classe author
     // classe basique pour implémenter plus facilement les 6 méthodes abstraites
     use BasicAuthenticatable;
 
-    protected $fillable = ['user', 'password'];
+    protected $fillable = ['user', 'password', 'admin'];
 }
 
 

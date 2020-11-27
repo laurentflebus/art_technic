@@ -20,10 +20,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'CompteController@afficherFormulaire');
 Route::post('/', 'CompteController@traiterFormulaire');
 
-// Route qui répond aux requêtes de type POST
-Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
-// Route qui répond aux requêtes de type POST
-Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
+Route::group([
+    'middleware' => 'App\Http\Middleware\Admin',
+], function () {
+    // Route qui répond aux requêtes de type POST
+    Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
+    // Route qui répond aux requêtes de type POST
+    Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
+});
+
 
 Route::get('/utilisateurs', 'CompteController@liste');
 

@@ -4,7 +4,7 @@
     <div class="container">
         <h1 class="display-1">Mon compte</h1>
 
-    <p>Vous êtes bien connecté {{ auth()->user()->user }}</p>
+    <p>Vous êtes bien connecté {{ auth()->user()->user }} {{ boolval(auth()->user()->admin) }}</p>
 
     </div>
 

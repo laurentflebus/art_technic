@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('contenu')
-    <form action="/inscription" method="post">
+    <form action="/inscriptionAuthentification" method="post">
         <br>
             
         {{-- Ajoute un input de type hidden avec un nombre aléatoire généré qui permet à Laravel
@@ -9,7 +9,7 @@
         {{ csrf_field() }}
         
         <div class="form-group">
-            <label for="user">Utilisateur</label>
+            <label for="user">Nom d'utilisateur</label>
             <input type="text" class="form-control" id="user" name="user" value="{{ old('user') }}">
             {{-- variable $errors  contient toutes les erreurs --}}
             
@@ -35,7 +35,29 @@
                 <p class="alert alert-danger">{{ $errors->first('password_confirmation') }}</p>
             @endif
         </div>
-        
+
+        <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">Type de compte</legend>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="admin" value="0" checked>
+                        <label class="form-check-label" for="gridRadios1">Utilisateur</label>
+                    </div>
+                    @if ($errors->has('utilisateur'))
+                        <p class="alert alert-danger">{{ $errors->first('admin') }}</p>
+                    @endif
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="admin" value="1">
+                        <label class="form-check-label" for="gridRadios2">Administrateur</label>
+                    </div>
+                    @if ($errors->has('admin'))
+                        <p class="alert alert-danger">{{ $errors->first('admin') }}</p>
+                    @endif
+                </div>
+            </div>
+        </fieldset>
+
         <button type="submit" class="btn btn-primary">Valider</button>
         
     </form>

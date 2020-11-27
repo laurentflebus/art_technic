@@ -43,10 +43,11 @@ class CompteController extends Controller
         $authentification = Authentification::create([
             'user' => request('user'),
             // bcrypt : fonction de hashing | mot de passe hashé
-            'password' => bcrypt(request('password'))
+            'password' => bcrypt(request('password')),
+            'admin' => request('admin')
         ]);
-
-        return "Nous avons reçu votre e-mail qui est " . request('email') . " et votre mot de passe est " . request('password');
+        
+        return redirect('/');
     }
 
     public function liste()
