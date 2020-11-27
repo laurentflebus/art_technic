@@ -16,7 +16,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        // Si l'utilisateur est null
+        // Si l'utilisateur est null, lance une erreur
         $utilisateur = auth()->user();
         if ( is_null($utilisateur) ) {
             abort(404);
