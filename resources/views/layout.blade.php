@@ -8,8 +8,8 @@
         <title>Art Technic</title>
         {{-- Bootstrap CSS --}}
         
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link href="css/simple-sidebar.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link href="/css/simple-sidebar.css" rel="stylesheet">
         
     </head>
     <body>
@@ -18,7 +18,9 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">ART TECHNIC</div>
                 <div class="list-group list-group-flush">
-                <a href="/mon-compte" class="list-group-item list-group-item-action bg-light">Accueil</a>
+                    <a href="/mon-compte" class="list-group-item list-group-item-action bg-light">Accueil</a>
+                    <a href="{{ URL::to('clients') }}" class="list-group-item list-group-item-action bg-light">Tous les clients</a>
+                    <a href="{{ URL::to('clients/create') }}" class="list-group-item list-group-item-action bg-light">Créer un client</a>
                 
                 </div>
             </div>

@@ -40,6 +40,8 @@ Route::group([
     Route::get('/mon-compte', 'CompteController@accueil');
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
+
+    Route::resource('/clients', 'ClientController');
 });
 
 
