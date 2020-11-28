@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Assujetti extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['intitule', 'num_tva'];
+
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
 }

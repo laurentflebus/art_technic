@@ -25,6 +25,8 @@ class CreateSocietesTable extends Migration
             $table->string('pays')->nullable();
             $table->text('remarque')->nullable();
             $table->timestamps();
+            $table->unsignedBigInteger('localite_id');
+            $table->foreign('localite_id')->references('id')->on('localites');
         });
     }
 

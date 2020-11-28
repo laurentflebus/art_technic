@@ -42,7 +42,7 @@
                 <div class="col-sm-10">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="admin" value="0" checked>
-                        <label class="form-check-label" for="gridRadios1">Utilisateur</label>
+                        <label class="form-check-label" for="gridRadios1">Utilisateur régulier</label>
                     </div>
                     @if ($errors->has('utilisateur'))
                         <p class="alert alert-danger">{{ $errors->first('admin') }}</p>

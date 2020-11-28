@@ -37,12 +37,13 @@
                             {{-- Si l'utilisateur est connecté --}}
                             {{-- @if (auth()->check()) --}}
                             @auth
-                                @include('partials.nav-item', ['lien' => 'mon-compte', 'texte' => 'Mon compte'])
-                                
-                                {{-- Si administrateur, affiche le lien Inscription --}}
+
+                                {{-- Si administrateur, affiche le lien Créer un utilisateur --}}
                                 @if (auth()->user()->admin)
-                                    @include('partials.nav-item', ['lien' => 'inscriptionAuthentification', 'texte' => 'Inscription'])
+                                    @include('partials.nav-item', ['lien' => 'inscriptionAuthentification', 'texte' => 'Créer un utilisateur'])
                                 @endif
+
+                                @include('partials.nav-item', ['lien' => 'mon-compte', 'texte' => 'Mon compte'])
                                 
                                 
                                 @include('partials.nav-item', ['lien' => 'deconnexion', 'texte' => 'Deconnexion'])

@@ -18,8 +18,6 @@ class CreateLocalitesTable extends Migration
             $table->string('intitule');
             $table->string('code_postal');
             $table->timestamps();
-            $table->unsignedBigInteger('societe_id');
-            $table->foreign('societe_id')->references('id')->on('societes');
         });
     }
 
