@@ -53,7 +53,7 @@
 
         <div class="form-group col-md-4">
             <label>E-mail</label>
-            <input type="email" name="email" class="form-control">
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
             @if ($errors->has('email'))
                 <p class="alert alert-danger">{{ $errors->first('email') }}</p>
             @endif
