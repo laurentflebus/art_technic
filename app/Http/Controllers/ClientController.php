@@ -10,9 +10,9 @@ use App\Models\Assujetti;
 class ClientController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 
+     * Affihe la liste des clients
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -25,9 +25,8 @@ class ClientController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire pour créer une nouvelle ressource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -35,16 +34,16 @@ class ClientController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 
+     * Enregistre un nouveau client.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        // on récupère toute la requête de l'utilisateur et on appelle la fonction validate pour valider les données
-        request()->validate([
-            // tableau de règles
+        // Validation des champs du formulaire d'inscription (client)
+        $request->validate([
             'civilite' => ['required'],
             'nom' => ['required'],
             'prenom' => ['required'],
@@ -59,95 +58,105 @@ class ClientController extends Controller
             'assujetti' => ['required'],
         ]);
         
-        
+        // Récupère la localité et l'assujettissement en bd
         $localite = Localite::where('intitule', request('localite'))->first();
         $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
-
-        $assujetti = Assujetti::create([
-            'intitule' => request('assujetti'),
-            'num_tva' => request('numtva'),
-          ]);
-        $localite = Localite::create([
-            'intitule' => request('localite'),
-            'code_postal' => request('codepostal'),
-        ]);
         
-        $client = Client::create([
-            'civilite' => request('civilite'),
-            'nom' => request('nom'),
-            'prenom' => request('prenom'),
-            'email' => request('email'),
-            'telephone' => request('telephone'),
-            'mobile' => request('mobile'),
-            'rue' => request('rue'),
-            'nrue' => request('nrue'),
-            'pays' => request('pays'),
-            'localite_id' => $localite->id,
-            'assujetti_id' => $assujetti->id,
-       ]);
+        // Vérifie si le client existe
+        $client = Client::where([
+                ['nom', request('nom')],
+                ['prenom', request('prenom')],
+                ['email', request('email')],
+            ])->first();
 
 
+        if($client) {
+            flash('Le client existe déjà.')->error();
+            return back();
+        }
 
-
-    //     // Si la localité existe déjà et l'assujetti aussi
-    //     if ($localite && $assujetti) {
-    //         //Insertion du client en base de données
-    //          $client = Client::create([
-    //             'civilite' => request('civilite'),
-    //             'nom' => request('nom'),
-    //             'prenom' => request('prenom'),
-    //             'email' => request('email'),
-    //             'telephone' => request('telephone'),
-    //             'mobile' => request('mobile'),
-    //             'rue' => request('rue'),
-    //             'nrue' => request('nrue'),
-    //             'pays' => request('pays'),
-    //             'localite_id' => $localite->id,
-    //             'assujetti_id' => $assujetti->id,
-    //        ]);
-    //    } elseif (!$assujetti) {
-    //          // Insertion du type d'assujettis en base de données
-    //          $assujetti = Assujetti::create([
-    //            'intitule' => request('assujetti'),
-    //            'num_tva' => request('numtva'),
-    //          ]);
- 
-    //      // Insertion du client en base de données
-    //          $client = Client::create([
-    //             'civilite' => request('civilite'),
-    //             'nom' => request('nom'),
-    //             'prenom' => request('prenom'),
-    //             'email' => request('email'),
-    //             'telephone' => request('telephone'),
-    //             'mobile' => request('mobile'),
-    //             'rue' => request('rue'),
-    //             'nrue' => request('nrue'),
-    //             'pays' => request('pays'),
-    //             'localite_id' => $localite->id,
-    //             'assujetti_id' => $assujetti->id,
-    //          ]);
-    //    } else {
-    //     // Insertion de la localité en base de données
-    //     $localite = Localite::create([
-    //       'intitule' => request('assujetti'),
-    //       'code_postal' => request('codepostal'),
-    //     ]);
-
-    // // Insertion du client en base de données
-    //     $client = Client::create([
-    //        'civilite' => request('civilite'),
-    //        'nom' => request('nom'),
-    //        'prenom' => request('prenom'),
-    //        'email' => request('email'),
-    //        'telephone' => request('telephone'),
-    //        'mobile' => request('mobile'),
-    //        'rue' => request('rue'),
-    //        'nrue' => request('nrue'),
-    //        'pays' => request('pays'),
-    //        'localite_id' => $localite->id,
-    //        'assujetti_id' => $assujetti->id,
-    //     ]);
-    //    }
+        
+        // Si la localité et l'assujetissement existe déjà
+       if (!$localite && !$assujetti) {
+            $assujetti = Assujetti::create([
+                'intitule' => request('assujetti'),
+                'num_tva' => request('numtva'),
+            ]);
+            $localite = Localite::create([
+                'intitule' => request('localite'),
+                'code_postal' => request('codepostal'),
+            ]);
+            
+            $client = Client::create([
+                'civilite' => request('civilite'),
+                'nom' => request('nom'),
+                'prenom' => request('prenom'),
+                'email' => request('email'),
+                'telephone' => request('telephone'),
+                'mobile' => request('mobile'),
+                'rue' => request('rue'),
+                'nrue' => request('nrue'),
+                'pays' => request('pays'),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+           
+        // Si l'assujetissement n'existe pas
+       } elseif (!$assujetti) {
+           // Insertion de l'assujetissement en bd
+            $assujetti = Assujetti::create([
+               'intitule' => request('assujetti'),
+               'num_tva' => request('numtva'),
+            ]);
+            $client = Client::create([
+                'civilite' => request('civilite'),
+                'nom' => request('nom'),
+                'prenom' => request('prenom'),
+                'email' => request('email'),
+                'telephone' => request('telephone'),
+                'mobile' => request('mobile'),
+                'rue' => request('rue'),
+                'nrue' => request('nrue'),
+                'pays' => request('pays'),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+        // Si la localite n'existe pas
+       } elseif (!$localite) {
+           // Insertion de la localité en bd
+            $localite = Localite::create([
+                'intitule' => request('localite'),
+                'code_postal' => request('codepostal'),
+            ]);
+            $client = Client::create([
+                'civilite' => request('civilite'),
+                'nom' => request('nom'),
+                'prenom' => request('prenom'),
+                'email' => request('email'),
+                'telephone' => request('telephone'),
+                'mobile' => request('mobile'),
+                'rue' => request('rue'),
+                'nrue' => request('nrue'),
+                'pays' => request('pays'),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+       } else {
+            //Insertion du client en base de données
+            $client = Client::create([
+                'civilite' => request('civilite'),
+                'nom' => request('nom'),
+                'prenom' => request('prenom'),
+                'email' => request('email'),
+                'telephone' => request('telephone'),
+                'mobile' => request('mobile'),
+                'rue' => request('rue'),
+                'nrue' => request('nrue'),
+                'pays' => request('pays'),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+       }
         
          flash('Le nouveau client a bien été enregistré.')->success();
          return redirect('/clients');

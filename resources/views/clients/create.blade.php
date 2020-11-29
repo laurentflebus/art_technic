@@ -3,7 +3,6 @@
 @section('contenu')
 
 <h1>Créer un client</h1>
-
 <form action="/clients" method="post">
     {{ csrf_field() }}
     <div class="form-row">
@@ -55,14 +54,23 @@
         <div class="form-group col-md-4">
             <label>E-mail</label>
             <input type="email" name="email" class="form-control">
+            @if ($errors->has('email'))
+                <p class="alert alert-danger">{{ $errors->first('email') }}</p>
+            @endif
           </div>
           <div class="form-group col-md-4">
             <label>Téléphone fixe</label>
             <input type="text" name="telephone" class="form-control">
+            @if ($errors->has('telephone'))
+                <p class="alert alert-danger">{{ $errors->first('telephone') }}</p>
+            @endif
           </div>
           <div class="form-group col-md-4">
             <label>Téléphone mobile</label>
             <input type="text" name="mobile" class="form-control">
+            @if ($errors->has('mobile'))
+                <p class="alert alert-danger">{{ $errors->first('mobile') }}</p>
+            @endif
           </div>
 
     </div>
@@ -72,10 +80,16 @@
         <div class="form-group col-md-8">
             <label>Rue</label>
             <input type="text" name="rue" class="form-control">
+            @if ($errors->has('rue'))
+                <p class="alert alert-danger">{{ $errors->first('rue') }}</p>
+            @endif
         </div>
         <div class="form-group col-md-4">
             <label>N. rue</label>
             <input type="text" name="nrue" class="form-control">
+            @if ($errors->has('nrue'))
+                <p class="alert alert-danger">{{ $errors->first('mobile') }}</p>
+            @endif
         </div>
     </div>
     
@@ -83,26 +97,35 @@
         <div class="form-group col-md-4">
             <label>Code postal</label>
             <select id="codepostal" name="codepostal" class="form-control">
-                <option selected>Choississez</option>
+                <option>Choississez</option>
                 <option>7130</option>
                 <option>7000</option>
             </select>
+            @if ($errors->has('codepostal'))
+                <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
+            @endif
         </div>
         <div class="form-group col-md-4">
             <label>Localité</label>
             <select id="localite" name="localite" class="form-control">
-                <option selected>Choississez</option>
+                <option>Choississez</option>
                 <option>Binche</option>
                 <option>Mons</option>
             </select>
+            @if ($errors->has('localite'))
+                <p class="alert alert-danger">{{ $errors->first('localite') }}</p>
+            @endif
         </div>
         <div class="form-group col-md-4">
             <label>Pays</label>
             <select id="codepostal" name="pays" class="form-control">
-                <option selected>Choississez</option>
+                <option>Choississez</option>
                 <option>Belgique</option>
                 <option>France</option>
             </select>
+            @if ($errors->has('codepostal'))
+                <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
+            @endif
         </div>
         
     </div>
