@@ -237,6 +237,7 @@ class ClientController extends Controller
         
         $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
 
+
         $client->assujetti->update([
             'intitule' => request('assujetti'),
             'num_tva' => request('numtva'),

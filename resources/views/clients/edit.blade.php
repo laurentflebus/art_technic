@@ -2,8 +2,9 @@
 
 @section('contenu')
 <h1>Modifier {{ $client->nom }} {{ $client->prenom }}</h1>
-<form action="/clients" method="PUT">
+<form action="/clients/{{ $client->id }}" method="post">
     {{ csrf_field() }}
+    {{ method_field('PUT') }}
     <div class="form-row">
 
         <div class="form-group col-md-4">
