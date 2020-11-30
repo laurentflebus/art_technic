@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Localite;
 use App\Models\Assujetti;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
@@ -59,66 +60,86 @@ class ClientController extends Controller
             'assujetti' => ['required'],
         ]);
         
-        // Récupère la localité et l'assujettissement en bd
-        $localite = Localite::where('intitule', request('localite'))->first();
-        $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
-        
-        // Vérifie si le client existe
-        $client = Client::where([
-                ['nom', request('nom')],
-                ['prenom', request('prenom')],
-                ['email', request('email')],
-            ])->first();
-
-
-        if($client) {
-            flash('Le client existe déjà.')->error();
-            return back();
+        // Vérifie si la localite existe déjà en bd       
+        $localites = DB::table('localites')->get();
+         
+        foreach ($localites as $item) {
+            if (Crypt::decrypt($item->intitule) == request('localite') &&
+                Crypt::decrypt($item->code_postal) == request('codepostal')) {
+                $localite = $item;
+            } 
         }
 
-        
-        // Si la localité et l'assujetissement existe déjà
+        // Vérifie si le type d'assujetissement existe déjà
+        $assujettis = DB::table('assujettis')->get();   
+        foreach ($assujettis as $item) {
+            if (Crypt::decrypt($item->intitule) == request('assujetti') &&
+                Crypt::decrypt($item->num_tva) == request('numtva')) {
+                $assujetti = $item;
+            }  
+        }
+
+        //$localite = Localite::where('intitule', Crypt::encrypt(request('localite')))->first();
+        //$assujetti = Assujetti::where('intitule', Crypt::encrypt(request('assujetti')))->first();
+        // $cli = Client::where([
+            //     [Crypt::decrypt($client->nom), request('nom')],
+            //     [Crypt::decrypt($client->prenom), request('prenom')],
+            //     [Crypt::decrypt($client->email), request('email')],
+            //])->first();
+
+        // Vérifie si le client existe déjà
+        $clients = Client::all();       
+        foreach($clients as $client) {           
+            if ( Crypt::decrypt($client->nom) == request('nom') &&
+                 Crypt::decrypt($client->prenom) == request('prenom') &&
+                 Crypt::decrypt($client->email) == request('email') ) {
+                    flash('Le client existe déjà.')->error();
+                    return back();
+             }
+        }
+
+        // Si la localité et l'assujetissement n'existe pas
        if (!$localite && !$assujetti) {
             $assujetti = Assujetti::create([
-                'intitule' => request('assujetti'),
-                'num_tva' => request('numtva'),
+                'intitule' => Crypt::encrypt(request('assujetti')),
+                'num_tva' => Crypt::encrypt(request('numtva')),
             ]);
             $localite = Localite::create([
-                'intitule' => request('localite'),
-                'code_postal' => request('codepostal'),
+                'intitule' => Crypt::encrypt(request('localite')),
+                'code_postal' => Crypt::encrypt(request('codepostal')),
             ]);
             
             $client = Client::create([
-                'civilite' => request('civilite'),
-                'nom' => request('nom'),
-                'prenom' => request('prenom'),
-                'email' => request('email'),
-                'telephone' => request('telephone'),
-                'mobile' => request('mobile'),
-                'rue' => request('rue'),
-                'nrue' => request('nrue'),
-                'pays' => request('pays'),
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);
            
         // Si l'assujetissement n'existe pas
        } elseif (!$assujetti) {
-           // Insertion de l'assujetissement en bd
+           // Insertion l'assujetissement en bd
             $assujetti = Assujetti::create([
-               'intitule' => request('assujetti'),
-               'num_tva' => request('numtva'),
+               'intitule' => Crypt::encrypt(request('assujetti')),
+               'num_tva' => Crypt::encrypt(request('numtva')),
             ]);
             $client = Client::create([
-                'civilite' => request('civilite'),
-                'nom' => request('nom'),
-                'prenom' => request('prenom'),
-                'email' => request('email'),
-                'telephone' => request('telephone'),
-                'mobile' => request('mobile'),
-                'rue' => request('rue'),
-                'nrue' => request('nrue'),
-                'pays' => request('pays'),
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);
@@ -126,34 +147,34 @@ class ClientController extends Controller
        } elseif (!$localite) {
            // Insertion de la localité en bd
             $localite = Localite::create([
-                'intitule' => request('localite'),
-                'code_postal' => request('codepostal'),
+                'intitule' => Crypt::encrypt(request('localite')),
+                'code_postal' => Crypt::encrypt(request('codepostal')),
             ]);
             $client = Client::create([
-                'civilite' => request('civilite'),
-                'nom' => request('nom'),
-                'prenom' => request('prenom'),
-                'email' => request('email'),
-                'telephone' => request('telephone'),
-                'mobile' => request('mobile'),
-                'rue' => request('rue'),
-                'nrue' => request('nrue'),
-                'pays' => request('pays'),
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);
        } else {
             //Insertion du client en base de données
             $client = Client::create([
-                'civilite' => request('civilite'),
-                'nom' => request('nom'),
-                'prenom' => request('prenom'),
-                'email' => request('email'),
-                'telephone' => request('telephone'),
-                'mobile' => request('mobile'),
-                'rue' => request('rue'),
-                'nrue' => request('nrue'),
-                'pays' => request('pays'),
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);

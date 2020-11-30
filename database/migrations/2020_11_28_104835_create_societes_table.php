@@ -15,11 +15,11 @@ class CreateSocietesTable extends Migration
     {
         Schema::create('societes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nom', 50);
-            $table->string('num_tva', 50);
-            $table->string('registre', 50)->nullable();
-            $table->string('num_compte', 50)->nullable();
-            $table->string('telephone', 50)->nullable();
+            $table->string('nom');
+            $table->string('num_tva');
+            $table->string('registre')->nullable();
+            $table->string('num_compte')->nullable();
+            $table->string('telephone')->nullable();
             $table->string('rue')->nullable();
             $table->string('nrue')->nullable();
             $table->string('pays')->nullable();

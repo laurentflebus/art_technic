@@ -15,8 +15,8 @@ class CreateAssujettisTable extends Migration
     {
         Schema::create('assujettis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('intitule', 50);
-            $table->string('num_tva', 50)->nullable();
+            $table->string('intitule');
+            $table->string('num_tva')->nullable();
             $table->timestamps();
         });
     }

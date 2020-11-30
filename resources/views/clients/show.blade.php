@@ -3,13 +3,13 @@
 @section('contenu')
 <div class="container">
     
-    <h1>Voir {{ $client->nom }}  {{ $client->prenom }} </h1>
+    <h1>Voir {{ Crypt::decrypt($client->nom) }}  {{ Crypt::decrypt($client->prenom) }} </h1>
     
         <div class="jumbotron text-center">
-            <h2>{{ $client->email }}</h2>
+            <h2>{{ Crypt::decrypt($client->email) }}</h2>
             <p>
-                <strong>Rue:</strong> {{ $client->rue }}<br>
-                <strong>N rue:</strong> {{ $client->nrue }}
+                <strong>Rue:</strong> {{ Crypt::decrypt($client->rue) }}<br>
+                <strong>N rue:</strong> {{ Crypt::decrypt($client->nrue) }}
             </p>
         </div>
     

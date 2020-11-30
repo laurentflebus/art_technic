@@ -12,20 +12,22 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <td>ID</td>
-            <td>Civilité</td>
             <td>Nom</td>
             <td>Prénom</td>
+            <td>Adresse</td>
+            <td>Localité</td>
+            <td>Contacts</td>
             <td>Actions</td>
         </tr>
     </thead>
     <tbody>
     @foreach($clients as $client)
         <tr>
-            <td>{{ $client->id }}</td>
-            <td>{{ $client->civilite }}</td>
-            <td>{{ $client->nom }}</td>
-            <td>{{ $client->prenom }}</td>
+            <td>{{ Crypt::decrypt($client->nom) }}</td>
+            <td>{{ Crypt::decrypt($client->prenom) }}</td>
+            <td>{{ Crypt::decrypt($client->rue) }}, {{ Crypt::decrypt($client->nrue) }} </td>
+            <td>{{ Crypt::decrypt($client->localite->code_postal) }} {{ Crypt::decrypt($client->localite->intitule) }} </td>
+            <td>{{ Crypt::decrypt($client->email) }} <br> {{ Crypt::decrypt($client->telephone) }} <br> {{ Crypt::decrypt($client->mobile) }} </td>
 
             <!-- we will also add show, edit, and delete buttons -->
             <td>
