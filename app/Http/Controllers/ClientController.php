@@ -26,7 +26,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Affiche le formulaire pour créer une nouvelle ressource.
+     * Affiche le formulaire pour créer un nouveau client
      *
      */
     public function create()

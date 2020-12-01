@@ -8,16 +8,16 @@
 @if (Session::has('message'))
     <div class="alert alert-info">{{ Session::get('message') }}</div>
 @endif
-
+<div class="table-responsive">
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <td>Nom</td>
-            <td>Prénom</td>
-            <td>Adresse</td>
-            <td>Localité</td>
-            <td>Contacts</td>
-            <td>Actions</td>
+            <th>Nom</th>
+            <th>Prénom</td>
+            <th>Adresse</th>
+            <th>Localité</th>
+            <th>Contacts</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -55,5 +55,5 @@
     @endforeach
     </tbody>
 </table>
-    
+</div>
 @endsection

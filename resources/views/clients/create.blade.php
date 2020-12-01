@@ -108,7 +108,7 @@
         <div class="form-group col-md-4">
             <label>Localité</label>
             <select id="localite" name="localite" class="form-control">
-                <option>Choississez</option>
+                <option value="">Choississez</option>
                 <option>Binche</option>
                 <option>Mons</option>
             </select>
@@ -119,7 +119,7 @@
         <div class="form-group col-md-4">
             <label>Pays</label>
             <select id="pays" name="pays" class="form-control">
-                <option>Choississez</option>
+                <option value="">Choississez</option>
                 <option>Belgique</option>
                 <option>France</option>
             </select>
