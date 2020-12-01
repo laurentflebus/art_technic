@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 class ClientController extends Controller
 {
     /**
-     * 
      * Affihe la liste des clients
      *
      */
@@ -36,7 +35,6 @@ class ClientController extends Controller
     }
 
     /**
-     * 
      * Enregistre un nouveau client.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -47,17 +45,17 @@ class ClientController extends Controller
         // Validation des champs du formulaire d'inscription (client)
         $request->validate([
             'civilite' => ['required'],
-            'nom' => ['required'],
-            'prenom' => ['required'],
-            'email' => ['required', 'email'],
-            'telephone' => ['required', 'numeric', 'min:9'],
-            'mobile' => ['required', 'numeric', 'min:10'],
-            'rue' => ['required'],
-            'nrue' => ['required'],
-            'codepostal' => ['required'],
-            'localite' => ['required'],
-            'pays' => ['required'],
-            'assujetti' => ['required'],
+            'nom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'prenom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'email' => ['required', 'regex:/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/' ,'email'],
+            'telephone' => ['required', 'numeric', 'min:8'],
+            'mobile' => ['required', 'numeric', 'min:8'],
+            'rue' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'nrue' => ['required', 'alpha_num'],
+            'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
+            'localite' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'pays' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'assujetti' => ['required', 'alpha'],
         ]);
         
         // Vérifie si la localite existe déjà en bd       

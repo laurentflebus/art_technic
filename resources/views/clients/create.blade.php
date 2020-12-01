@@ -118,13 +118,13 @@
         </div>
         <div class="form-group col-md-4">
             <label>Pays</label>
-            <select id="codepostal" name="pays" class="form-control">
+            <select id="pays" name="pays" class="form-control">
                 <option>Choississez</option>
                 <option>Belgique</option>
                 <option>France</option>
             </select>
-            @if ($errors->has('codepostal'))
-                <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
+            @if ($errors->has('pays'))
+                <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
             @endif
         </div>
         

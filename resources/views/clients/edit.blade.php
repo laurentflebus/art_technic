@@ -124,7 +124,7 @@
         </div>
         <div class="form-group col-md-4">
             <label>Pays</label>
-            <select id="codepostal" name="pays" class="form-control">
+            <select id="pays" name="pays" class="form-control">
                 @foreach ($pays as $item)
                     <option value="{{ Crypt::decrypt($item->pays) }}"
                         @if (Crypt::decrypt($client->pays) == Crypt::decrypt($item->pays))
@@ -133,8 +133,8 @@
                     >{{ Crypt::decrypt($item->pays) }}</option>
                 @endforeach
             </select>
-            @if ($errors->has('codepostal'))
-                <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
+            @if ($errors->has('pays'))
+                <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
             @endif
         </div>
         
