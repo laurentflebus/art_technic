@@ -303,7 +303,7 @@ class ClientController extends Controller
                 'assujetti_id' => $assujetti->id,
             
         ]);
-        flash('Le nouveau client a bien été mis à jour.')->success();
+        flash('Le client a bien été mis à jour.')->success();
         return redirect('/clients');
     }
 

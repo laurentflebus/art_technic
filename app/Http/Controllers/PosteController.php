@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Poste;
 use App\Models\Tva;
 
@@ -109,15 +110,22 @@ class PosteController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Afficher le formulaire pour modifier un poste
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $tvas = DB::table('tvas')->select('intitule', 'taux')->distinct()->get();
+        $poste = Poste::find($id);
+
+        return view('postes.edit', [
+            'poste' => $poste,
+            'tvas' => $tvas,
+        ]);
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -128,7 +136,50 @@ class PosteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Validation des champs du formulaire (poste de vente)
+        $request->validate([
+            'numero' => ['required'],
+            'poste' => ['required'],
+            'codebarre' => ['required'],
+            'quantite' => ['required', 'numeric'],
+            'prixunitaire' => ['required'],
+            'tva' => ['required'],
+            'taux' => ['required', 'numeric']
+        ]);
+
+        // récupère le poste grâce à son id
+        $poste = Poste::find($id);
+        
+        // Vérifie si la tva existe déjà en bd
+        $tva="";       
+        $tvas = DB::table('tvas')->get();        
+        foreach ($tvas as $item) {
+            if ($item->intitule == request('tva') && $item->taux == request('taux')) {
+                $tva = $item;
+            } 
+        }
+        // si la localité n'existe pas
+        if (!$tva) {
+            $tva = Tva::create([
+                'intitule' => request('tva'),
+                'taux' => request('taux'),
+            ]);
+        }
+
+    
+        // $tva = Tva::where('intitule', request('tva'))->first();
+
+        $poste->update([
+                'numero' => request('numero'),
+                'intitule' => request('poste'),
+                'code_barre' => request('codebarre'),
+                'quantite' => request('quantite'),
+                'prix_unitaire' => request('prixunitaire'),
+                'tva_id' => $tva->id,
+            
+        ]);
+        flash('Le poste a bien été mis à jour.')->success();
+        return redirect('/postes');
     }
 
     /**
