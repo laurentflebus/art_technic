@@ -1,17 +1,19 @@
 @extends('layout')
 
 @section('contenu')
-<div class="container">
-    
-    <h1>Voir {{ Crypt::decrypt($client->nom) }}  {{ Crypt::decrypt($client->prenom) }} </h1>
-    
-        <div class="jumbotron text-center">
-            <h2>{{ Crypt::decrypt($client->email) }}</h2>
-            <p>
-                <strong>Rue:</strong> {{ Crypt::decrypt($client->rue) }}<br>
-                <strong>N rue:</strong> {{ Crypt::decrypt($client->nrue) }}
+  <!-- Card -->
+    <div class="card text-center">
+        <h5 class="card-header">Client</h5>
+        <div class="card-body">
+            <h5 class="card-title">{{ Crypt::decrypt($client->civilite) }}  {{ Crypt::decrypt($client->nom) }}  {{ Crypt::decrypt($client->prenom) }}</h5>
+            <p class="card-text">
+                <strong>Adresse : </strong> {{ Crypt::decrypt($client->rue) }}, {{ Crypt::decrypt($client->nrue) }} <br>
+                <strong>Localité : </strong> {{ Crypt::decrypt($client->localite->code_postal) }} {{ Crypt::decrypt($client->localite->intitule) }}
             </p>
         </div>
-    
-    </div>
+        <div class="card-footer">
+            <a href="{{ URL::to('clients/' . $client->id . '/edit') }}" class="btn btn-success">Modifier</a>
+        </div>
+     
+    </div>  
 @endsection
