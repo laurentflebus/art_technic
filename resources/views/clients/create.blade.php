@@ -98,6 +98,7 @@
             <label>Code postal</label>
             <select id="codepostal" name="codepostal" class="form-control">
                 <option>Choississez</option>
+                <option>1000</option>
                 <option>7130</option>
                 <option>7000</option>
             </select>
@@ -109,6 +110,7 @@
             <label>Localité</label>
             <select id="localite" name="localite" class="form-control">
                 <option>Choississez</option>
+                <option>Bruxelles</option>
                 <option>Binche</option>
                 <option>Mons</option>
             </select>

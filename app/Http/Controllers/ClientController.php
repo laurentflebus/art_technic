@@ -58,9 +58,9 @@ class ClientController extends Controller
             'assujetti' => ['required', 'alpha'],
         ]);
         
-        // Vérifie si la localite existe déjà en bd       
-        $localites = DB::table('localites')->get();
-         
+        // Vérifie si la localite existe déjà en bd 
+        $localite = "";      
+        $localites = DB::table('localites')->get();    
         foreach ($localites as $item) {
             if (Crypt::decrypt($item->intitule) == request('localite') &&
                 Crypt::decrypt($item->code_postal) == request('codepostal')) {
@@ -69,6 +69,7 @@ class ClientController extends Controller
         }
 
         // Vérifie si le type d'assujetissement existe déjà
+        $assujetti = "";
         $assujettis = DB::table('assujettis')->get();   
         foreach ($assujettis as $item) {
             if (Crypt::decrypt($item->intitule) == request('assujetti') &&
@@ -95,7 +96,7 @@ class ClientController extends Controller
                     return back();
              }
         }
-
+        
         // Si la localité et l'assujetissement n'existe pas
        if (!$localite && !$assujetti) {
             $assujetti = Assujetti::create([
@@ -295,7 +296,7 @@ class ClientController extends Controller
         $client = Client::find($id);
         $client->delete();
 
-        flash("Le client $client->nom $client->prenom a bien été supprimé.")->success();
+        flash('Le client' . Crypt::decrypt($client->nom) . ' ' .   Crypt::decrypt($client->prenom) . 'a bien été supprimé.')->success();
         return redirect('/clients');
     }
 }

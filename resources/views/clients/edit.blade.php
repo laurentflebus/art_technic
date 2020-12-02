@@ -169,6 +169,6 @@
     </div>
 
     
-    <button type="submit" class="btn btn-primary">Modifier</button>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vouloir modifier ce client.')">Valider</button>
   </form>
 @endsection
