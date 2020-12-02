@@ -55,10 +55,11 @@ class ClientController extends Controller
             'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
             'localite' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
             'pays' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
-            'assujetti' => ['required', 'alpha'],
+            'assujetti' => ['required', 'regex:/^[a-z ]+$/i'],
         ]);
         
-        // Vérifie si la localite existe déjà en bd       
+        // Vérifie si la localite existe déjà en bd
+        $localite="";       
         $localites = DB::table('localites')->get();
          
         foreach ($localites as $item) {
@@ -69,6 +70,7 @@ class ClientController extends Controller
         }
 
         // Vérifie si le type d'assujetissement existe déjà
+        $assujetti = "";
         $assujettis = DB::table('assujettis')->get();   
         foreach ($assujettis as $item) {
             if (Crypt::decrypt($item->intitule) == request('assujetti') &&
@@ -227,7 +229,6 @@ class ClientController extends Controller
     /**
      * Modifier le client spécifié.
      * 
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -237,44 +238,67 @@ class ClientController extends Controller
         // Validation des champs du formulaire d'inscription (client)
         $request->validate([
             'civilite' => ['required'],
-            'nom' => ['required'],
-            'prenom' => ['required'],
-            'email' => ['required', 'email'],
-            'telephone' => ['required', 'numeric', 'min:9'],
-            'mobile' => ['required', 'numeric', 'min:10'],
-            'rue' => ['required'],
-            'nrue' => ['required'],
-            'codepostal' => ['required'],
-            'localite' => ['required'],
-            'pays' => ['required'],
-            'assujetti' => ['required'],
+            'nom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'prenom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'email' => ['required', 'regex:/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/' ,'email'],
+            'telephone' => ['required', 'numeric', 'min:8'],
+            'mobile' => ['required', 'numeric', 'min:8'],
+            'rue' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'nrue' => ['required', 'alpha_num'],
+            'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
+            'localite' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'pays' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'assujetti' => ['required', 'regex:/^[a-z ]+$/i'],
         ]);
-
+        // récupère le client grâce à son id
         $client = Client::find($id);
-
-        $localite = Localite::where('intitule', request('localite'))->first();
         
-        $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
+        // Vérifie si la localite existe déjà en bd
+        $localite="";       
+        $localites = DB::table('localites')->get();        
+        foreach ($localites as $item) {
+            if (Crypt::decrypt($item->intitule) == request('localite') &&
+                Crypt::decrypt($item->code_postal) == request('codepostal')) {
+                $localite = $item;
+            } 
+        }
+        // si la localité n'existe pas
+        if (!$localite) {
+            $localite = Localite::create([
+                'intitule' => Crypt::encrypt(request('localite')),
+                'code_postal' => Crypt::encrypt(request('codepostal')),
+            ]);
+        }
 
+        // Vérifie si le type d'assujetissement existe déjà
+        $assujetti = "";
+        $assujettis = DB::table('assujettis')->get();   
+        foreach ($assujettis as $item) {
+            if (Crypt::decrypt($item->intitule) == request('assujetti') &&
+                Crypt::decrypt($item->num_tva) == request('numtva')) {
+                $assujetti = $item;
+            }  
+        }
 
-        $client->assujetti->update([
-            'intitule' => request('assujetti'),
-            'num_tva' => request('numtva'),
-        ]);
-        $client->localite->update([
-            'intitule' => request('localite'),
-            'code_postal' => request('codepostal'),
-        ]);
+        if (!$assujetti) {
+            $assujetti = Assujetti::create([
+                'intitule' => Crypt::encrypt(request('assujetti')),
+                'num_tva' => Crypt::encrypt(request('numtva')),
+            ]);
+        }
+        // $localite = Localite::where('intitule', request('localite'))->first();
+        // $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
+
         $client->update([
                 'civilite' => request('civilite'),
-                'nom' => request('nom'),
-                'prenom' => request('prenom'),
-                'email' => request('email'),
-                'telephone' => request('telephone'),
-                'mobile' => request('mobile'),
-                'rue' => request('rue'),
-                'nrue' => request('nrue'),
-                'pays' => request('pays'),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             
@@ -295,7 +319,7 @@ class ClientController extends Controller
         $client = Client::find($id);
         $client->delete();
 
-        flash("Le client $client->nom $client->prenom a bien été supprimé.")->success();
+        flash('Le client ' . Crypt::decrypt($client->nom) . ' ' . Crypt::decrypt($client->prenom) . ' a bien été supprimé.')->success();
         return redirect('/clients');
     }
 }

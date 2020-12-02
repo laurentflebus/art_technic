@@ -47,7 +47,7 @@
                     <a class="btn btn-small btn-info" href="{{ URL::to('clients/' . $client->id . '/edit') }}">Modifier</a>
                     {{ csrf_field() }}
                     {{ method_field('DELETE') }}
-                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce client ?')">Supprimer</button>
                 </form>
 
             </td>
