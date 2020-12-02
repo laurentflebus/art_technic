@@ -128,7 +128,7 @@ class PosteController extends Controller
     
 
     /**
-     * Update the specified resource in storage.
+     * Modifier un poste de vente.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -183,13 +183,17 @@ class PosteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer un poste de vente.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $poste = Poste::find($id);
+        $poste->delete();
+
+        flash('Le poste de vente ' . $poste->intitule . ' a bien été supprimé.')->success();
+        return redirect('/postes');
     }
 }

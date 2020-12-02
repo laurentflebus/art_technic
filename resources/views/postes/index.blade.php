@@ -21,9 +21,9 @@
                 <td>{{ $poste->numero }}</td>
                 <td>{{ $poste->intitule }}</td>
                 <td>{{ $poste->code_barre }}</td>
-                <td>{{ $poste->quantite }}</td>
-                <td>{{ $poste->prix_unitaire }}</td>
-                <td>{{ $poste->tva->taux }}</td>
+                <td>{{ $poste->quantite }} pc.</td>
+                <td>{{ $poste->prix_unitaire }}€</td>
+                <td>{{ $poste->tva->taux }}%</td>
     
                 <!-- we will also add show, edit, and delete buttons -->
                 <td>
@@ -43,7 +43,7 @@
                         <a class="btn btn-small btn-info" href="{{ URL::to('postes/' . $poste->id . '/edit') }}">Modifier</a>
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce poste de vente ?')">Supprimer</button>
                     </form>
     
                 </td>
