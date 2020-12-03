@@ -17,9 +17,9 @@ class Poste extends Model
         return $this->belongsTo(Tva::class);
     }
 
-    // Relation many to many avec la table "ventes" avec deux colonnes supplémentaires (quantite, prix_unitaire)
+    // Relation many to many avec la table "ventes" avec trois colonnes supplémentaires (quantite, prix_unitaire, detail)
     public function ventes()
     {
-        return $this->belongsToMany(Vente::class)->withPivot('quantite', 'prix_unitaire');
+        return $this->belongsToMany(Vente::class)->withPivot('quantite', 'prix_unitaire', 'detail');
     }
 }

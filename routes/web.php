@@ -43,6 +43,7 @@ Route::group([
 
     Route::resource('/clients', 'ClientController');
     Route::resource('/postes', 'PosteController');
+    Route::resource('/ventes', 'VenteController');
 });
 
 

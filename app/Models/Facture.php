@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Facture extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['numero'];
+
+    public function vente()
+    {
+        return $this->belongsTo(Vente::class);
+    }
 }
