@@ -8,16 +8,16 @@
 @if (Session::has('message'))
     <div class="alert alert-info">{{ Session::get('message') }}</div>
 @endif
-
+<div class="table-responsive">
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <td>Nom</td>
-            <td>Prénom</td>
-            <td>Adresse</td>
-            <td>Localité</td>
-            <td>Contacts</td>
-            <td>Actions</td>
+            <th>Nom</th>
+            <th>Prénom</td>
+            <th>Adresse</th>
+            <th>Localité</th>
+            <th>Contacts</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +47,11 @@
                     <a class="btn btn-small btn-info" href="{{ URL::to('clients/' . $client->id . '/edit') }}">Modifier</a>
                     {{ csrf_field() }}
                     {{ method_field('DELETE') }}
+<<<<<<< HEAD
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce client.')">Supprimer</button>
+=======
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce client ?')">Supprimer</button>
+>>>>>>> poste
                 </form>
 
             </td>
@@ -55,5 +59,5 @@
     @endforeach
     </tbody>
 </table>
-    
+</div>
 @endsection

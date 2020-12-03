@@ -169,6 +169,10 @@
     </div>
 
     
+<<<<<<< HEAD
     <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vouloir modifier ce client.')">Valider</button>
+=======
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vouloir modifier ce client ?')">Valider</button>
+>>>>>>> poste
   </form>
 @endsection

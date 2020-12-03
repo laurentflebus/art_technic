@@ -42,6 +42,7 @@ Route::group([
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
 
     Route::resource('/clients', 'ClientController');
+    Route::resource('/postes', 'PosteController');
 });
 
 

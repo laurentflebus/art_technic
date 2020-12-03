@@ -60,14 +60,14 @@
           </div>
           <div class="form-group col-md-4">
             <label>Téléphone fixe</label>
-            <input type="text" name="telephone" class="form-control">
+            <input type="text" name="telephone" class="form-control" value="{{ old('telephone') }}">
             @if ($errors->has('telephone'))
                 <p class="alert alert-danger">{{ $errors->first('telephone') }}</p>
             @endif
           </div>
           <div class="form-group col-md-4">
             <label>Téléphone mobile</label>
-            <input type="text" name="mobile" class="form-control">
+            <input type="text" name="mobile" class="form-control" value="{{ old('mobile') }}">
             @if ($errors->has('mobile'))
                 <p class="alert alert-danger">{{ $errors->first('mobile') }}</p>
             @endif
@@ -79,14 +79,14 @@
     <div class="form-row">
         <div class="form-group col-md-8">
             <label>Rue</label>
-            <input type="text" name="rue" class="form-control">
+            <input type="text" name="rue" class="form-control" value="{{ old('rue') }}">
             @if ($errors->has('rue'))
                 <p class="alert alert-danger">{{ $errors->first('rue') }}</p>
             @endif
         </div>
         <div class="form-group col-md-4">
             <label>N. rue</label>
-            <input type="text" name="nrue" class="form-control">
+            <input type="text" name="nrue" class="form-control" value="{{ old('nrue') }}">
             @if ($errors->has('nrue'))
                 <p class="alert alert-danger">{{ $errors->first('mobile') }}</p>
             @endif
@@ -99,6 +99,10 @@
             <select id="codepostal" name="codepostal" class="form-control">
                 <option>Choississez</option>
                 <option>1000</option>
+<<<<<<< HEAD
+=======
+                <option>5000</option>
+>>>>>>> poste
                 <option>7130</option>
                 <option>7000</option>
             </select>
@@ -109,9 +113,14 @@
         <div class="form-group col-md-4">
             <label>Localité</label>
             <select id="localite" name="localite" class="form-control">
+<<<<<<< HEAD
                 <option>Choississez</option>
+=======
+                <option value="">Choississez</option>
+>>>>>>> poste
                 <option>Bruxelles</option>
                 <option>Binche</option>
+                <option>Charleroi</option>
                 <option>Mons</option>
             </select>
             @if ($errors->has('localite'))
@@ -121,7 +130,7 @@
         <div class="form-group col-md-4">
             <label>Pays</label>
             <select id="pays" name="pays" class="form-control">
-                <option>Choississez</option>
+                <option value="">Choississez</option>
                 <option>Belgique</option>
                 <option>France</option>
             </select>
@@ -156,10 +165,16 @@
                     </div>
                 </div>
             </fieldset>
+            @if ($errors->has('assujetti'))
+                <p class="alert alert-danger">{{ $errors->first('assujetti') }}</p>
+            @endif
         </div> 
         <div class="form-group col-md-6">
             <label>Numéro TVA</label>
-            <input type="text" name="numtva" class="form-control">
+            <input type="text" name="numtva" class="form-control" value="{{ old('numtva') }}">
+            @if ($errors->has('numtva'))
+                <p class="alert alert-danger">{{ $errors->first('numtva') }}</p>
+            @endif
         </div>
     </div>
 

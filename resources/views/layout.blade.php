@@ -21,7 +21,8 @@
                     <a href="/mon-compte" class="list-group-item list-group-item-action bg-light">Accueil</a>
                     <a href="{{ URL::to('clients') }}" class="list-group-item list-group-item-action bg-light">Tous les clients</a>
                     <a href="{{ URL::to('clients/create') }}" class="list-group-item list-group-item-action bg-light">Créer un client</a>
-                
+                    <a href="{{ URL::to('postes') }}" class="list-group-item list-group-item-action bg-light">Postes de vente</a>
+                    <a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-light">Créer un poste de vente</a>
                 </div>
             </div>
 
@@ -30,8 +31,8 @@
                 <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom">
                     <button id="menu-toggle" class="btn btn-light">MENU</button>
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"><i class="fas fa-bars fa-1x"></i></span>
                     </button>
 
                     <div id="navbarSupportedContent" class="collapse navbar-collapse">
