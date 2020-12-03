@@ -13,6 +13,11 @@ class Localite extends Model
 
     public function clients()
     {
-        $this->hasMany(Client::class);
+        return $this->hasMany(Client::class);
+    }
+
+    public function societes()
+    {
+        return $this->hasMany(Localite::class);
     }
 }

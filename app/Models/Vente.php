@@ -26,4 +26,9 @@ class Vente extends Model
     {
         return $this->belongsToMany(Poste::class)->withPivot('quantite', 'prix_unitaire', 'detail');
     }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

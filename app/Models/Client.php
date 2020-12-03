@@ -21,4 +21,9 @@ class Client extends Model
     {
         return $this->belongsTo(Localite::class);
     }
+
+    public function ventes()
+    {
+        return $this->hasMany(Vente::class);
+    }
 }
