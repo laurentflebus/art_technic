@@ -43,13 +43,13 @@ class PosteController extends Controller
     {
         // Validation des champs du formulaire (poste de vente)
         $request->validate([
-            'numero' => ['required'],
-            'poste' => ['required'],
-            'codebarre' => ['required'],
-            'quantite' => ['required', 'numeric'],
-            'prixunitaire' => ['required'],
-            'tva' => ['required'],
-            'taux' => ['required', 'numeric']
+            'numero' => ['required', 'numeric'],
+            'poste' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'codebarre' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'quantite' => ['required', 'regex:/^[0-9]+$/'],
+            'prixunitaire' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
+            'tva' => ['required', 'regex:/^[a-z]+$/i'],
+            'taux' => ['required', 'regex:/^[0-9]+$/']
         ]);
 
         //verification doublon du poste de vente
@@ -138,13 +138,13 @@ class PosteController extends Controller
     {
         // Validation des champs du formulaire (poste de vente)
         $request->validate([
-            'numero' => ['required'],
-            'poste' => ['required'],
-            'codebarre' => ['required'],
-            'quantite' => ['required', 'numeric'],
-            'prixunitaire' => ['required'],
-            'tva' => ['required'],
-            'taux' => ['required', 'numeric']
+            'numero' => ['required', 'numeric'],
+            'poste' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'codebarre' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'quantite' => ['required', 'regex:/^[0-9]+$/'],
+            'prixunitaire' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
+            'tva' => ['required', 'regex:/^[a-z]+$/i'],
+            'taux' => ['required', 'regex:/^[0-9]+$/']
         ]);
 
         // récupère le poste grâce à son id

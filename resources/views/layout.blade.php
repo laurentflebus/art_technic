@@ -31,8 +31,8 @@
                 <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom">
                     <button id="menu-toggle" class="btn btn-light">MENU</button>
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"><i class="fas fa-bars fa-1x"></i></span>
                     </button>
 
                     <div id="navbarSupportedContent" class="collapse navbar-collapse">

@@ -34,7 +34,7 @@
 
         <div class="form-group col-md-4">
             <label>Quantité en stock</label>
-            <input type="text" name="quantite" class="form-control">
+            <input type="text" name="quantite" class="form-control" value="{{ old('quantite') }}">
             @if ($errors->has('quantite'))
                 <p class="alert alert-danger">{{ $errors->first('quantite') }}</p>
             @endif
@@ -42,8 +42,8 @@
         
         <div class="form-group col-md-4">
         <label>Prix unitaire</label>
-        <input type="text" name="prixunitaire" class="form-control">
-        @if ($errors->has('mobile'))
+        <input type="text" name="prixunitaire" class="form-control" value="{{ old('prixunitaire') }}">
+        @if ($errors->has('prixunitaire'))
             <p class="alert alert-danger">{{ $errors->first('prixunitaire') }}</p>
         @endif
         </div>

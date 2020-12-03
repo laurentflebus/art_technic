@@ -15,7 +15,7 @@
             @endif
         </div> 
         
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label>Intitulé du poste de vente</label>
             <input type="text" name="poste" class="form-control" value="{{ $poste->intitule }}">
             @if ($errors->has('poste'))
