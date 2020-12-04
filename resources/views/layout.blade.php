@@ -10,7 +10,7 @@
         
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link href="/css/simple-sidebar.css" rel="stylesheet">
-        
+        <link rel="stylesheet" href="/css/bootstrap.css">
     </head>
     <body>
         <div class="d-flex" id="wrapper">
