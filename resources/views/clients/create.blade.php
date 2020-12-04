@@ -179,7 +179,7 @@
     </div>
 
     
-    <button type="submit" class="btn btn-primary">Valider</button>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
   </form>
 
     

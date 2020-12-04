@@ -11,8 +11,8 @@
                 <th>Total HT</th>
                 <th>Mode règlement</th>
                 <th>A Fact.</th>
-                <th>Est Fact.</th>
                 <th>Est Payé</th>
+                               
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,27 +22,22 @@
                 <td>{{ $vente->id }}</td>
                 <td>{{ $vente->created_at }}</td>
                 @foreach ($vente->postes as $poste)
-                {{ $totalttc = floatval($poste['pivot']['quantite'] * $poste['pivot']['prix_unitaire']) }}
-                <td>{{ $totalttc }}</td>
-                @endforeach
+                    {{ $totalttc = floatval($poste['pivot']['quantite'] * $poste['pivot']['prix_unitaire']) }}
+                    <td>{{ $totalttc }}</td>
+                    {{ $taux = $poste->tva->taux }}
                 
-                <td></td>
-                <td></td>
-                <td></td>
-    
-                <!-- we will also add show, edit, and delete buttons -->
-                <td>
-    
-                    <!-- delete the shark (uses the destroy method DESTROY /sharks/{id} -->
-                    <!-- we will add this later since its a little more complicated than the other two buttons -->
+                @endforeach
+                {{ $totalht = $totalttc - ($totalttc * floatval($taux)/100) }}
+                <td>{{ $totalht }}</td>
+                
+                <td>{{ $vente->modereglement->intitule }}</td>
+                <td>{{ $vente->a_facturer }}</td>
+                <td>{{ $vente->est_paye }}</td>
     
                    
                     
-    
-                <form action= "{{ URL::to('ventes/' . $vente->id) }}" method="post">
-    
-                         <!-- show the shark (uses the show method found at GET /sharks/{id} -->
-                        <a class="btn btn-small btn-success" href="{{ URL::to('ventes/' . $vente->id) }}">Afficher</a>
+                <td>
+                    <form action= "{{ URL::to('ventes/' . $vente->id) }}" method="post">
     
                         <!-- edit this shark (uses the edit method found at GET /sharks/{id}/edit -->
                         <a class="btn btn-small btn-info" href="{{ URL::to('ventes/' . $vente->id . '/edit') }}">Modifier</a>

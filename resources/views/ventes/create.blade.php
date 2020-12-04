@@ -34,8 +34,8 @@
                     </option>
                 @endforeach
             </select>
-            @if ($errors->has('numeroposte'))
-                <p class="alert alert-danger">{{ $errors->first('numeroposte') }}</p>
+            @if ($errors->has('intituleposte'))
+                <p class="alert alert-danger">{{ $errors->first('intituleposte') }}</p>
             @endif
         </div>
         
@@ -88,8 +88,8 @@
                     </option>
                 @endforeach
             </select>
-            @if ($errors->has('numeroposte'))
-                <p class="alert alert-danger">{{ $errors->first('numeroposte') }}</p>
+            @if ($errors->has('client'))
+                <p class="alert alert-danger">{{ $errors->first('client') }}</p>
             @endif
         </div>
 
@@ -101,9 +101,29 @@
             @endif
         </div>
         
-        
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Mode de règlement</label>
+            <select name="modereglement" class="form-control">
+                    <option>Comptant</option>
+                    <option>Carte</option>
+                    <option>Crédit</option>
+            </select>
+            @if ($errors->has('modereglement'))
+                <p class="alert alert-danger">{{ $errors->first('modereglement') }}</p>
+            @endif
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Date</label>
+            <input type="date" name="date" class="form-control" value="{{ $d = date('Y-m-d') }}" placeholder="Y-m-d">
+            @if ($errors->has('date'))
+                <p class="alert alert-danger">{{ $errors->first('date') }}</p>
+            @endif
+        </div>
     </div>
     <button type="reset" class="btn btn-danger">Annuler</button>
-    <button type="submit" class="btn btn-primary">Valider</button>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
 </form>
 @endsection
