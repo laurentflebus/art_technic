@@ -88,29 +88,25 @@
                 // crée une instance de XmlHttpRequest
                 // permet d'envoyer une requête HTTP
                 // Appel AJAX en JQuery
-                    
-                $.ajax(
+                 // type POST requête HTTP   
+                $.post(
                     // script qui va sélectionner le poste de vente
-                    url: 'postevente.php', // ressource ciblée
-                    type: 'POST', // type de la requête HTTP
-                    data: 'codebarre=' + codebarre, // on passe la variable codebarre (formulaire)
-                    datatype: 'html', // type de données à recevoir
-                    // si l'appel AJAX a réussi
-                    success: function(code_html, statut) { // code_html contient le HTML renvoyé
+                    'postevente.php', // fichier cible coté serveur, script qui récupère les infos du poste de vente
+                    {
+                        codebarre : $('#codebarre').val(), // passe la variable codebarre issue du formulaire
+                    }
+                    'text', // type de données à recevoir
+                    fonction_retour, // nom de la fonction de retour
                     
-
-                    }
-                    // si l'appel AJAX a echoué
-                    error: function(resultat, statut, erreur) {
-
-                    }
-                    // s'execute une fois l'appel AJAX effectué
-                    complete: function(resultat, statut) {
-
-                    }
                 );
 
             });
+            // si l'appel AJAX a réussi
+            function fonction_retour(texte_recu) {
+                // code pour gérer le retour de l'appel AJAX
+                $(texte_recu).appendTo("#poste");
+
+            }
 
             $("#menu-toggle").click(function(e) {
                 e.preventDefault(); // annule l'action du div id=menu-toggle
