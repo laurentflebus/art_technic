@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('contenu')
-<h3>Modifier la vente : {{ $vente->facture->numero }}</h3>
+<h3>Modification d'une vente : {{ $vente->facture->numero }}</h3>
 <form action="/ventes/{{ $vente->id }}" method="post">
     {{ csrf_field() }}
     {{ method_field('PUT') }}

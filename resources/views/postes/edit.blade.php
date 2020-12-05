@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('contenu')
-<h3>Modifier le poste : {{ $poste->numero }} {{ $poste->intitule }}</h3>
+<h3>Modification d'un Poste de Vente : {{ $poste->numero }} {{ $poste->intitule }}</h3>
 <form action="/postes/{{ $poste->id }}" method="post">
     {{ csrf_field() }}
     {{ method_field('PUT') }}

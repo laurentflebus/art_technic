@@ -2,7 +2,7 @@
 
 @section('contenu')
 
-<h1>Créer un client</h1>
+<h3>Ajout d'un contact</h3>
 <form action="/clients" method="post">
     {{ csrf_field() }}
     <div class="form-row">

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('contenu')
-<h3>Modifier le client : {{ Crypt::decrypt($client->nom) }} {{ Crypt::decrypt($client->prenom) }}</h3>
+<h3>Modification du contact : {{ Crypt::decrypt($client->nom) }} {{ Crypt::decrypt($client->prenom) }}</h3>
 <form action="/clients/{{ $client->id }}" method="post">
     {{ csrf_field() }}
     {{ method_field('PUT') }}

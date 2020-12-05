@@ -11,6 +11,11 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link href="/css/simple-sidebar.css" rel="stylesheet">
         <link rel="stylesheet" href="/css/bootstrap.css">
+
+        {{-- Bootstrap Javascript --}}
+        {{-- JQuery --}}
+        <script src="js/jquery-3.5.1.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <div class="d-flex" id="wrapper">
@@ -74,13 +79,41 @@
                 
             </div>
         </div>
-        {{-- Bootstrap Javascript --}}
-        <script src="js/jquery-3.5.1.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
+        
         
         <script>
+            // Quand le document HTML est chargé, lance la fonction avec le code jQuery
+            $.('#codebarre').click(function(){
+                    
+                // crée une instance de XmlHttpRequest
+                // permet d'envoyer une requête HTTP
+                // Appel AJAX en JQuery
+                    
+                $.ajax(
+                    // script qui va sélectionner le poste de vente
+                    url: 'postevente.php', // ressource ciblée
+                    type: 'POST', // type de la requête HTTP
+                    data: 'codebarre=' + codebarre, // on passe la variable codebarre (formulaire)
+                    datatype: 'html', // type de données à recevoir
+                    // si l'appel AJAX a réussi
+                    success: function(code_html, statut) { // code_html contient le HTML renvoyé
+                    
+
+                    }
+                    // si l'appel AJAX a echoué
+                    error: function(resultat, statut, erreur) {
+
+                    }
+                    // s'execute une fois l'appel AJAX effectué
+                    complete: function(resultat, statut) {
+
+                    }
+                );
+
+            });
+
             $("#menu-toggle").click(function(e) {
-                e.preventDefault();
+                e.preventDefault(); // annule l'action du div id=menu-toggle
                 $("#wrapper").toggleClass("toggled");
             });
         </script>

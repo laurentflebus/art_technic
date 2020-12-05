@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('contenu')
-<h3>Création d'une vente</h3>
+<h3>Création d'une Vente</h3>
 <form action="/ventes" method="post">
     {{ csrf_field() }}
     <div class="form-row">
