@@ -83,14 +83,12 @@
         
         
         <script>
-            // Quand le document HTML est chargé, lance la fonction avec le code jQuery
-            
+               // Évenement lors qu'une touche est relachée dans le champs code barre
                 $('#codebarre').keyup(function(e){
                     var codebarre = $('#codebarre').val();
                     // crée une instance de XmlHttpRequest
                     // permet d'envoyer une requête HTTP 
-                    // Appel AJAX en JQuery
-                    
+                    // Appel AJAX en JQuery                   
                     $.ajax({                        
                         url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
                         type: 'GET', // Type de la requête HTTP
@@ -100,26 +98,50 @@
                         success: function(data) {
                             // code pour gérer le retour de l'appel AJAX
                             console.log(data);
-                            $('#prixtvac').val(data.prix_unitaire);
-                            $('#quantite').val(data.quantite);
-                            $('#numeroposte').val(data.numero);
-                            $('#intituleposte').val(data.intitule)
-                            var quantite = data.quantite;
-                            var prixunitaire = data.prix_unitaire;
+                            $('#prixtvac').val(data[0].prix_unitaire);                            
+                            $('#numeroposte').val(data[0].numero);
+                            $('#intituleposte').val(data[0].intitule);
+
                             
-                            $('#totalttca').val(quantite*prixunitaire);
+                            var prixunitaire = data[0].prix_unitaire;
+                            var taux = data[1].taux;
+                            var prixhtva = prixunitaire * (1-(taux/100));                           
+                            $('#prixhtva').val(prixhtva.toFixed(2));
+                            
                         },
                         
                     });
+
+                });
+                // Évenement lors qu'une touche est relachée dans le champs quantite
+                $('#quantite').keyup(function(e){
+                    var quantite = $('#quantite').val();
+                    var codebarre = $('#codebarre').val();
+                    $.ajax({                        
+                        url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
+                        type: 'GET', // Type de la requête HTTP
+                        data: {'codebarre': codebarre}, // passe la variable codebarre issue du formulaire
+                        datatype: 'json', // type de données à recevoir      
+                        // si l'appel AJAX a réussi
+                        success: function(data) {
+                            // code pour gérer le retour de l'appel AJAX
+                            console.log(data);
+                            var prixunitaire = data[0].prix_unitaire;
+                            var total = quantite * prixunitaire;
+
+                            $('#totalttca').val(total.toFixed(2));
+                            $('#totalttc').val(total.toFixed(2)); 
+                        },
+                        
+                    });
+                    
                 });
             
-            
-            
 
-            $("#menu-toggle").click(function(e) {
-                e.preventDefault(); // annule l'action du div id=menu-toggle
-                $("#wrapper").toggleClass("toggled");
-            });
+                $("#menu-toggle").click(function(e) {
+                    e.preventDefault(); // annule l'action du div id=menu-toggle
+                    $("#wrapper").toggleClass("toggled");
+                });
         </script>
         
     </body>

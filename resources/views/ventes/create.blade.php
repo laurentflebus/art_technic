@@ -62,7 +62,7 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label>Prix unitaire HT</label>
-            <input type="text" name="prixhtva" class="form-control" value="{{ old('prixhtva') }}">
+            <input type="text" id="prixhtva" name="prixhtva" class="form-control" value="{{ old('prixhtva') }}">
             @if ($errors->has('prixhtva'))
                 <p class="alert alert-danger">{{ $errors->first('prixhtva') }}</p>
             @endif
@@ -95,7 +95,7 @@
 
         <div class="form-group col-md-6">
             <label>Total TTC</label>
-            <input type="text" name="totalttc" class="form-control" value="{{ old('totalttc') }}">
+            <input type="text" id="totalttc" name="totalttc" class="form-control" value="{{ old('totalttc') }}">
             @if ($errors->has('totalttc'))
                 <p class="alert alert-danger">{{ $errors->first('totalttc') }}</p>
             @endif
