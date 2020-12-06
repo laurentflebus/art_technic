@@ -42,25 +42,23 @@
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
             <label>Quantité</label>
             <input type="text" id="quantite" name="quantite" class="form-control" value="{{ old('quantite') }}">
             @if ($errors->has('quantite'))
                     <p class="alert alert-danger">{{ $errors->first('quantite') }}</p>
             @endif
-      </div>
+        </div>
 
-      <div class="form-group col-md-6">
-            <label for="poste">Prix unitaire TVAC</label>
-            <input type="text" id="prixtvac" name="prixtvac" class="form-control" value="{{ old('prixtvac') }}">
-            @if ($errors->has('prixtvac'))
-                <p class="alert alert-danger">{{ $errors->first('prixtvac') }}</p>
-            @endif
-      </div>
-    </div>
+        <div class="form-group col-md-3">
+                <label for="poste">Prix unitaire TVAC</label>
+                <input type="text" id="prixtvac" name="prixtvac" class="form-control" value="{{ old('prixtvac') }}">
+                @if ($errors->has('prixtvac'))
+                    <p class="alert alert-danger">{{ $errors->first('prixtvac') }}</p>
+                @endif
+        </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
             <label>Prix unitaire HT</label>
             <input type="text" id="prixhtva" name="prixhtva" class="form-control" value="{{ old('prixhtva') }}">
             @if ($errors->has('prixhtva'))
@@ -68,15 +66,16 @@
             @endif
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
             <label>Total TTC par article</label>
             <input type="text" id="totalttca" name="totalttca" class="form-control" value="{{ old('totalttca') }}">
             @if ($errors->has('totalttca'))
                 <p class="alert alert-danger">{{ $errors->first('totalttca') }}</p>
             @endif
         </div>
-        
     </div>
+
+    
     
     <div class="form-row">
         <div class="form-group col-md-6">

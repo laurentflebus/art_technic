@@ -134,13 +134,20 @@ class VenteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer une vente.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $vente = Vente::find($id);
+        $vente->delete();
+        foreach ($vente->postes as $poste) {
+            $vente->postes()->detach($poste);
+        }
+        
+        flash('La vente ' . $vente->id . ' a bien été supprimée.')->success();
+        return redirect('/ventes');
     }
 }
