@@ -7,14 +7,14 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label>Code barre</label>
-            <input type="text" name="codebarre" class="form-control" value="{{ old('codebarre') }}">
+            <input type="text" id="codebarre" name="codebarre" class="form-control" value="{{ old('codebarre') }}">
             @if ($errors->has('codebarre'))
                     <p class="alert alert-danger">{{ $errors->first('codebarre') }}</p>
             @endif
         </div>
         <div class="form-group col-md-4">
             <label>Référence</label>
-            <select name="numeroposte" class="form-control">
+            <select id="numeroposte" name="numeroposte" class="form-control">
                 @foreach ($postes as $poste)
                     <option value="{{ $poste->numero }}">
                         {{ $poste->numero }}
@@ -27,7 +27,7 @@
         </div>
         <div class="form-group col-md-4">
             <label>Intitulé</label>
-            <select name="intituleposte" class="form-control">
+            <select id="intituleposte" name="intituleposte" class="form-control">
                 @foreach ($postes as $poste)
                     <option value="{{ $poste->intitule }}">
                         {{ $poste->intitule }}
@@ -44,7 +44,7 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label>Quantité</label>
-            <input type="text" name="quantite" class="form-control" value="{{ old('quantite') }}">
+            <input type="text" id="quantite" name="quantite" class="form-control" value="{{ old('quantite') }}">
             @if ($errors->has('quantite'))
                     <p class="alert alert-danger">{{ $errors->first('quantite') }}</p>
             @endif
@@ -52,7 +52,7 @@
 
       <div class="form-group col-md-6">
             <label for="poste">Prix unitaire TVAC</label>
-            <input type="text" name="prixtvac" class="form-control" value="{{ old('prixtvac') }}">
+            <input type="text" id="prixtvac" name="prixtvac" class="form-control" value="{{ old('prixtvac') }}">
             @if ($errors->has('prixtvac'))
                 <p class="alert alert-danger">{{ $errors->first('prixtvac') }}</p>
             @endif
@@ -70,7 +70,7 @@
 
         <div class="form-group col-md-6">
             <label>Total TTC par article</label>
-            <input type="text" name="totalttca" class="form-control" value="{{ old('totalttca') }}">
+            <input type="text" id="totalttca" name="totalttca" class="form-control" value="{{ old('totalttca') }}">
             @if ($errors->has('totalttca'))
                 <p class="alert alert-danger">{{ $errors->first('totalttca') }}</p>
             @endif

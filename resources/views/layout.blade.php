@@ -9,13 +9,14 @@
         {{-- Bootstrap CSS --}}
         
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/bootstrap.min.css.map">
         <link href="/css/simple-sidebar.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/bootstrap.css">
+        {{-- <link rel="stylesheet" href="/css/bootstrap.css"> --}}
 
         {{-- Bootstrap Javascript --}}
         {{-- JQuery --}}
-        <script src="js/jquery-3.5.1.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="/js/jquery-3.5.1.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <div class="d-flex" id="wrapper">
@@ -83,30 +84,37 @@
         
         <script>
             // Quand le document HTML est chargé, lance la fonction avec le code jQuery
-            $.('#codebarre').click(function(){
+            
+                $('#codebarre').keyup(function(e){
+                    var codebarre = $('#codebarre').val();
+                    // crée une instance de XmlHttpRequest
+                    // permet d'envoyer une requête HTTP 
+                    // Appel AJAX en JQuery
                     
-                // crée une instance de XmlHttpRequest
-                // permet d'envoyer une requête HTTP
-                // Appel AJAX en JQuery
-                 // type POST requête HTTP   
-                $.post(
-                    // script qui va sélectionner le poste de vente
-                    'postevente.php', // fichier cible coté serveur, script qui récupère les infos du poste de vente
-                    {
-                        codebarre : $('#codebarre').val(), // passe la variable codebarre issue du formulaire
-                    }
-                    'text', // type de données à recevoir
-                    fonction_retour, // nom de la fonction de retour
-                    
-                );
-
-            });
-            // si l'appel AJAX a réussi
-            function fonction_retour(texte_recu) {
-                // code pour gérer le retour de l'appel AJAX
-                $(texte_recu).appendTo("#poste");
-
-            }
+                    $.ajax({                        
+                        url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
+                        type: 'GET', // Type de la requête HTTP
+                        data: {'codebarre': codebarre}, // passe la variable codebarre issue du formulaire
+                        datatype: 'json', // type de données à recevoir      
+                        // si l'appel AJAX a réussi
+                        success: function(data) {
+                            // code pour gérer le retour de l'appel AJAX
+                            console.log(data);
+                            $('#prixtvac').val(data.prix_unitaire);
+                            $('#quantite').val(data.quantite);
+                            $('#numeroposte').val(data.numero);
+                            $('#intituleposte').val(data.intitule)
+                            var quantite = data.quantite;
+                            var prixunitaire = data.prix_unitaire;
+                            
+                            $('#totalttca').val(quantite*prixunitaire);
+                        },
+                        
+                    });
+                });
+            
+            
+            
 
             $("#menu-toggle").click(function(e) {
                 e.preventDefault(); // annule l'action du div id=menu-toggle

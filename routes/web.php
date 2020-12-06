@@ -40,10 +40,12 @@ Route::group([
     Route::get('/mon-compte', 'CompteController@accueil');
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
+    Route::get('/ajax', 'AjaxController@ajaxRequestPost');
 
     Route::resource('/clients', 'ClientController');
     Route::resource('/postes', 'PosteController');
     Route::resource('/ventes', 'VenteController');
+    
 });
 
 
