@@ -45,7 +45,7 @@ class PosteController extends Controller
         $request->validate([
             'numero' => ['required', 'numeric'],
             'poste' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
-            'codebarre' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'codebarre' => ['required', 'regex:/^[\w]+$/i'],
             'quantite' => ['required', 'regex:/^[0-9]+$/'],
             'prixunitaire' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
@@ -140,7 +140,7 @@ class PosteController extends Controller
         $request->validate([
             'numero' => ['required', 'numeric'],
             'poste' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
-            'codebarre' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'codebarre' => ['required', 'regex:/^[\w]+$/i'],
             'quantite' => ['required', 'regex:/^[0-9]+$/'],
             'prixunitaire' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],

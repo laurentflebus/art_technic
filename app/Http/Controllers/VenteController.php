@@ -45,13 +45,13 @@ class VenteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'codebarre' => ['required'],
-            'numeroposte' => ['required'],
-            'intituleposte' => ['required'],
-            'quantite' => ['required'],
-            'prixtvac' => ['required'],
-            'client' => ['required'],
-            'modereglement' => ['required'],
+            'codebarre' => ['required', 'regex:/^[\w]+$/i'],
+            'numeroposte' => ['required', 'regex:/^[0-9]+$/'],
+            'intituleposte' => ['required', 'regex:/^[\w àéè,.\'-]+$/i'],
+            'quantite' => ['required', 'regex:/^[0-9]+$/'],
+            'prixtvac' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
+            'client' => ['required', 'regex:/^[0-9]+$/'],
+            'modereglement' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
         ]);
 
         $modereglement = "";
