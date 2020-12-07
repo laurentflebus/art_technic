@@ -99,10 +99,7 @@
             <select id="codepostal" name="codepostal" class="form-control">
                 <option>Choississez</option>
                 <option>1000</option>
-<<<<<<< HEAD
-=======
                 <option>5000</option>
->>>>>>> poste
                 <option>7130</option>
                 <option>7000</option>
             </select>
@@ -113,11 +110,7 @@
         <div class="form-group col-md-4">
             <label>Localité</label>
             <select id="localite" name="localite" class="form-control">
-<<<<<<< HEAD
-                <option>Choississez</option>
-=======
                 <option value="">Choississez</option>
->>>>>>> poste
                 <option>Bruxelles</option>
                 <option>Binche</option>
                 <option>Charleroi</option>

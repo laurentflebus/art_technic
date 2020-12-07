@@ -31,6 +31,7 @@
                     <a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-light">Créer un poste de vente</a>
                     <a href="{{ URL::to('ventes') }}" class="list-group-item list-group-item-action bg-light">Listing ventes</a>
                     <a href="{{ URL::to('ventes/create') }}" class="list-group-item list-group-item-action bg-light">Caisse</a>
+                    <a href="{{ URL::to('parametres') }}" class="list-group-item list-group-item-action bg-light">Paramètres</a>
                 </div>
             </div>
 

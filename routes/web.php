@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//routes concernant authentification
+//routes concernant l'authentification
 // 1er paramètre : chemin de l'URL, 2ème paramètre : la vue à afficher
 Route::get('/', 'CompteController@afficherFormulaire');
 Route::post('/', 'CompteController@traiterFormulaire');
 
+// Groupe de routes
 Route::group([
     'middleware' => 'App\Http\Middleware\Admin',
 ], function () {
@@ -36,16 +37,19 @@ Route::get('/utilisateurs', 'CompteController@liste');
 Route::group([
     'middleware' => 'App\Http\Middleware\Auth',
 ], function () {
-    //routes concernant authentification connecté
+    //routes concernant l'utilisateur connecté
     Route::get('/mon-compte', 'CompteController@accueil');
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
-    Route::get('/ajax', 'AjaxController@ajaxRequestPost');
+
+    Route::get('/parametres', 'SocieteController@afficher');
+    Route::post('/parametres', 'SocieteController@gerer');
+
+    Route::get('/ajax', 'AjaxController@ajaxRequest');
 
     Route::resource('/clients', 'ClientController');
     Route::resource('/postes', 'PosteController');
-    Route::resource('/ventes', 'VenteController');
-    
+    Route::resource('/ventes', 'VenteController'); 
 });
 
 

@@ -8,7 +8,7 @@ use App\Models\Tva;
 
 class AjaxController extends Controller
 {
-    public function ajaxRequestPost()
+    public function ajaxRequest()
     {
         $poste = Poste::where('code_barre', request('codebarre'))->first();
         $tva = Tva::where('id', $poste->tva_id)->first();  
