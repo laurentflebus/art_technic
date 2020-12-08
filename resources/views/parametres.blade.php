@@ -17,10 +17,10 @@
         <form action="/parametres" method="post">
 
             {{ csrf_field() }}
-                   
+                  
             <div class="input-group mb-3">
                 <span class="input-group-text">Nom</span>
-                <input type="text" name="nom" class="form-control" value="">
+                <input type="text" name="nom" class="form-control" value="{{ Crypt::decrypt($societe->nom) }}">
                 @if ($errors->has('nom'))
                     <p class="alert alert-danger">{{ $errors->first('nom') }}</p>
                 @endif
@@ -28,7 +28,7 @@
             
             <div class="input-group mb-3">
                 <span class="input-group-text">N°TVA</span>
-                <input type="text" name="numtva" class="form-control" value="">
+                <input type="text" name="numtva" class="form-control" value="{{ Crypt::decrypt($societe->num_tva) }}">
                 @if ($errors->has('numtva'))
                     <p class="alert alert-danger">{{ $errors->first('numtva') }}</p>
                 @endif
@@ -36,7 +36,7 @@
         
             <div class="input-group mb-3">
                 <span class="input-group-text">Registre</span>
-                <input type="text" name="registre" class="form-control" value="">
+                <input type="text" name="registre" class="form-control" value="{{ Crypt::decrypt($societe->registre) }}">
                 @if ($errors->has('registre'))
                     <p class="alert alert-danger">{{ $errors->first('registre') }}</p>
                 @endif
@@ -44,7 +44,7 @@
         
             <div class="input-group mb-3">
                 <span class="input-group-text">N°Compte</span>
-                <input type="text" name="numcompte" class="form-control" value="">
+                <input type="text" name="numcompte" class="form-control" value="{{ Crypt::decrypt($societe->num_compte) }}">
                 @if ($errors->has('numcompte'))
                     <p class="alert alert-danger">{{ $errors->first('numcompte') }}</p>
                 @endif
@@ -52,7 +52,7 @@
         
             <div class="input-group mb-3">
                 <span class="input-group-text">Téléphone</span>
-                <input type="text" name="telephone" class="form-control" value="">
+                <input type="text" name="telephone" class="form-control" value="{{ Crypt::decrypt($societe->telephone) }}">
                 @if ($errors->has('telephone'))
                     <p class="alert alert-danger">{{ $errors->first('telephone') }}</p>
                 @endif
@@ -61,16 +61,16 @@
             <div class="form-row">
                 <div class="input-group col-md-6">
                     <span class="input-group-text">Rue</span>
-                    <input type="text" name="rue" class="form-control" value="">
+                    <input type="text" name="rue" class="form-control" value="{{ Crypt::decrypt($societe->rue) }}">
                     @if ($errors->has('rue'))
                         <p class="alert alert-danger">{{ $errors->first('rue') }}</p>
                     @endif
                 </div>
                 <div class="input-group col-md-6">
                     <span class="input-group-text">N. rue</span>
-                    <input type="text" name="nrue" class="form-control" value="{{ old('nrue') }}">
+                    <input type="text" name="nrue" class="form-control" value="{{ Crypt::decrypt($societe->nrue) }}">
                     @if ($errors->has('nrue'))
-                        <p class="alert alert-danger">{{ $errors->first('mobile') }}</p>
+                        <p class="alert alert-danger">{{ $errors->first('nrue') }}</p>
                     @endif
                 </div>
             </div>
@@ -122,7 +122,10 @@
         
             <div class="form-group mb-3">
                 <label for="remarque" class="form-label">Remarque</label>
-                <textarea class="form-control" id="remarque" rows="3" name="remarque"></textarea>
+                <textarea class="form-control" id="remarque" rows="3" name="remarque">{{ Crypt::decrypt($societe->remarque) }}</textarea>
+                @if ($errors->has('remarque'))
+                        <p class="alert alert-danger">{{ $errors->first('remarque') }}</p>
+                @endif
             </div>
             
         

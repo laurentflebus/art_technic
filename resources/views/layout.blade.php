@@ -7,10 +7,11 @@
         <meta name="author" content="Flebus Laurent">
         <title>Art Technic</title>
         {{-- Bootstrap CSS --}}
-        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/bootstrap.min.css.map">
         <link href="/css/simple-sidebar.css" rel="stylesheet">
+        <link href="/css/style.css" rel="stylesheet">
         {{-- <link rel="stylesheet" href="/css/bootstrap.css"> --}}
 
         {{-- Bootstrap Javascript --}}
@@ -40,10 +41,33 @@
                         </svg>
                         Accueil
                     </a>
-                    <a href="{{ URL::to('clients') }}" class="list-group-item list-group-item-action bg-light">Tous les clients</a>                    
-                    <a href="{{ URL::to('clients/create') }}" class="list-group-item list-group-item-action bg-light">Créer un client</a>
-                    <a href="{{ URL::to('postes') }}" class="list-group-item list-group-item-action bg-light">Postes de vente</a>
-                    <a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-light">Créer un poste de vente</a>
+                    <a href="#clientSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-light dropdown-toggle">
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                        Clients</a>
+	            		<ul class="collapse list-unstyled" id="clientSubmenu">
+                			<li>
+                    			<a href="{{ URL::to('clients') }}" class="list-group-item list-group-item-action bg-light">Les Clients</a>
+                			</li>
+                			<li>
+                    			<a href="{{ URL::to('clients/create') }}" class="list-group-item list-group-item-action bg-light">Créer un client</a>
+                			</li>
+                			
+	            		</ul>
+                    <a href="#posteSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-light dropdown-toggle">Postes</a>
+	            		<ul class="collapse list-unstyled" id="posteSubmenu">
+                			<li>
+                    			<a href="{{ URL::to('postes') }}" class="list-group-item list-group-item-action bg-light">Les Postes de vente</a>
+                			</li>
+                			<li>
+                    			<a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-light">Créer un poste de vente</a>
+                			</li>
+                			
+	            		</ul>                   
+                    
+                    
+                    
                     <a href="{{ URL::to('ventes') }}" class="list-group-item list-group-item-action bg-light">Listing ventes</a>
                     <a href="{{ URL::to('ventes/create') }}" class="list-group-item list-group-item-action bg-light">Caisse</a>
                     <a href="{{ URL::to('parametres') }}" class="list-group-item list-group-item-action bg-light">Paramètres</a>
@@ -52,11 +76,10 @@
 
             <div id="page-content-wrapper">
 
-                <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom">
-                    <button id="menu-toggle" class="btn btn-light">MENU</button>
-
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"><i class="fas fa-bars fa-1x"></i></span>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+                    <button type="button" id="menu-toggle" class="btn btn-light">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Menu</span>
                     </button>
 
                     <div id="navbarSupportedContent" class="collapse navbar-collapse">
