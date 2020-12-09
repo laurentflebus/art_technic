@@ -8,6 +8,7 @@ use App\Models\Poste;
 use App\Models\Client;
 use App\Models\Modereglement;
 use App\Models\Facture;
+use Hamcrest\Type\IsNumeric;
 
 class VenteController extends Controller
 {
@@ -44,15 +45,23 @@ class VenteController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'codebarre' => ['required', 'regex:/^[\w]+$/i'],
-            'numeroposte' => ['required', 'regex:/^[0-9]+$/'],
-            'intituleposte' => ['required', 'regex:/^[\w àéè,.\'-]+$/i'],
-            'quantite' => ['required', 'regex:/^[0-9]+$/'],
-            'prixtvac' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
-            'client' => ['required', 'regex:/^[0-9]+$/'],
-            'modereglement' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
-        ]);
+        // récupère le nombre de poste grâce à l'input caché 'nbPoste'
+        $nbPoste = request('nbPoste');
+
+        
+        for ($i=1; $i <= $nbPoste; $i++) { 
+            $request->validate([
+                'quantite'.$i => ['required', 'regex:/^[0-9]+$/'],
+            ]);
+        }
+        // $request->validate([
+        //     'codebarre' => ['required', 'regex:/^[\w]+$/i'],
+        //     'numeroposte1' => ['required', 'regex:/^[0-9]+$/'],
+        //     'intituleposte1' => ['required', 'regex:/^[\w àéè,.\'-]+$/i'],            
+        //     'prixtvac1' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],          
+        //     'client' => ['required', 'regex:/^[0-9]+$/'],
+        //     'modereglement' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+        // ]);
 
         $modereglement = "";
         $modereglement = Modereglement::where('intitule', request('modereglement'))->first();
@@ -73,12 +82,58 @@ class VenteController extends Controller
             'modereglement_id' => $modereglement->id,
             'facture_id' => $facture->id, 
         ]);
-        $poste = Poste::where('numero', request('numeroposte'))->first();
-        $vente->postes()->attach($poste, [
-            'quantite' => request('quantite'),
-            'prix_unitaire' => request('prixtvac'),
-            'detail' => 'Aucun détail',
-        ]);
+        
+        
+        
+        // boucle pour les tests champs null, doublons
+        for ($i=1; $i <= $nbPoste ; $i++) { 
+            // récupération tous les champs numeroposte($i) intituleposte($i) quantite($i) prixtvac($i)
+            $numeroposte = request('numeroposte'.$i);
+            $intituleposte = request('intituleposte'.$i);
+            $quantite = request('quantite'.$i);
+            $prixtvac = request('prixtvac'.$i);
+
+            // vérifie les champs sont nuls
+            if (!$numeroposte) {
+                flash('Vous devez insérer un numero de poste à la ligne '.$i)->error();
+                return back();
+            }
+            if (!$intituleposte) {
+                flash('Vous devez insérer un intitule de poste à la ligne '.$i)->error();
+                return back();
+            }
+            if (!$quantite) {
+                flash('Vous devez insérer une quantité à la ligne '.$i)->error();
+                return back();
+            }
+            if (!(is_numeric($quantite))) {
+                flash('La quantité doit être un nombre entier.')->error();
+                return back();
+            }
+            if (!$prixtvac) {
+                flash('Vous devez insérer un prix tvac à la ligne '.$i)->error();
+                return back();
+            }
+
+            // Boucle qui compare les intitulés de poste au précédent de la liste, empeche ainsi les doublons de poste
+            for ($cposte=1; $cposte < $i; $cposte++) { 
+                $intitulecompare = request('intituleposte'.$cposte);
+                if($intituleposte == $intitulecompare) {
+                    flash('Vous avez entré plusieurs fois le même poste de vente.')->error();
+                    return back();
+                }
+            }
+
+        }
+        // Boucle pour les ajouts de postes de vente
+        for ($i=1; $i <= $nbPoste; $i++) {           
+            $poste = Poste::where('intitule', request('intituleposte'.$i))->first();
+            $vente->postes()->attach($poste, [
+                'quantite' => request('quantite'.$i),
+                'prix_unitaire' => request('prixtvac'.$i),
+                'detail' => 'Aucun détail',
+            ]);
+        }
 
         flash('La vente a bien été enregistrée')->success();
         return redirect('/ventes');

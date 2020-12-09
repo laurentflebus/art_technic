@@ -6,8 +6,8 @@ jQuery(function($){
     var cptPoste = 1;
     var cPoste = '1';
     // Évenement lorsqu'une touche est relachée dans le champs code barre
-    $('#codebarre1').keyup(function(e){
-        var codebarre = $('#codebarre1').val();
+    $('#codebarre').keyup(function(e){
+        var codebarre = $('#codebarre').val();
         // crée une instance de XmlHttpRequest
         // permet d'envoyer une requête HTTP 
         // Appel AJAX en JQuery                   
@@ -35,9 +35,10 @@ jQuery(function($){
         });
     });
     // Évenement lorsqu'une touche est relachée dans le champs quantite
-    $('#quantite1').keyup(function(e){
-        var quantite = $('#quantite1').val();
-        var codebarre = $('#codebarre1').val();
+    $('#quantite').keyup(function(e){
+        var quantite = $('#quantite').val();
+        var codebarre = $('#codebarre').val();
+        
         $.ajax({                        
             url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
             type: 'GET', // Type de la requête HTTP
@@ -76,30 +77,29 @@ jQuery(function($){
             // ajoute à une div vide le clone
             $('#bloc').append(clone);
             // modifie les attributs id et name des input codebarre, numeroposte, intituleposte, quantite, prixtvac, prixhtva, totalttca
-            $('#bloc #codebarre1').attr('id', 'codebarre'+cPoste);
-            $('#bloc #codebarre1').attr('name', 'codebarre'+cPoste);
-            $('#bloc #numeroposte1').attr('id', 'numeroposte'+cPoste);
             $('#bloc #numeroposte1').attr('name', 'numeroposte'+cPoste);
-            $('#bloc #intituleposte1').attr('id', 'intituleposte'+cPoste);
+            $('#bloc #numeroposte1').attr('id', 'numeroposte'+cPoste);
             $('#bloc #intituleposte1').attr('name', 'intituleposte'+cPoste);
-            $('#bloc #quantite1').attr('id', 'quantite'+cPoste);
+            $('#bloc #intituleposte1').attr('id', 'intituleposte'+cPoste);
             $('#bloc #quantite1').attr('name', 'quantite'+cPoste);
-            $('#bloc #prixtvac1').attr('id', 'prixtvac'+cPoste);
+            $('#bloc #quantite1').attr('id', 'quantite'+cPoste);
             $('#bloc #prixtvac1').attr('name', 'prixtvac'+cPoste);
-            $('#bloc #prixhtva1').attr('id', 'prixhtva'+cPoste);
+            $('#bloc #prixtvac1').attr('id', 'prixtvac'+cPoste);
             $('#bloc #prixhtva1').attr('name', 'prixhtva'+cPoste);
-            $('#bloc #totalttca1').attr('id', 'totalttca'+cPoste);
+            $('#bloc #prixhtva1').attr('id', 'prixhtva'+cPoste);
+            $('#bloc #totalttca1').attr('name', 'totalttca'+cPoste);
             $('#bloc #totalttca1').attr('id', 'totalttca'+cPoste);
 
             // vide les nouveaux champs
-            $('#codebarre'+cPoste).val('');
             $('#numeroposte'+cPoste).val('');
             $('#intituleposte'+cPoste).val('');
             $('#quantite'+cPoste).val('');
             $('#prixtvac'+cPoste).val('');
             $('#prixhtva'+cPoste).val('');
             $('#totalttca'+cPoste).val('');
-                                    
+            
+            // supprimme tous les label du div bloc
+            $('#bloc label').remove();
             // change la valeur de l'input caché avec la derrière valeur de cPoste (nombre de poste).
             $('#nbPoste').val(cPoste);
         }
