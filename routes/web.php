@@ -20,20 +20,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'CompteController@afficherFormulaire');
 Route::post('/', 'CompteController@traiterFormulaire');
 
-// Groupe de routes
+// Groupe de routes Middelware Admin (est administrateur)
 Route::group([
     'middleware' => 'App\Http\Middleware\Admin',
 ], function () {
-    // Route qui répond aux requêtes de type POST
+    // Route qui répond aux requêtes de type GET
     Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
     // Route qui répond aux requêtes de type POST
     Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
 });
 
-
-Route::get('/utilisateurs', 'CompteController@liste');
-
-// Groupe de routes 
+// Groupe de routes Middleware Auth (est identifié)
 Route::group([
     'middleware' => 'App\Http\Middleware\Auth',
 ], function () {
@@ -51,11 +48,6 @@ Route::group([
     Route::resource('/postes', 'PosteController');
     Route::resource('/ventes', 'VenteController'); 
 });
-
-
-
-
-
 
 // route générique
 //Route::get('/{nomclient}', 'ClientController@voir');
