@@ -7,13 +7,12 @@
     </div>
     <div class="card-body">
         <form action="/inscriptionAuthentification" method="post">
-            <br>
                 
             {{-- Ajoute un input de type hidden avec un nombre aléatoire généré qui permet à Laravel
                  de vérifier que le formulaire est bien envoyé depuis le site --}}
             {{ csrf_field() }}
             
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="user">Nom d'utilisateur</label>
                 <input type="text" class="form-control" id="user" name="user" value="{{ old('user') }}">
                 {{-- variable $errors  contient toutes les erreurs --}}
@@ -24,7 +23,7 @@
             </div>
             
     
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name="password">
                 @if ($errors->has('password'))
@@ -33,7 +32,7 @@
             </div>
             
     
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="password_confirmation">Confirmation</label>
                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                 @if ($errors->has('password_confirmation'))
@@ -43,8 +42,8 @@
     
             <fieldset class="form-group">
                 <div class="row">
-                  <legend class="col-form-label col-sm-2 pt-0">Type de compte</legend>
-                    <div class="col-sm-10">
+                    <legend class="col-form-label col-md-2">Type de compte</legend>
+                    <div class="col-md-10">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="admin" value="0" checked>
                             <label class="form-check-label" for="gridRadios1">Utilisateur régulier</label>
