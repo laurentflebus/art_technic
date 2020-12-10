@@ -11,15 +11,20 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/bootstrap.min.css.map">
         <link href="/css/simple-sidebar.css" rel="stylesheet">
-        
+
+        {{-- Datatable --}}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
         {{-- <link rel="stylesheet" href="/css/bootstrap.css"> --}}
 
-        {{-- Bootstrap Javascript --}}
+        {{-- Bootstrap Javascript --}}        
         {{-- JQuery --}}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         {{-- <script src="/js/jquery-3.5.1.min.js"></script> --}}
         <script src="/js/script.js"></script>
         <script src="/js/bootstrap.bundle.min.js"></script>
+        {{-- Datatable --}}
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
     </head>
     <body>
         <div class="d-flex" id="wrapper">

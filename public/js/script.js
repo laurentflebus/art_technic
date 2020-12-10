@@ -1,5 +1,5 @@
 
-jQuery(function($){
+$(document).ready(function(){
     // cache le bouton supprimer
     $('#supprimerposte').hide();
     // Nombre de poste max
@@ -136,4 +136,21 @@ jQuery(function($){
         e.preventDefault(); // annule l'action du div id=menu-toggle
         $("#wrapper").toggleClass("toggled");
     });
+
+    // datatable
+    $('#table').DataTable({
+        "language": {
+            "lengthMenu": "Nombre _MENU_ par page",
+            "search": "Recherche ",
+            "info": "_START_ à _END_ entrées",
+            "infoEmpty": "0 entrées",
+            "infoFiltered": "(Filtré sur _MAX_ au total)",
+            "zeroRecords": "Aucun résultat",
+            "paginate": {
+                "previous": "précédent",
+                "next": "suivant"
+            },
+          }
+    });
+    
 });
