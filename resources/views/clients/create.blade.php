@@ -1,9 +1,12 @@
 @extends('layout')
 
 @section('contenu')
-
-<h3>Ajout d'un contact</h3>
-<form action="/clients" method="post">
+<div class="card">
+    <div class="card-header text-center">
+        <h3>Ajout d'un contact</h3>
+    </div>
+    <div class="card-body">
+    <form action="/clients" method="post">
     {{ csrf_field() }}
     <div class="form-row">
 
@@ -172,8 +175,16 @@
     </div>
 
     
-    <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
-  </form>
+    
+</div>
+    <div class="card-footer text-center">
+            <button type="reset" class="btn btn-danger">Annuler</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
+        </form>
+    </div>
+</div>
+
+
 
     
 @endsection

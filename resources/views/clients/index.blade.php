@@ -2,7 +2,7 @@
 
 @section('contenu')
 <div class="card">
-    <div class="card-header">
+    <div class="card-header text-center">
         <h4>
             Gestion des Clients
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -73,9 +73,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    <div class="card-footer">
-
     </div>
 </div>
 
