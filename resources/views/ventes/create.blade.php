@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('contenu')
-<div class="card">
+<div class="card text-center">
     <div class="card-header">
         <h3>Création d'une Vente</h3>
     </div>
@@ -18,18 +18,35 @@
                                 <p class="alert alert-danger">{{ $errors->first('codebarre') }}</p>
                         @endif
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Quantité</label>
                         <input type="text" id="quantite" name="quantite" class="form-control" value="{{ old('quantite') }}">
-                        @if ($errors->has('quantite'))
-                                <p class="alert alert-danger">{{ $errors->first('quantite') }}</p>
-                        @endif
+                        @for ($i = 1; $i <= 10; $i++)
+                            @if ($errors->has('quantite'.$i))
+                            <p class="alert alert-danger">{{ $errors->first('quantite'.$i) }}</p>
+                            @endif
+                        @endfor
+                        
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Ajouter un poste</label>
+                        <div>
+                            <label>Ajouter</label>
+                        </div>
+                        
                         <button type="button" class="btn btn-outline-primary btn-sm" id="ajouterposte">
                             <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <div>
+                            <label>Supprimer</label>
+                        </div>
+                        
+                        <button type="button" class="btn btn-outline-danger btn-sm" id="supprimerposte">
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-dash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
                             </svg>
                         </button>
                     </div>
@@ -39,45 +56,33 @@
                     <div class="form-row">
                         <div class="form-group col-md-2">
                             <label>Référence</label>
-                            <select id="numeroposte1" name="numeroposte1" class="form-control" readonly>
-                                @foreach ($postes as $poste)
-                                    <option value="{{ $poste->numero }}">
-                                        {{ $poste->numero }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
+                            <input type="text" id="numeroposte1" name="numeroposte1" class="form-control" readonly>
                         </div>
                         <div class="form-group col-md-2">
                             <label>Intitulé</label>
-                            <select id="intituleposte1" name="intituleposte1" class="form-control" readonly>
-                                @foreach ($postes as $poste)
-                                    <option value="{{ $poste->intitule }}">
-                                        {{ $poste->intitule }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <input type="text" id="intituleposte1" name="intituleposte1" class="form-control" readonly>
                         </div>
                         <div class="form-group col-md-2">
                             <label>Qté</label>
-                            <input type="text" id="quantite1" name="quantite1" class="form-control" value="{{ old('quantite1') }}" readonly>
+                            <input type="text" id="quantite1" name="quantite1" class="form-control" readonly>
                         </div>
         
                         <div class="form-group col-md-2">
                             <label for="poste">P.U TVAC</label>
-                            <input type="text" id="prixtvac1" name="prixtvac1" class="form-control" value="{{ old('prixtvac1') }}" readonly>
+                            <input type="text" id="prixtvac1" name="prixtvac1" class="form-control" readonly>
                             
                         </div>
         
                         <div class="form-group col-md-2">
                             <label>P.U HT</label>
-                            <input type="text" id="prixhtva1" name="prixhtva1" class="form-control" value="{{ old('prixhtva1') }}" readonly>                   
+                            <input type="text" id="prixhtva1" name="prixhtva1" class="form-control" readonly>                   
                         </div>
         
                         <div class="form-group col-md-2">
                             <label>Total TTC</label>
-                            <input type="text" id="totalttca1" name="totalttca1" class="form-control" value="{{ old('totalttca1') }}" readonly>                              
+                            <input type="text" id="totalttca1" name="totalttca1" class="form-control" readonly>                              
                         </div>
+
                         
                     </div>
                 </div>
@@ -104,7 +109,7 @@
         
                 <div class="form-group col-md-6">
                     <label>Total TTC</label>
-                    <input type="text" id="totalttc" name="totalttc" class="form-control" value="{{ old('totalttc') }}" readonly>
+                    <input type="text" id="totalttc" name="totalttc" class="form-control" readonly>
                     @if ($errors->has('totalttc'))
                         <p class="alert alert-danger">{{ $errors->first('totalttc') }}</p>
                     @endif

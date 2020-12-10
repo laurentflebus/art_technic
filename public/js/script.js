@@ -1,6 +1,7 @@
 
 jQuery(function($){
-
+    // cache le bouton supprimer
+    $('#supprimerposte').hide();
     // Nombre de poste max
     var max = 10;
     var cptPoste = 1;
@@ -66,7 +67,8 @@ jQuery(function($){
     });
     
     $('#ajouterposte').click(function(e) {
-
+        // affiche le bouton supprimer
+        $('#supprimerposte').show();
         if (cptPoste < max) {
             // incremente le compteur et transforme en chaine de caractère
             cptPoste++;
@@ -90,6 +92,9 @@ jQuery(function($){
             $('#bloc #totalttca1').attr('name', 'totalttca'+cPoste);
             $('#bloc #totalttca1').attr('id', 'totalttca'+cPoste);
 
+            // modifie l'id du clone
+            $('#bloc #clone').attr('id', 'clone'+cPoste);
+
             // vide les nouveaux champs
             $('#numeroposte'+cPoste).val('');
             $('#intituleposte'+cPoste).val('');
@@ -106,6 +111,25 @@ jQuery(function($){
         console.log(cPoste);
 
     });
+
+        
+    $('#supprimerposte').click(function(e) {
+        // supprime le clone
+        $('#clone'+cPoste).remove();
+
+        // Décrémente le compteur poste et on le transforme en chaine de caractère
+        cptPoste--;
+        cPoste = cptPoste.toString();
+        console.log(cPoste);
+        // change la valeur de l'input caché avec la dernière valeur de cPoste
+        $('#nbPoste').val(cPoste);
+        // si nombre de poste = 1, cache le bouton supprimer
+        if(cptPoste == 1) {
+            $('#supprimerposte').hide()
+        }
+    });
+    
+    
 
     // événement menu aside
     $("#menu-toggle").click(function(e) {

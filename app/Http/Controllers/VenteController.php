@@ -8,7 +8,6 @@ use App\Models\Poste;
 use App\Models\Client;
 use App\Models\Modereglement;
 use App\Models\Facture;
-use Hamcrest\Type\IsNumeric;
 
 class VenteController extends Controller
 {
@@ -32,9 +31,8 @@ class VenteController extends Controller
      */
     public function create()
     {
-        $postes = Poste::all();
         $clients = Client::all();
-        return view('ventes.create', ['postes' => $postes, 'clients' => $clients]);
+        return view('ventes.create', ['clients' => $clients]);
     }
 
     /**
@@ -47,13 +45,7 @@ class VenteController extends Controller
     {
         // récupère le nombre de poste grâce à l'input caché 'nbPoste'
         $nbPoste = request('nbPoste');
-
-        
-        for ($i=1; $i <= $nbPoste; $i++) { 
-            $request->validate([
-                'quantite'.$i => ['required', 'regex:/^[0-9]+$/'],
-            ]);
-        }
+    
         // $request->validate([
         //     'codebarre' => ['required', 'regex:/^[\w]+$/i'],
         //     'numeroposte1' => ['required', 'regex:/^[0-9]+$/'],
@@ -62,6 +54,47 @@ class VenteController extends Controller
         //     'client' => ['required', 'regex:/^[0-9]+$/'],
         //     'modereglement' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
         // ]);
+        
+        // boucle pour les tests de champs null, doublons
+        for ($i=1; $i <= $nbPoste ; $i++) { 
+            // récupére tous les champs numeroposte($i) intituleposte($i) quantite($i) prixtvac($i)
+            $numeroposte = request('numeroposte'.$i);
+            $intituleposte = request('intituleposte'.$i);
+            $quantite = request('quantite'.$i);
+
+            // vérifie les champs sont null
+            if (!($numeroposte && $intituleposte)) {
+                flash('Vous devez insérer un numero et un intitulé de poste à la ligne '.$i)->error();
+                return back();
+            }
+
+            if (!$quantite) {
+                flash('Vous devez insérer une quantité à la ligne '.$i)->error();
+                return back();
+            }
+
+            // vérifie si la quantité est au format numéric
+            if (!is_numeric($quantite)) {
+                flash('La quantité doit être un nombre entier.')->error();
+                return back();
+            }
+            // évite les chiffres à virgule
+            for ($i=1; $i <= $nbPoste; $i++) { 
+                $request->validate([
+                    'quantite'.$i => ['required', 'regex:/^[0-9]+$/'],
+                ]);
+            }
+
+            // Boucle qui compare les numéros de poste au(x) précédent(s) de la liste, empêche ainsi les doublons de poste
+            for ($cposte=1; $cposte < $i; $cposte++) { 
+                $numerocompare = request('numeroposte'.$cposte);
+                if($numeroposte == $numerocompare) {
+                    flash('Vous avez entré plusieurs fois le même poste de vente.')->error();
+                    return back();
+                }
+            }
+
+        }
 
         $modereglement = "";
         $modereglement = Modereglement::where('intitule', request('modereglement'))->first();
@@ -71,9 +104,11 @@ class VenteController extends Controller
                 'intitule' => request('modereglement'),
             ]);
         }
+
         $facture = Facture::create([
             'numero' => 'A/20/0000001',
         ]);
+
         $vente = Vente::create([
             'a_facturer' => false,
             'est_paye' => true,
@@ -83,51 +118,10 @@ class VenteController extends Controller
             'facture_id' => $facture->id, 
         ]);
         
-        
-        
-        // boucle pour les tests champs null, doublons
-        for ($i=1; $i <= $nbPoste ; $i++) { 
-            // récupération tous les champs numeroposte($i) intituleposte($i) quantite($i) prixtvac($i)
-            $numeroposte = request('numeroposte'.$i);
-            $intituleposte = request('intituleposte'.$i);
-            $quantite = request('quantite'.$i);
-            $prixtvac = request('prixtvac'.$i);
 
-            // vérifie les champs sont nuls
-            if (!$numeroposte) {
-                flash('Vous devez insérer un numero de poste à la ligne '.$i)->error();
-                return back();
-            }
-            if (!$intituleposte) {
-                flash('Vous devez insérer un intitule de poste à la ligne '.$i)->error();
-                return back();
-            }
-            if (!$quantite) {
-                flash('Vous devez insérer une quantité à la ligne '.$i)->error();
-                return back();
-            }
-            if (!(is_numeric($quantite))) {
-                flash('La quantité doit être un nombre entier.')->error();
-                return back();
-            }
-            if (!$prixtvac) {
-                flash('Vous devez insérer un prix tvac à la ligne '.$i)->error();
-                return back();
-            }
-
-            // Boucle qui compare les intitulés de poste au précédent de la liste, empeche ainsi les doublons de poste
-            for ($cposte=1; $cposte < $i; $cposte++) { 
-                $intitulecompare = request('intituleposte'.$cposte);
-                if($intituleposte == $intitulecompare) {
-                    flash('Vous avez entré plusieurs fois le même poste de vente.')->error();
-                    return back();
-                }
-            }
-
-        }
         // Boucle pour les ajouts de postes de vente
         for ($i=1; $i <= $nbPoste; $i++) {           
-            $poste = Poste::where('intitule', request('intituleposte'.$i))->first();
+            $poste = Poste::where('numero', request('numeroposte'.$i))->first();
             $vente->postes()->attach($poste, [
                 'quantite' => request('quantite'.$i),
                 'prix_unitaire' => request('prixtvac'.$i),
@@ -135,7 +129,7 @@ class VenteController extends Controller
             ]);
         }
 
-        flash('La vente a bien été enregistrée')->success();
+        flash('La vente a bien été enregistrée.')->success();
         return redirect('/ventes');
         
     }
