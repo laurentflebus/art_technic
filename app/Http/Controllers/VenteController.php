@@ -46,6 +46,7 @@ class VenteController extends Controller
         // récupère le nombre de poste grâce à l'input caché 'nbPoste'
         $nbPoste = request('nbPoste');
     
+    
         // $request->validate([
         //     'codebarre' => ['required', 'regex:/^[\w]+$/i'],
         //     'numeroposte1' => ['required', 'regex:/^[0-9]+$/'],
@@ -79,14 +80,16 @@ class VenteController extends Controller
                 return back();
             }
             // évite les chiffres à virgule
-            for ($i=1; $i <= $nbPoste; $i++) { 
+            for ($j=1; $j <= $nbPoste; $j++) { 
                 $request->validate([
-                    'quantite'.$i => ['required', 'regex:/^[0-9]+$/'],
+                    'quantite'.$j => ['required', 'regex:/^[0-9]+$/'],
+                ], [
+                    'quantite'.$j.'.regex' => 'La quantité doit être un nombre entier.'
                 ]);
             }
 
             // Boucle qui compare les numéros de poste au(x) précédent(s) de la liste, empêche ainsi les doublons de poste
-            for ($cposte=1; $cposte < $i; $cposte++) { 
+            for ($cposte=1; $cposte < $i; $cposte++) {
                 $numerocompare = request('numeroposte'.$cposte);
                 if($numeroposte == $numerocompare) {
                     flash('Vous avez entré plusieurs fois le même poste de vente.')->error();
@@ -105,19 +108,48 @@ class VenteController extends Controller
             ]);
         }
 
-        $facture = Facture::create([
-            'numero' => 'A/20/0000001',
-        ]);
+
+        $ticket = request('ticket');
+        // Si la case Ticket de caisse est cochée, on assigne la valeur true à la variable $paye
+        if ($ticket) {
+            $paye = true;
+        } else {
+            $paye = false;
+        }
+
+        $bon = request('bon');
+        // Si la case Bon de commande est cochée, on assigne la valeur true à la variable $b
+        if ($bon) {
+            $b = true;
+        } else {
+            $b = false;
+        }
+        
+        // Si la case Facture est cochée, on crée une facture et assigne la valeur false à la variable $afacturer
+        $facture = request('facture');
+        if ($facture) {
+            $afacturer = false;
+        } else {
+            $afacturer = true;
+        }
 
         $vente = Vente::create([
-            'a_facturer' => false,
-            'est_paye' => true,
-            'a_un_bon_commande' => false,
+            'a_facturer' => $afacturer,
+            'est_paye' => $paye,
+            'a_un_bon_commande' => $b,
             'client_id' => request('client'),
-            'modereglement_id' => $modereglement->id,
-            'facture_id' => $facture->id, 
+            'modereglement_id' => $modereglement->id, 
         ]);
         
+        $nfacture = 0;
+        if ($facture) {
+            $nfacture++;
+            $facture = Facture::create([
+                'numero' => 'A/20/'.$nfacture,
+                'vente_id' => $vente->id,
+            ]);
+        } 
+            
 
         // Boucle pour les ajouts de postes de vente
         for ($i=1; $i <= $nbPoste; $i++) {           

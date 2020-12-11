@@ -10,7 +10,7 @@ class Vente extends Model
 {
     use HasFactory;
     // colonnes remplissables (évite l'erreur Mass Assignement)
-    protected $fillable = ['a_facturer', 'est_paye', 'a_un_bon_commande', 'client_id', 'modereglement_id', 'facture_id'];
+    protected $fillable = ['a_facturer', 'est_paye', 'a_un_bon_commande', 'client_id', 'modereglement_id'];
 
     public function modereglement()
     {
@@ -19,7 +19,7 @@ class Vente extends Model
     
     public function facture()
     {
-        return $this->belongsTo(Facture::class);
+        return $this->hasOne(Facture::class);
     }
     // Relation many to many avec la table "postes" avec trois colonnes supplémentaires (quantite, prix_unitaire, détail)
     public function postes()

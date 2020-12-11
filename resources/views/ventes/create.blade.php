@@ -1,8 +1,8 @@
 @extends('layout')
 
 @section('contenu')
-<div class="card text-center">
-    <div class="card-header">
+<div class="card">
+    <div class="card-header text-center">
         <h3>Création d'une Vente</h3>
     </div>
     <div class="card-body">
@@ -10,7 +10,7 @@
             {{ csrf_field() }}
             <input type="hidden" id="nbPoste" name="nbPoste" value="1">
             
-                <div class="form-row">
+                <div class="form-row text-center">
                     <div class="form-group col-md-4">
                         <label>Code barre</label>
                         <input type="text" id="codebarre" name="codebarre" class="form-control" value="{{ old('codebarre') }}">
@@ -53,7 +53,7 @@
                 </div>
         
                 <div id="clone">
-                    <div class="form-row">
+                    <div class="form-row text-center">
                         <div class="form-group col-md-2">
                             <label>Référence</label>
                             <input type="text" id="numeroposte1" name="numeroposte1" class="form-control" readonly>
@@ -137,9 +137,27 @@
                     @endif
                 </div>
             </div>
-            
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="ticket" id="ticket" name='ticket' checked>
+                <label class="form-check-label" for="ticket">
+                    Ticket de caisse
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="facture" id="facture" name='facture'>
+                <label class="form-check-label" for="facture">
+                    Facture
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="bon" id="bon" name='bon'>
+                <label class="form-check-label" for="bon">
+                    Bon de commande
+                </label>
+            </div>
     </div>
-    <div class="card-footer">
+    
+    <div class="card-footer text-center">
         <button type="reset" class="btn btn-danger">Annuler</button>
             <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
         </form>

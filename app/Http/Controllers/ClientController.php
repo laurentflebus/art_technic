@@ -45,16 +45,16 @@ class ClientController extends Controller
         // Validation des champs du formulaire d'inscription (client)
         $request->validate([
             'civilite' => ['required'],
-            'nom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
-            'prenom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'nom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
+            'prenom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
             'email' => ['required', 'regex:/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/' ,'email'],
             'telephone' => ['required', 'numeric', 'min:8'],
             'mobile' => ['required', 'numeric', 'min:8'],
-            'rue' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'nrue' => ['required', 'alpha_num'],
             'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
-            'localite' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
-            'pays' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'localite' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'assujetti' => ['required', 'regex:/^[a-z ]+$/i'],
         ]);
         

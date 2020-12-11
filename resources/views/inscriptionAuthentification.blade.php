@@ -45,15 +45,15 @@
                     <legend class="col-form-label col-md-2">Type de compte</legend>
                     <div class="col-md-10">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="admin" value="0" checked>
-                            <label class="form-check-label" for="gridRadios1">Utilisateur régulier</label>
+                            <input class="form-check-input" type="radio" name="admin" id="util" value="0" checked>
+                            <label class="form-check-label" for="util">Utilisateur régulier</label>
                         </div>
                         @if ($errors->has('utilisateur'))
                             <p class="alert alert-danger">{{ $errors->first('admin') }}</p>
                         @endif
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="admin" value="1">
-                            <label class="form-check-label" for="gridRadios2">Administrateur</label>
+                            <input class="form-check-input" type="radio" name="admin" id="admin" value="1">
+                            <label class="form-check-label" for="admin">Administrateur</label>
                         </div>
                         @if ($errors->has('admin'))
                             <p class="alert alert-danger">{{ $errors->first('admin') }}</p>

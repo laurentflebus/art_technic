@@ -21,10 +21,8 @@ class CreateVentesTable extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('modereglement_id');
-            $table->unsignedBigInteger('facture_id');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('modereglement_id')->references('id')->on('modereglements');
-            $table->foreign('facture_id')->references('id')->on('factures');
         });
     }
 

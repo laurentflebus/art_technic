@@ -24,16 +24,16 @@ class SocieteController extends Controller
         Societe::get()->first()->delete();
         // Validation des champs du formulaire info société
         request()->validate([
-            'nom' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'nom' => ['required', 'regex:/^[a-z éèàùç,.\'-]+$/i'],
             'numtva' => ['required', 'regex:/^[a-z0-9]+$/i'],
             'registre' => ['required', 'regex:/^[a-z0-9]+$/i'],
             'numcompte' => ['required', 'regex:/^[a-z0-9]+$/i'],
             'telephone' => ['required', 'numeric', 'min:8'],
-            'rue' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'nrue' => ['required', 'alpha_num'],
             'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
-            'localite' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
-            'pays' => ['required', 'regex:/^[a-z ,\'-]+$/i'],
+            'localite' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'remarque' => ['required', 'regex:/^[\w ,.\'-]+$/i'],          
         ]);
         // Vérifie si la localite existe déjà en bd
