@@ -18,7 +18,7 @@ class CreateFacturesTable extends Migration
             $table->string('numero', 50);
             $table->timestamps();
             $table->unsignedBigInteger('vente_id');
-            $table->foreign('vente_id')->references('id')->on('ventes');
+            $table->foreign('vente_id')->references('id')->on('ventes')->onDelete('cascade');
         });
     }
 

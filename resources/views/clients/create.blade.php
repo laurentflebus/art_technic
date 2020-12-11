@@ -144,18 +144,18 @@
                   <legend class="col-form-label col-sm-4 pt-0">Assujetti</legend>
                     <div class="col-sm-6">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="assujetti" value="Assujetti" checked>
-                            <label class="form-check-label">Assujetti</label>
+                            <input class="form-check-input" type="radio" name="assujetti" id="assujetti" value="Assujetti" checked>
+                            <label class="form-check-label" for="assujetti">Assujetti</label>
                         </div>
                         
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="assujetti" value="Non assujetti">
-                            <label class="form-check-label">Non assujetti</label>
+                            <input class="form-check-input" type="radio" name="assujetti" id="nassujetti" value="Non assujetti">
+                            <label class="form-check-label" for="nassujetti">Non assujetti</label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="assujetti" value="En attente">
-                            <label class="form-check-label">En attente</label>
+                            <input class="form-check-input" type="radio" name="assujetti" id="attente" value="En attente">
+                            <label class="form-check-label" for="attente">En attente</label>
                         </div>
                         
                     </div>

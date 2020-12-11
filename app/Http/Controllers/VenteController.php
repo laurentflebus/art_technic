@@ -150,7 +150,6 @@ class VenteController extends Controller
             ]);
         } 
             
-
         // Boucle pour les ajouts de postes de vente
         for ($i=1; $i <= $nbPoste; $i++) {           
             $poste = Poste::where('numero', request('numeroposte'.$i))->first();
@@ -159,7 +158,15 @@ class VenteController extends Controller
                 'prix_unitaire' => request('prixtvac'.$i),
                 'detail' => 'Aucun détail',
             ]);
+            // diminue la quantite du poste de vente en stock
+            $quantitemaj = $poste->quantite - request('quantite'.$i);
+            $poste->update([
+                'quantite' => $quantitemaj,
+            ]);
+
         }
+        
+
 
         flash('La vente a bien été enregistrée.')->success();
         return redirect('/ventes');

@@ -49,19 +49,26 @@ $(document).ready(function(){
             success: function(data) {
                 // code pour gérer le retour de l'appel AJAX
                 console.log(data);
-                var prixunitaire = data[0].prix_unitaire;
-                var total = quantite * prixunitaire;
+                var qte = data[0].quantite;
+                // Si la quantité insérée dans le champs est supérieur à la quantité en stock on stoppe le processus
+                if (quantite > qte) {
+                    alert("Quantité insérée supérieure au stock !");
+                } else {
+                    var prixunitaire = data[0].prix_unitaire;
+                    var total = quantite * prixunitaire;
+                    
 
-                $('#totalttca'+ $('#nbPoste').val()).val(total.toFixed(2));
-                $('#totalttc'+ $('#nbPoste').val()).val(total.toFixed(2));
-                $('#quantite'+$('#nbPoste').val()).val(quantite);
+                    $('#totalttca'+ $('#nbPoste').val()).val(total.toFixed(2));
+                    $('#totalttc'+ $('#nbPoste').val()).val(total.toFixed(2));
+                    $('#quantite'+$('#nbPoste').val()).val(quantite);
 
-                // Calcul du total TTC
-                var totalttc = 0;
-                for (let i = 1; i <= cPoste; i++) {
-                    totalttc += Number($('#totalttca'+i).val());
+                    // Calcul du total TTC
+                    var totalttc = 0;
+                    for (let i = 1; i <= cPoste; i++) {
+                        totalttc += Number($('#totalttca'+i).val());
+                    }
+                    $('#totalttc').val(totalttc.toFixed(2));
                 }
-                $('#totalttc').val(totalttc.toFixed(2));
             },           
         });        
     });
@@ -150,8 +157,9 @@ $(document).ready(function(){
                 "previous": "Précédent",
                 "next": "Suivant"
             },
-        },
-        
+        },    
     });
+
+    
     
 });

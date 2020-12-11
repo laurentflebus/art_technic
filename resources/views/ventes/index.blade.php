@@ -23,16 +23,18 @@
                 </thead>
                 <tbody>
                     @foreach($ventes as $vente)
+                        {{ $totalttc = 0 }}
+                        {{ $totalht = 0 }}
+                        {{ $totaltva = 0 }}
                         <tr>
                             <td>{{ $vente->id }}</td>
                             <td>{{ $vente->created_at }}</td>
-                            @foreach ($vente->postes as $poste)
-                                {{ $totalttc = floatval($poste['pivot']['quantite'] * $poste['pivot']['prix_unitaire']) }}
-                                <td>{{ $totalttc }}</td>
-                                {{ $taux = $poste->tva->taux }}
-                            
+                            @foreach ($vente->postes as $poste)                     
+                               {{ $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}
+                               {{ $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100) }}
+                               {{ $totalht = $totalttc -  $totaltva }}
                             @endforeach
-                            {{ $totalht = $totalttc - ($totalttc * floatval($taux)/100) }}
+                            <td>{{ $totalttc }}</td>
                             <td>{{ $totalht }}</td>
                             
                             <td>{{ $vente->modereglement->intitule }}</td>
