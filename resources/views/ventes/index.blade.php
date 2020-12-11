@@ -23,26 +23,28 @@
                 </thead>
                 <tbody>
                     @foreach($ventes as $vente)
-                        {{ $totalttc = 0 }}
-                        {{ $totalht = 0 }}
-                        {{ $totaltva = 0 }}
+                        <input type="hidden" value="{{ $totalttc = 0 }}">
+                        <input type="hidden" value="{{ $totaltva = 0 }}">
+                        
                         <tr>
                             <td>{{ $vente->id }}</td>
                             <td>{{ $vente->created_at }}</td>
-                            @foreach ($vente->postes as $poste)                     
-                               {{ $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}
-                               {{ $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100) }}
-                               {{ $totalht = $totalttc -  $totaltva }}
+
+                            @foreach ($vente->postes as $poste)
+
+                                <input type="hidden" value="{{ $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}">            
+                                <input type="hidden" value="{{ $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100) }}">
+                                <input type="hidden" value="{{ $totalht = $totalttc -  $totaltva }}"> 
+
                             @endforeach
-                            <td>{{ $totalttc }}</td>
-                            <td>{{ $totalht }}</td>
+
+                            <td>{{  number_format($totalttc, 2, '.', '') }}</td>
+                            <td>{{ number_format($totalht, 2, '.', '') }}</td>
                             
                             <td>{{ $vente->modereglement->intitule }}</td>
                             <td>{{ $vente->a_facturer }}</td>
                             <td>{{ $vente->est_paye }}</td>
-                
-                            
-                                
+                    
                             <td>
                                 <form action= "{{ URL::to('ventes/' . $vente->id) }}" method="post">
                 
@@ -64,7 +66,6 @@
                                         </svg>
                                     </button>
                                 </form>
-                
                             </td>
                         </tr>
                     @endforeach

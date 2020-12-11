@@ -34,7 +34,7 @@ class SocieteController extends Controller
             'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
             'localite' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
-            'remarque' => ['required', 'regex:/^[\w ,.\'-]+$/i'],          
+            'remarque' => ['required', 'regex:/^[a-z0-9 éèàùç!,.\'-]+$/i'],          
         ]);
         // Vérifie si la localite existe déjà en bd
         $localite = "";       
