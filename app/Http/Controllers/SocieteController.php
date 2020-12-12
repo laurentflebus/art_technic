@@ -16,6 +16,11 @@ class SocieteController extends Controller
     }
     public function store()
     {
+        $company = DB::table('societes')->get()->first();
+        if ($company) {
+            flash('Une société existe déjà, veuillez la modifier.')->error();
+            return redirect('/parametres/edit');
+        }
          // Validation des champs du formulaire info société
          request()->validate([
             'nom' => ['required', 'regex:/^[a-z éèàùç,.\'-]+$/i'],

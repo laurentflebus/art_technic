@@ -147,9 +147,9 @@
                         <span class="sr-only">Menu</span>
                     </button>
                     <div class="container">
-                        <br>
+                        
                         @include('flash::message')
-
+                        <br>
                         {{-- directive yield --}}
                         @yield('contenu') 
                         
