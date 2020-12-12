@@ -14,7 +14,7 @@
         
     </div>
     <div class="card-body">
-        <form action="/parametres" method="post">
+        <form action="/parametres/edit" method="post">
 
             {{ csrf_field() }}
             
@@ -97,13 +97,16 @@
                     @endif
                 </div>
                 
-        
                 <div class="form-group col-md-4">
-                    <label class="form-label">Pays</label>
+                    <label>Pays</label>
                     <select id="pays" name="pays" class="form-control">
-                        <option value="">Choississez</option>
-                        <option>Belgique</option>
-                        <option>France</option>
+                        @foreach ($pays as $item)
+                            <option value="{{ Crypt::decrypt($item->pays) }}"
+                                @if (Crypt::decrypt($societe->pays) == Crypt::decrypt($item->pays))
+                                    selected="selected"
+                                @endif
+                            >{{ Crypt::decrypt($item->pays) }}</option>
+                        @endforeach
                     </select>
                     @if ($errors->has('pays'))
                         <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
@@ -126,7 +129,7 @@
             
     </div>
     <div class="card-footer text-center">
-            <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Modifier</button>
         </form>
         
     </div>

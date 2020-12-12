@@ -40,8 +40,11 @@ Route::group([
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
 
-    Route::get('/parametres', 'SocieteController@afficher');
-    Route::post('/parametres', 'SocieteController@gerer');
+    Route::get('/parametres/create', 'SocieteController@create');
+    Route::post('/parametres/create', 'SocieteController@store');
+
+    Route::get('/parametres/edit', 'SocieteController@edit');
+    Route::post('/parametres/edit', 'SocieteController@update');
 
     Route::get('/ajax', 'AjaxController@ajaxRequest');
 
