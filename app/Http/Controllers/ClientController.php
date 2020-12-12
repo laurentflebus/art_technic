@@ -212,14 +212,12 @@ class ClientController extends Controller
     public function edit($id)
     {
         $assujettis = DB::table('assujettis')->select('intitule')->distinct()->get();
-        $localites = DB::table('localites')->select('intitule', 'code_postal')->distinct()->get();
         $pays = DB::table('clients')->select('pays')->distinct()->get();
         $civilites = DB::table('clients')->select('civilite')->distinct()->get();
         $client = Client::find($id);
 
         return view('clients.edit', [
             'client' => $client,
-            'localites' => $localites,
             'pays' => $pays,
             'assujettis' => $assujettis,
             'civilites' => $civilites,

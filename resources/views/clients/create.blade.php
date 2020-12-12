@@ -99,26 +99,14 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label>Code postal</label>
-            <select id="codepostal" name="codepostal" class="form-control">
-                <option>Choississez</option>
-                <option>1000</option>
-                <option>5000</option>
-                <option>7130</option>
-                <option>7000</option>
-            </select>
+            <input type="text" name="codepostal" class="form-control" value="{{ old('codepostal') }}">
             @if ($errors->has('codepostal'))
                 <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
             @endif
         </div>
         <div class="form-group col-md-4">
             <label>Localité</label>
-            <select id="localite" name="localite" class="form-control">
-                <option value="">Choississez</option>
-                <option>Bruxelles</option>
-                <option>Binche</option>
-                <option>Charleroi</option>
-                <option>Mons</option>
-            </select>
+            <input type="text" name="localite" class="form-control" value="{{ old('localite') }}">
             @if ($errors->has('localite'))
                 <p class="alert alert-danger">{{ $errors->first('localite') }}</p>
             @endif
@@ -126,7 +114,7 @@
         <div class="form-group col-md-4">
             <label>Pays</label>
             <select id="pays" name="pays" class="form-control">
-                <option value="">Choississez</option>
+                <option>Saisissez</option>
                 <option>Belgique</option>
                 <option>France</option>
             </select>

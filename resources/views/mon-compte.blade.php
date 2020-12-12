@@ -10,22 +10,36 @@
             <form class="section" action="/modification-mot-de-passe" method="post">
                 
                 {{ csrf_field() }}
-                
-                <div class="form-group col-md-6">
-                    <label for="password">Nouveau mot de passe</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                    @if ($errors->has('password'))
-                        <p class="alert alert-danger">{{ $errors->first('password') }}</p>
-                    @endif
+                <div class="row">
+                    <div class="form-group col-md-4">
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="password">Nouveau mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                        @if ($errors->has('password'))
+                            <p class="alert alert-danger">{{ $errors->first('password') }}</p>
+                        @endif
+                    </div>
+                    <div class="form-group col-md-4">
+
+                    </div>
                 </div>
                 
-        
-                <div class="form-group col-md-6">
-                    <label for="password_confirmation">Confirmation mot de passe</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                    @if ($errors->has('password_confirmation'))
-                        <p class="alert alert-danger">{{ $errors->first('password_confirmation') }}</p>
-                    @endif
+                <div class="row">
+                    <div class="form-group col-md-4">
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="password_confirmation">Confirmation mot de passe</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+                        @if ($errors->has('password_confirmation'))
+                            <p class="alert alert-danger">{{ $errors->first('password_confirmation') }}</p>
+                        @endif
+                    </div>
+                    <div class="form-group col-md-4">
+
+                    </div>
                 </div>
                 
                 

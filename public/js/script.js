@@ -160,6 +160,12 @@ $(document).ready(function(){
         },    
     });
 
-    
-    
+    // désactiver la touche enter sur le formulaire de vente pour le scanner
+    $('#formvente').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+          e.preventDefault();
+          return false;
+        }
+    });
 });

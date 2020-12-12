@@ -22,12 +22,14 @@ Route::post('/', 'CompteController@traiterFormulaire');
 
 // Groupe de routes Middelware Admin (est administrateur)
 
-
+Route::group([
+    'middleware' => 'App\Http\Middleware\Admin',
+], function () {
     // Route qui répond aux requêtes de type GET
     Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
     // Route qui répond aux requêtes de type POST
     Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
-
+});
 
 // Groupe de routes Middleware Auth (est identifié)
 Route::group([

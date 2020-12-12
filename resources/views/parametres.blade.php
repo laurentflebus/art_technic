@@ -17,10 +17,16 @@
         <form action="/parametres" method="post">
 
             {{ csrf_field() }}
-                  
+            
+            @foreach ($societes as $societe)
+            @if (empty($societe))
+                <p>Hello world</p>
+            @endif
+            
+            
             <div class="input-group mb-3">
                 <span class="input-group-text">Nom</span>
-                <input type="text" name="nom" class="form-control" value="{{ Crypt::decrypt($societe->nom) }}">
+                <input type="text" name="nom" class="form-control" value="{{ Crypt::decrypt($societe->nom)}}">
                 @if ($errors->has('nom'))
                     <p class="alert alert-danger">{{ $errors->first('nom') }}</p>
                 @endif
@@ -77,28 +83,15 @@
             
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label class="form-label">Code postal</label>
-                    <select class="form-control" id="codepostal" name="codepostal">
-                        <option value=""></option>
-                        <option>1000</option>
-                        <option>5000</option>
-                        <option>7130</option>
-                        <option>7000</option>
-                    </select>
+                    <label>Code postal</label>
+                    <input type="text" name="codepostal" class="form-control" value="{{ Crypt::decrypt($societe->localite->code_postal) }}">
                     @if ($errors->has('codepostal'))
                         <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
                     @endif
-                  </div>
-        
-                  <div class="form-group col-md-4">
-                    <label class="form-label">Localité</label>
-                    <select id="localite" name="localite" class="form-control">
-                        <option value="">Choississez</option>
-                        <option>Bruxelles</option>
-                        <option>Binche</option>
-                        <option>Charleroi</option>
-                        <option>Mons</option>
-                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Localité</label>
+                    <input type="text" name="localite" class="form-control" value="{{ Crypt::decrypt($societe->localite->intitule) }}">
                     @if ($errors->has('localite'))
                         <p class="alert alert-danger">{{ $errors->first('localite') }}</p>
                     @endif
@@ -128,13 +121,14 @@
                 @endif
             </div>
             
-        
+            @endforeach
             
             
     </div>
     <div class="card-footer text-center">
             <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Valider</button>
         </form>
+        
     </div>
 </div>
 

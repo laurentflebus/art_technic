@@ -6,7 +6,7 @@
         <h3>Création d'une Vente</h3>
     </div>
     <div class="card-body">
-        <form action="/ventes" method="post">
+        <form action="/ventes" id="formvente" method="post">
             {{ csrf_field() }}
             <input type="hidden" id="nbPoste" name="nbPoste" value="1">
             

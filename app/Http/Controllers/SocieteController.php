@@ -12,9 +12,10 @@ class SocieteController extends Controller
 {
     public function afficher()
     {
-        $societe = DB::table('societes')->get()->first();
+        //$societe = DB::table('societes')->get()->first();
+        $societes = Societe::all();
         return view('parametres', [
-            'societe' => $societe,
+            'societes' => $societes,
         ]);
     }
 
