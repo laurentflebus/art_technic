@@ -48,3 +48,7 @@
     margin-left: -15rem;
   }
 }
+body {
+  /* background-image: url('/img/fond.jpg'); */
+  background-color: rgb(105,105,105);
+}

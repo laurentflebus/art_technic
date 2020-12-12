@@ -89,7 +89,7 @@
                             </a>
                             <ul class="collapse list-unstyled" id="posteSubmenu">
                                 <li>
-                                    <a href="{{ URL::to('postes') }}" class="list-group-item list-group-item-action bg-light">Les Postes de vente</a>
+                                    <a href="{{ URL::to('postes') }}" class="list-group-item list-group-item-action bg-light">Inventaire</a>
                                 </li>
                                 <li>
                                     <a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-light">Créer un poste de vente</a>
@@ -140,7 +140,7 @@
                         <br>
                         <p>
                             PaperMill &copy; <script>document.write(new Date().getFullYear());</script> <br>
-                            by Flebus Laurent 
+                            Flebus Laurent prod.
                         </p>
                     </div>
                 </div>
