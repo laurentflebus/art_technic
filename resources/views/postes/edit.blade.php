@@ -32,7 +32,7 @@
             <div class="form-row">
         
                 <div class="form-group col-md-4">
-                    <label>Code barre</label>
+                    <label>Code barre / Code</label>
                     <input type="text" name="codebarre" class="form-control" value="{{ $poste->code_barre }}">
                     @if ($errors->has('codebarre'))
                         <p class="alert alert-danger">{{ $errors->first('codebarre') }}</p>

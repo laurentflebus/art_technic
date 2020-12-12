@@ -64,41 +64,42 @@
                 @endif
             </div>
         
-            <div class="form-row">
-                <div class="input-group col-md-6">
+            
+                <div class="input-group mb-3">
                     <span class="input-group-text">Rue</span>
                     <input type="text" name="rue" class="form-control" value="{{ Crypt::decrypt($societe->rue) }}">
                     @if ($errors->has('rue'))
                         <p class="alert alert-danger">{{ $errors->first('rue') }}</p>
                     @endif
                 </div>
-                <div class="input-group col-md-6">
+                <div class="input-group mb-3">
                     <span class="input-group-text">N. rue</span>
                     <input type="text" name="nrue" class="form-control" value="{{ Crypt::decrypt($societe->nrue) }}">
                     @if ($errors->has('nrue'))
                         <p class="alert alert-danger">{{ $errors->first('nrue') }}</p>
                     @endif
                 </div>
-            </div>
             
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label>Code postal</label>
+            
+            
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Code postal</span>
                     <input type="text" name="codepostal" class="form-control" value="{{ Crypt::decrypt($societe->localite->code_postal) }}">
                     @if ($errors->has('codepostal'))
                         <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
                     @endif
                 </div>
-                <div class="form-group col-md-4">
-                    <label>Localité</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Localité</span>
                     <input type="text" name="localite" class="form-control" value="{{ Crypt::decrypt($societe->localite->intitule) }}">
                     @if ($errors->has('localite'))
                         <p class="alert alert-danger">{{ $errors->first('localite') }}</p>
                     @endif
                 </div>
-                
-                <div class="form-group col-md-4">
-                    <label>Pays</label>
+            
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Pays</span>
                     <select id="pays" name="pays" class="form-control">
                         @foreach ($pays as $item)
                             <option value="{{ Crypt::decrypt($item->pays) }}"
@@ -112,17 +113,18 @@
                         <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
                     @endif
                 </div>
+
                 
+                <div class="form-group mb-3">
+                    <span class="input-group-text" id="remarque">Remarque</span>
+                    <textarea class="form-control" id="remarque" rows="3" name="remarque">{{ Crypt::decrypt($societe->remarque) }}</textarea>
+                    @if ($errors->has('remarque'))
+                            <p class="alert alert-danger">{{ $errors->first('remarque') }}</p>
+                    @endif
+                </div>
                 
-            </div>
         
-            <div class="form-group mb-3">
-                <label for="remarque" class="form-label">Remarque</label>
-                <textarea class="form-control" id="remarque" rows="3" name="remarque">{{ Crypt::decrypt($societe->remarque) }}</textarea>
-                @if ($errors->has('remarque'))
-                        <p class="alert alert-danger">{{ $errors->first('remarque') }}</p>
-                @endif
-            </div>
+            
             
             @endforeach
             
