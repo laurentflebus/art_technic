@@ -6,7 +6,7 @@
         <h3>Ajout d'un Poste de Vente</h3>
     </div>
     <div class="card-body">
-        <form action="/postes" method="post">
+        <form action="/postes" id="formposte" method="post">
             {{ csrf_field() }}
             
             <div class="form-row">

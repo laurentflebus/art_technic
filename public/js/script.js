@@ -168,4 +168,13 @@ $(document).ready(function(){
           return false;
         }
     });
+
+    // désactiver la touche enter sur le formulaire du poste pour le scanner
+    $('#formposte').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+          e.preventDefault();
+          return false;
+        }
+    });
 });
