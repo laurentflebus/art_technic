@@ -3,7 +3,7 @@
 @section('contenu')
 <div class="card">
     <div class="card-header text-center">
-        <h4>Gestion des Postes de Vente</h4>
+        <h4>Inventaire</h4>
     </div>
     <div class="card-body">
         <div class="table-responsive">
