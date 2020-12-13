@@ -21,7 +21,6 @@ Route::get('/', 'CompteController@afficherFormulaire');
 Route::post('/', 'CompteController@traiterFormulaire');
 
 // Groupe de routes Middelware Admin (est administrateur)
-
 Route::group([
     'middleware' => 'App\Http\Middleware\Admin',
 ], function () {
@@ -36,7 +35,7 @@ Route::group([
     'middleware' => 'App\Http\Middleware\Auth',
 ], function () {
     //routes concernant l'utilisateur connecté
-    Route::get('/mon-compte', 'CompteController@accueil');
+    Route::get('/accueil', 'CompteController@accueil');
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
 

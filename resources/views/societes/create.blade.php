@@ -59,62 +59,61 @@
                 @endif
             </div>
         
-            <div class="form-row">
-                <div class="input-group col-md-6">
-                    <span class="input-group-text">Rue</span>
-                    <input type="text" name="rue" class="form-control" value="{{ old('rue')}}">
-                    @if ($errors->has('rue'))
-                        <p class="alert alert-danger">{{ $errors->first('rue') }}</p>
-                    @endif
-                </div>
-                <div class="input-group col-md-6">
-                    <span class="input-group-text">N. rue</span>
-                    <input type="text" name="nrue" class="form-control" value="{{ old('nrue')}}">
-                    @if ($errors->has('nrue'))
-                        <p class="alert alert-danger">{{ $errors->first('nrue') }}</p>
-                    @endif
-                </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Rue</span>
+                <input type="text" name="rue" class="form-control" value="{{ old('rue') }}">
+                @if ($errors->has('rue'))
+                    <p class="alert alert-danger">{{ $errors->first('rue') }}</p>
+                @endif
             </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">N. rue</span>
+                <input type="text" name="nrue" class="form-control" value="{{ old('nrue') }}">
+                @if ($errors->has('nrue'))
+                    <p class="alert alert-danger">{{ $errors->first('nrue') }}</p>
+                @endif
+            </div>
+        
+        
+        
+            <div class="input-group mb-3">
+                <span class="input-group-text">Code postal</span>
+                <input type="text" name="codepostal" class="form-control" value="{{ old('codepostal') }}">
+                @if ($errors->has('codepostal'))
+                    <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
+                @endif
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Localité</span>
+                <input type="text" name="localite" class="form-control" value="{{ old('localite') }}">
+                @if ($errors->has('localite'))
+                    <p class="alert alert-danger">{{ $errors->first('localite') }}</p>
+                @endif
+            </div>
+        
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Pays</span>
+                <select id="pays" name="pays" class="form-control">
+                    <option>Belgique</option>
+                    <option>France</option>
+                </select>
+                @if ($errors->has('pays'))
+                    <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
+                @endif
+            </div>
+
             
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label>Code postal</label>
-                    <input type="text" name="codepostal" class="form-control" value="{{ old('codepostal')}}">
-                    @if ($errors->has('codepostal'))
-                        <p class="alert alert-danger">{{ $errors->first('codepostal') }}</p>
-                    @endif
-                </div>
-                <div class="form-group col-md-4">
-                    <label>Localité</label>
-                    <input type="text" name="localite" class="form-control" value="{{ old('localite')}}">
-                    @if ($errors->has('localite'))
-                        <p class="alert alert-danger">{{ $errors->first('localite') }}</p>
-                    @endif
-                </div>
-                
-        
-                <div class="form-group col-md-4">
-                    <label class="form-label">Pays</label>
-                    <select id="pays" name="pays" class="form-control">
-                        <option value="">Choississez</option>
-                        <option>Belgique</option>
-                        <option>France</option>
-                    </select>
-                    @if ($errors->has('pays'))
-                        <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
-                    @endif
-                </div>
-                
-                
-            </div>
-        
             <div class="form-group mb-3">
-                <label for="remarque" class="form-label">Remarque</label>
-                <textarea class="form-control" id="remarque" rows="3" name="remarque">{{ old('remarque')}}</textarea>
+                <span class="input-group-text" id="remarque">Remarque</span>
+                <textarea class="form-control" id="remarque" rows="3" name="remarque">{{ old('remarque') }}</textarea>
                 @if ($errors->has('remarque'))
                         <p class="alert alert-danger">{{ $errors->first('remarque') }}</p>
                 @endif
             </div>
+                
+           
+            
             
     </div>
     <div class="card-footer text-center">

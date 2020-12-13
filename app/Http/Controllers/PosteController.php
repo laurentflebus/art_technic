@@ -47,7 +47,7 @@ class PosteController extends Controller
             'poste' => ['required', 'regex:/^[a-z0-9 éèàùç\'-]+$/i'],
             'codebarre' => ['required', 'regex:/^[\w]+$/i'],
             'quantite' => ['required', 'regex:/^[0-9]+$/'],
-            'prixunitaire' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
+            'prixunitaire' => ['required', 'regex:/^[0-9]+([.]{1}[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
             'taux' => ['required', 'regex:/^[0-9]+$/']
         ]);
@@ -139,10 +139,10 @@ class PosteController extends Controller
         // Validation des champs du formulaire (poste de vente)
         $request->validate([
             'numero' => ['required', 'numeric'],
-            'poste' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+            'poste' => ['required', 'regex:/^[a-z0-9 éèàùç\'-]+$/i'],
             'codebarre' => ['required', 'regex:/^[\w]+$/i'],
             'quantite' => ['required', 'regex:/^[0-9]+$/'],
-            'prixunitaire' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],
+            'prixunitaire' => ['required', 'regex:/^[0-9]+([.]{1}[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
             'taux' => ['required', 'regex:/^[0-9]+$/']
         ]);

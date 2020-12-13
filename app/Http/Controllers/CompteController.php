@@ -8,7 +8,7 @@ class CompteController extends Controller
 {
     public function accueil() 
     {
-        return view('/mon-compte');
+        return view('/accueil');
     }
 
     public function deconnexion()
@@ -62,6 +62,10 @@ class CompteController extends Controller
     // afficher le formulaire de connexion
     public function afficherFormulaire()
     {
+        //  si l'utilisateur est connecté
+        if (auth()->check()) {        
+            return back();
+        }
         return view('connexion');
     }
 
@@ -85,7 +89,7 @@ class CompteController extends Controller
         if($resultat)
         {
             flash('Vous êtes connecté.')->success();
-            return redirect('/mon-compte');
+            return redirect('/accueil');
         }
         // Sinon retour vers la page précédente et renvoit également les données qui ont été envoyées par l'utilisateur
         return back()->withInput()->withErrors([

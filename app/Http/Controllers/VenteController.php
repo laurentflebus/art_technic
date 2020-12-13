@@ -133,13 +133,24 @@ class VenteController extends Controller
             $afacturer = true;
         }
 
-        $vente = Vente::create([
-            'a_facturer' => $afacturer,
-            'est_paye' => $paye,
-            'a_un_bon_commande' => $b,
-            'client_id' => request('client'),
-            'modereglement_id' => $modereglement->id, 
-        ]);
+        $client = request('client');
+        if (!$client) {
+            $vente = Vente::create([
+                'a_facturer' => $afacturer,
+                'est_paye' => $paye,
+                'a_un_bon_commande' => $b,
+                'modereglement_id' => $modereglement->id, 
+            ]);
+        } else {
+            $vente = Vente::create([
+                'a_facturer' => $afacturer,
+                'est_paye' => $paye,
+                'a_un_bon_commande' => $b,
+                'client_id' => request('client'),
+                'modereglement_id' => $modereglement->id, 
+            ]);
+        }
+        
         
         $nfacture = 0;
         if ($facture) {

@@ -25,15 +25,15 @@ class SocieteController extends Controller
          request()->validate([
             'nom' => ['required', 'regex:/^[a-z éèàùç,.\'-]+$/i'],
             'numtva' => ['required', 'regex:/^[a-z0-9]+$/i'],
-            'registre' => ['required', 'regex:/^[a-z0-9]+$/i'],
-            'numcompte' => ['required', 'regex:/^[a-z0-9]+$/i'],
-            'telephone' => ['required', 'numeric', 'min:8'],
+            'registre' => ['nullable', 'regex:/^[a-z0-9]+$/i'],
+            'numcompte' => ['nullable', 'regex:/^[a-z0-9]+$/i'],
+            'telephone' => ['nullable', 'numeric', 'min:8'],
             'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'nrue' => ['required', 'alpha_num'],
             'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
             'localite' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
-            'remarque' => ['required', 'regex:/^[a-z0-9 éèàùç!,.\'-]+$/i'],          
+            'remarque' => ['nullable', 'regex:/^[a-z0-9 éèàùç!,.\'-]+$/i'],          
         ]);
         // Vérifie si la localite existe déjà en bd
         $localite = "";       

@@ -58,11 +58,11 @@
                             <label>Référence</label>
                             <input type="text" id="numeroposte1" name="numeroposte1" class="form-control" readonly>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label>Intitulé</label>
                             <input type="text" id="intituleposte1" name="intituleposte1" class="form-control" readonly>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-1">
                             <label>Qté</label>
                             <input type="text" id="quantite1" name="quantite1" class="form-control" readonly>
                         </div>
@@ -96,6 +96,7 @@
                 <div class="form-group col-md-6">
                     <label>Client</label>
                     <select name="client" class="form-control">
+                        <option></option>
                         @foreach ($clients as $client)
                             <option value="{{ $client->id }}">
                                 {{ Crypt::decrypt($client->nom) }} {{ Crypt::decrypt($client->prenom) }}

@@ -20,9 +20,9 @@ class CreateSocietesTable extends Migration
             $table->string('registre')->nullable();
             $table->string('num_compte')->nullable();
             $table->string('telephone')->nullable();
-            $table->string('rue')->nullable();
-            $table->string('nrue')->nullable();
-            $table->string('pays')->nullable();
+            $table->string('rue');
+            $table->string('nrue');
+            $table->string('pays');
             $table->text('remarque')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('localite_id');
