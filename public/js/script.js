@@ -6,34 +6,44 @@ $(document).ready(function(){
     var max = 10;
     var cptPoste = 1;
     var cPoste = '1';
+    // compteur de touches afin d'executer la requête ajax 1 seule fois et pas à chaque fois qu'une touche est préssée
+    var cptkey = 0;
+
     // Évenement lorsqu'une touche est relachée dans le champs code barre
     $('#codebarre').keyup(function(e){
         var codebarre = $('#codebarre').val();
+        cptkey++;
         // crée une instance de XmlHttpRequest
         // permet d'envoyer une requête HTTP 
-        // Appel AJAX en JQuery                   
-        $.ajax({                        
-            url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
-            type: 'GET', // Type de la requête HTTP
-            data: {'codebarre': codebarre}, // passe la variable codebarre issue du formulaire
-            datatype: 'json', // type de données à recevoir      
-            // si l'appel AJAX a réussi
-            success: function(data) {
-                // code pour gérer le retour de l'appel AJAX
-                console.log(data);
-                $('#prixtvac'+ $('#nbPoste').val()).val(data[0].prix_unitaire);                            
-                $('#numeroposte'+ $('#nbPoste').val()).val(data[0].numero);
-                $('#intituleposte'+ $('#nbPoste').val()).val(data[0].intitule);
-
-                
-                var prixunitaire = data[0].prix_unitaire;
-                var taux = data[1].taux;
-                var prixhtva = prixunitaire * (1-(taux/100));                           
-                $('#prixhtva'+ $('#nbPoste').val()).val(prixhtva.toFixed(2));
-
-                console.log($('#nbPoste').val());    
-            },    
-        });
+        // Appel AJAX en JQuery
+        // à la 14ème frappe (enter)
+        if (cptkey > 13) {
+            $.ajax({                        
+                url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
+                type: 'GET', // Type de la requête HTTP
+                data: {'codebarre': codebarre}, // passe la variable codebarre issue du formulaire
+                datatype: 'json', // type de données à recevoir      
+                // si l'appel AJAX a réussi
+                success: function(data) {
+                    // code pour gérer le retour de l'appel AJAX
+                    console.log(data);
+                    $('#prixtvac'+ $('#nbPoste').val()).val(data[0].prix_unitaire);                            
+                    $('#numeroposte'+ $('#nbPoste').val()).val(data[0].numero);
+                    $('#intituleposte'+ $('#nbPoste').val()).val(data[0].intitule);
+    
+                    
+                    var prixunitaire = data[0].prix_unitaire;
+                    var taux = data[1].taux;
+                    var prixhtva = prixunitaire * (1-(taux/100));                           
+                    $('#prixhtva'+ $('#nbPoste').val()).val(prixhtva.toFixed(2));
+    
+                    console.log($('#nbPoste').val());
+                    // réinitiale le compteur de touche
+                    cptkey = 0; 
+                }, 
+            }); 
+        }               
+        
     });
     // Évenement lorsqu'une touche est relachée dans le champs quantite
     $('#quantite').keyup(function(e){
@@ -72,8 +82,13 @@ $(document).ready(function(){
             },           
         });        
     });
-    
+    // événement lors du click sur le bouton ajouter (+)
     $('#ajouterposte').click(function(e) {
+        // efface les données dans les champs codebarre et quantite
+        $('#codebarre').val('');
+        $('#quantite').val('');
+        // positionner le curseur dans le champs codebarre
+        $('#codebarre').focus();
         // affiche le bouton supprimer
         $('#supprimerposte').show();
         if (cptPoste < max) {
@@ -116,10 +131,8 @@ $(document).ready(function(){
             $('#nbPoste').val(cPoste);
         }
         console.log(cPoste);
-
     });
-
-        
+    // événement lors du click sur le bouton supprimer (-)    
     $('#supprimerposte').click(function(e) {
         // supprime le clone
         $('#clone'+cPoste).remove();
