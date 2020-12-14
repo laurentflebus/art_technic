@@ -58,11 +58,11 @@ $(document).ready(function(){
             success: function(data) {
                 // code pour gérer le retour de l'appel AJAX
                 console.log(data);
-                var qte = data[0].quantite;
-                // Si la quantité insérée dans le champs est supérieur à la quantité en stock on stoppe le processus
-                if (quantite > qte) {
-                    alert("Quantité insérée supérieure au stock !");
-                } else {
+                // var qte = data[0].quantite;
+                // // Si la quantité insérée dans le champs est supérieur à la quantité en stock on stoppe le processus
+                // if (quantite > qte) {
+                //     alert("Quantité insérée supérieure au stock !");
+                // } else {
                     var prixunitaire = data[0].prix_unitaire;
                     var total = quantite * prixunitaire;
                     
@@ -77,7 +77,7 @@ $(document).ready(function(){
                         totalttc += Number($('#totalttca'+i).val());
                     }
                     $('#totalttc').val(totalttc.toFixed(2));
-                }
+                // }
             },           
         });        
     });

@@ -25,10 +25,11 @@
                     @foreach($ventes as $vente)
                         <input type="hidden" value="{{ $totalttc = 0 }}">
                         <input type="hidden" value="{{ $totaltva = 0 }}">
-                        
+                        <input type="hidden" value="{{ $timestamp = strtotime($vente->date) }}">
+                        <input type="hidden" value="{{ $datefr = date("d/m/Y", $timestamp) }}">
                         <tr>
                             <td>{{ $vente->id }}</td>
-                            <td>{{ $vente->created_at }}</td>
+                            <td>{{ $datefr }}</td>
 
                             @foreach ($vente->postes as $poste)
 

@@ -18,6 +18,7 @@ class CreateVentesTable extends Migration
             $table->boolean('a_facturer');
             $table->boolean('est_paye');
             $table->boolean('a_un_bon_commande');
+            $table->date('date');
             $table->timestamps();
             $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('modereglement_id');

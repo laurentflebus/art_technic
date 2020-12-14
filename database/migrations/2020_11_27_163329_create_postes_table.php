@@ -18,7 +18,7 @@ class CreatePostesTable extends Migration
             $table->string('numero', 50);
             $table->string('intitule', 50);
             $table->string('code_barre', 50);
-            $table->integer('quantite');
+            $table->integer('quantite')->nullable();
             $table->float('prix_unitaire', 8, 2);
             $table->timestamps();
             $table->unsignedBigInteger('tva_id');

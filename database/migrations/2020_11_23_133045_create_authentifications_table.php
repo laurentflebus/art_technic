@@ -17,6 +17,7 @@ class CreateAuthentificationsTable extends Migration
             $table->increments('id');
             $table->string('user')->unique();
             $table->string('password');
+            $table->boolean('admin');
             $table->timestamps();
         });
     }

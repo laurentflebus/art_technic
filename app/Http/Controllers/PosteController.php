@@ -46,7 +46,7 @@ class PosteController extends Controller
             'numero' => ['required', 'numeric'],
             'poste' => ['required', 'regex:/^[a-z0-9 éèàùç\'-]+$/i'],
             'codebarre' => ['required', 'regex:/^[a-z0-9]{13}$/i'],
-            'quantite' => ['required', 'regex:/^[0-9]+$/'],
+            'quantite' => ['nullable', 'regex:/^[0-9]+$/'],
             'prixunitaire' => ['required', 'regex:/^[0-9]+([.]{1}[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
             'taux' => ['required', 'regex:/^[0-9]+$/']
@@ -143,7 +143,7 @@ class PosteController extends Controller
             'numero' => ['required', 'numeric'],
             'poste' => ['required', 'regex:/^[a-z0-9 éèàùç\'-]+$/i'],
             'codebarre' => ['required', 'regex:/^[a-z0-9]{13}$/i'],
-            'quantite' => ['required', 'regex:/^[0-9]+$/'],
+            'quantite' => ['nullable', 'regex:/^[0-9]+$/'],
             'prixunitaire' => ['required', 'regex:/^[0-9]+([.]{1}[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
             'taux' => ['required', 'regex:/^[0-9]+$/']

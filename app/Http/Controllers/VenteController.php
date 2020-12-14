@@ -45,16 +45,16 @@ class VenteController extends Controller
     {
         // récupère le nombre de poste grâce à l'input caché 'nbPoste'
         $nbPoste = request('nbPoste');
-    
-    
-        // $request->validate([
-        //     'codebarre' => ['required', 'regex:/^[\w]+$/i'],
-        //     'numeroposte1' => ['required', 'regex:/^[0-9]+$/'],
-        //     'intituleposte1' => ['required', 'regex:/^[\w àéè,.\'-]+$/i'],            
-        //     'prixtvac1' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],          
-        //     'client' => ['required', 'regex:/^[0-9]+$/'],
-        //     'modereglement' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
-        // ]);
+        
+        $request->validate([
+            'date' => ['required'],
+            // 'codebarre' => ['required', 'regex:/^[\w]+$/i'],
+            // 'numeroposte1' => ['required', 'regex:/^[0-9]+$/'],
+            // 'intituleposte1' => ['required', 'regex:/^[\w àéè,.\'-]+$/i'],            
+            // 'prixtvac1' => ['required', 'regex:/^[0-9]+(.[0-9]{1,2})?$/'],          
+            // 'client' => ['required', 'regex:/^[0-9]+$/'],
+            // 'modereglement' => ['required', 'regex:/^[a-z ,.\'-]+$/i'],
+        ]);
         
         // boucle pour les tests de champs null, doublons
         for ($i=1; $i <= $nbPoste ; $i++) { 
@@ -139,6 +139,7 @@ class VenteController extends Controller
                 'a_facturer' => $afacturer,
                 'est_paye' => $paye,
                 'a_un_bon_commande' => $b,
+                'date' => request('date'),
                 'modereglement_id' => $modereglement->id, 
             ]);
         } else {
@@ -146,6 +147,7 @@ class VenteController extends Controller
                 'a_facturer' => $afacturer,
                 'est_paye' => $paye,
                 'a_un_bon_commande' => $b,
+                'date' => request('date'),
                 'client_id' => request('client'),
                 'modereglement_id' => $modereglement->id, 
             ]);
@@ -169,12 +171,14 @@ class VenteController extends Controller
                 'prix_unitaire' => request('prixtvac'.$i),
                 'detail' => 'Aucun détail',
             ]);
-            // diminue la quantite du poste de vente en stock
-            $quantitemaj = $poste->quantite - request('quantite'.$i);
-            $poste->update([
-                'quantite' => $quantitemaj,
-            ]);
-
+            // Si une quantité (en stock) existe pour ce poste 
+            if ($poste->quantite) {
+                // diminue la quantite du poste de vente en stock
+                $quantitemaj = $poste->quantite - request('quantite'.$i);
+                $poste->update([
+                    'quantite' => $quantitemaj,
+                ]);
+            }
         }
         
 
