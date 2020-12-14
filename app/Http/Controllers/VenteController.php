@@ -192,7 +192,13 @@ class VenteController extends Controller
      */
     public function show($id)
     {
-       
+       // récupérer la vente
+       $vente = Vente::find($id);
+
+       //afficher la vue et passer la variable $vente
+       return view('ventes.show', [
+           'vente' => $vente,
+       ]);
     }
 
     /**

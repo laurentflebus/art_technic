@@ -13,11 +13,11 @@ $(document).ready(function(){
     $('#codebarre').keyup(function(e){
         var codebarre = $('#codebarre').val();
         cptkey++;
+        console.log(cptkey);
         // crée une instance de XmlHttpRequest
         // permet d'envoyer une requête HTTP 
         // Appel AJAX en JQuery
-        // à la 14ème frappe (enter)
-        if (cptkey > 13) {
+        if (cptkey > 12) {
             $.ajax({                        
                 url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
                 type: 'GET', // Type de la requête HTTP
@@ -36,8 +36,7 @@ $(document).ready(function(){
                     var taux = data[1].taux;
                     var prixhtva = prixunitaire * (1-(taux/100));                           
                     $('#prixhtva'+ $('#nbPoste').val()).val(prixhtva.toFixed(2));
-    
-                    console.log($('#nbPoste').val());
+                    //console.log($('#nbPoste').val());
                     // réinitiale le compteur de touche
                     cptkey = 0; 
                 }, 
@@ -170,7 +169,11 @@ $(document).ready(function(){
                 "previous": "Précédent",
                 "next": "Suivant"
             },
-        },    
+        },
+        "columnDefs": [
+            { className: "right", "targets": [ 2, 3 ] },
+            { className: "center", "targets": [ 4, 5] }
+        ] 
     });
 
     // désactiver la touche enter sur le formulaire de vente pour le scanner

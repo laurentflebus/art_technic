@@ -45,11 +45,13 @@ class PosteController extends Controller
         $request->validate([
             'numero' => ['required', 'numeric'],
             'poste' => ['required', 'regex:/^[a-z0-9 éèàùç\'-]+$/i'],
-            'codebarre' => ['required', 'regex:/^[\w]+$/i'],
+            'codebarre' => ['required', 'regex:/^[a-z0-9]{13}$/i'],
             'quantite' => ['required', 'regex:/^[0-9]+$/'],
             'prixunitaire' => ['required', 'regex:/^[0-9]+([.]{1}[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
             'taux' => ['required', 'regex:/^[0-9]+$/']
+        ],[
+            'codebarre.regex' => 'Le champs doit contenir 13 caractères alphanumériques.'
         ]);
 
         //verification doublon du poste de vente
@@ -140,11 +142,13 @@ class PosteController extends Controller
         $request->validate([
             'numero' => ['required', 'numeric'],
             'poste' => ['required', 'regex:/^[a-z0-9 éèàùç\'-]+$/i'],
-            'codebarre' => ['required', 'regex:/^[\w]+$/i'],
+            'codebarre' => ['required', 'regex:/^[a-z0-9]{13}$/i'],
             'quantite' => ['required', 'regex:/^[0-9]+$/'],
             'prixunitaire' => ['required', 'regex:/^[0-9]+([.]{1}[0-9]{1,2})?$/'],
             'tva' => ['required', 'regex:/^[a-z]+$/i'],
             'taux' => ['required', 'regex:/^[0-9]+$/']
+        ],[
+            'codebarre.regex' => 'Le champs doit contenir 13 caractères alphanumériques.'
         ]);
 
         // récupère le poste grâce à son id

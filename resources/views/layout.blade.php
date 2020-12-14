@@ -140,7 +140,7 @@
                         <br>
                         <p>
                             PaperMill &copy; <script>document.write(new Date().getFullYear());</script> <br>
-                            Flebus Laurent prod.
+                            Laurent Flebus prod.
                         </p>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 
 @section('contenu')
 <div class="card">
-    <div class="card-header">
+    <div class="card-header text-center">
         <h4>Listing des Ventes</h4>
     </div>
     <div class="card-body">
@@ -38,16 +38,36 @@
 
                             @endforeach
 
-                            <td>{{  number_format($totalttc, 2, '.', '') }}</td>
-                            <td>{{ number_format($totalht, 2, '.', '') }}</td>
+                            <td>{{  number_format($totalttc, 2, '.', '') }}€</td>
+                            <td>{{ number_format($totalht, 2, '.', '') }}€</td>
                             
                             <td>{{ $vente->modereglement->intitule }}</td>
-                            <td>{{ $vente->a_facturer }}</td>
-                            <td>{{ $vente->est_paye }}</td>
+
+                            <td>
+                                <input type="checkbox"
+                                @if ($vente->a_facturer)
+                                    checked
+                                @endif
+                                >
+                            </td>
+                            <td>
+                                <input type="checkbox"
+                                @if ($vente->est_paye)
+                                    checked
+                                @endif
+                                >
+                            </td>
                     
                             <td>
                                 <form action= "{{ URL::to('ventes/' . $vente->id) }}" method="post">
-                
+                                    
+                                    {{-- Affiche la vente (utilise la méthode show avec la route GET /ventes/{id}) --}}
+                                    <a class="btn btn-small btn-success" href="{{ URL::to('ventes/' . $vente->id) }}">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                        </svg>
+                                    </a>
                                     {{-- Modifie la vente (utilise la méthode edit avec la route GET /postes/{id}/edit) --}}
                                     <a class="btn btn-small btn-info" href="{{ URL::to('ventes/' . $vente->id . '/edit') }}">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
