@@ -8,6 +8,7 @@ use App\Models\Poste;
 use App\Models\Client;
 use App\Models\Modereglement;
 use App\Models\Facture;
+use Illuminate\Support\Facades\DB;
 
 class VenteController extends Controller
 {
@@ -153,12 +154,17 @@ class VenteController extends Controller
             ]);
         }
         
-        
-        $nfacture = 0;
+        $timestamp = strtotime(request('date'));
+        $annee = date("y", $timestamp);
+        $fact = DB::table('factures')->select('id')->latest()->first();
+        $numfacture = $fact->id;
+        if (!$numfacture) {
+            $numfacture = 0;
+        }
         if ($facture) {
-            $nfacture++;
+            $numfacture++;
             $facture = Facture::create([
-                'numero' => 'A/20/'.$nfacture,
+                'numero' => 'V/' . $annee . '/'.$numfacture,
                 'vente_id' => $vente->id,
             ]);
         } 

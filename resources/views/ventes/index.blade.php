@@ -10,14 +10,17 @@
             <table id="table" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Num vente</th>
+                        <th>ID</th>
+                        <th>Num Facture</th>
+                        <th>Client</th>
                         <th>Date</td>
                         <th>Total TTC</th>
                         <th>Total HT</th>
                         <th>Mode règlement</th>
                         <th>A Fact.</th>
+                        <th>Est Fact</th>
                         <th>Est Payé</th>
-                                       
+                        <th>Bon</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -26,9 +29,19 @@
                         <input type="hidden" value="{{ $totalttc = 0 }}">
                         <input type="hidden" value="{{ $totaltva = 0 }}">
                         <input type="hidden" value="{{ $timestamp = strtotime($vente->date) }}">
-                        <input type="hidden" value="{{ $datefr = date("d/m/Y", $timestamp) }}">
+                        <input type="hidden" value="{{ $datefr = date("d/m/y", $timestamp) }}">
                         <tr>
                             <td>{{ $vente->id }}</td>
+                            <td>
+                                @if ($vente->facture)
+                                    {{ $vente->facture->numero }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($vente->client)
+                                    {{ Crypt::decrypt($vente->client->nom)}} {{ Crypt::decrypt($vente->client->prenom) }}
+                                @endif
+                            </td>
                             <td>{{ $datefr }}</td>
 
                             @foreach ($vente->postes as $poste)
@@ -53,12 +66,26 @@
                             </td>
                             <td>
                                 <input type="checkbox"
+                                {{-- Si une facture existe pour cette vente --}}
+                                @if ($vente->facture)
+                                    checked
+                                @endif
+                                >
+                            </td>
+                            <td>
+                                <input type="checkbox"
                                 @if ($vente->est_paye)
                                     checked
                                 @endif
                                 >
                             </td>
-                    
+                            <td>
+                                <input type="checkbox"
+                                @if ($vente->a_un_bon_commande)
+                                    checked
+                                @endif
+                                >
+                            </td>
                             <td>
                                 <form action= "{{ URL::to('ventes/' . $vente->id) }}" method="post">
                                     

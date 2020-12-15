@@ -10,16 +10,7 @@
             {{ csrf_field() }}
             {{ method_field('PUT') }}
             <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label>Code barre</label>
-                    @foreach ($vente->postes as $poste)
-                        <input type="text" name="codebarre" class="form-control" value="{{ $poste->code_barre }}">
-                    @endforeach
-                    @if ($errors->has('codebarre'))
-                            <p class="alert alert-danger">{{ $errors->first('codebarre') }}</p>
-                    @endif
-                </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-2">
                     <label>Référence</label>
                     <select name="numeroposte" class="form-control">
                         @foreach ($vente->postes as $poste)
@@ -37,7 +28,7 @@
                         <p class="alert alert-danger">{{ $errors->first('numeroposte') }}</p>
                     @endif
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-2">
                     <label>Intitulé</label>
                     <select name="intituleposte" class="form-control">
                         @foreach ($vente->postes as $poste)
@@ -56,10 +47,10 @@
                     @endif
                 </div>
                 
-            </div>
+            
         
-            <div class="form-row">
-                <div class="form-group col-md-6">
+            
+                <div class="form-group col-md-2">
                     <label>Quantité</label>
                     @foreach ($vente->postes as $poste)
                         <input type="text" name="quantite" class="form-control" value="{{ $poste['pivot']['quantite'] }}">
@@ -69,7 +60,7 @@
                     @endforeach          
               </div>
         
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-2">
                     <label for="poste">Prix unitaire TVAC</label>
                     @foreach ($vente->postes as $poste)
                         <input type="text" name="prixtvac" class="form-control" value="{{ $poste['pivot']['prix_unitaire'] }}">
@@ -78,10 +69,10 @@
                         @endif
                     @endforeach        
               </div>
-            </div>
+            
         
-            <div class="form-row">
-                <div class="form-group col-md-6">
+            
+                <div class="form-group col-md-2">
                     <label>Prix unitaire HT</label>
                     <input type="text" name="prixhtva" class="form-control" value="{{ old('prixhtva') }}">
                     @if ($errors->has('prixhtva'))
@@ -89,7 +80,7 @@
                     @endif
                 </div>
         
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-2">
                     <label>Total TTC par article</label>
                     <input type="text" name="totalttca" class="form-control" value="{{ old('totalttca') }}">
                     @if ($errors->has('totalttca'))

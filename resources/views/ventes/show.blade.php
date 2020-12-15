@@ -27,7 +27,7 @@
                             <td>{{ $poste->intitule }}</td>
                             <td>{{ $poste->pivot->quantite }}€</td>
                             <td>{{ $poste->prix_unitaire }}€</td>
-                            <td>{{ number_format($puhtva, 2, '.', '') }}€</td>
+                            <td>{{ number_format($puhtva, 4, '.', '') }}€</td>
                             <td>{{ number_format($totalttc, 2, '.', '') }}€</td>    
                         </tr>
                     @endforeach
