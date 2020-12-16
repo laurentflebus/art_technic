@@ -211,9 +211,33 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        $assujettis = DB::table('assujettis')->select('intitule')->distinct()->get();
-        $pays = DB::table('clients')->select('pays')->distinct()->get();
-        $civilites = DB::table('clients')->select('civilite')->distinct()->get();
+        // selectionne toutes les valeurs de la colonne intitule de la table assujettis 
+        $assujettis = DB::table('assujettis')->select('intitule')->get();
+        // boucle car même si les valeurs sont égales décryptées elles ne le sont pas dans la table
+        $compare = null;
+        foreach ($assujettis as $assujetti) {      
+            if ($compare == Crypt::decrypt($assujetti->intitule)) {
+                $assujettis->forget($assujettis->search($assujetti));
+            }
+            $compare = Crypt::decrypt($assujetti->intitule);
+        }
+
+        $pays = DB::table('clients')->select('pays')->get();        
+        foreach ($pays as $pay) { 
+            if ($compare == Crypt::decrypt($pay->pays)) {
+                $pays->forget($pays->search($pay));
+            }
+            $compare = Crypt::decrypt($pay->pays);
+        }
+
+        $civilites = DB::table('clients')->select('civilite')->get();
+        foreach ($civilites as $item) { 
+            if ($compare == Crypt::decrypt($item->civilite)) {
+                $civilites->forget($civilites->search($item));
+            }
+            $compare = Crypt::decrypt($item->civilite);
+        }
+
         $client = Client::find($id);
 
         return view('clients.edit', [

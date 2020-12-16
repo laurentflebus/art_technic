@@ -35,8 +35,10 @@
             </table>
         </div>
     </div>
-    <div class="card-footer">
-
+    <div class="card-footer text-center">
+        <a class="btn btn-small btn-info" href="{{ URL::to('email/' . $vente->id) }}" title="Modifier le poste">
+            Envoyer la facture par e-mail
+        </a>
     </div>
 </div>
 

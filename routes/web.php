@@ -53,6 +53,8 @@ Route::group([
 
     Route::get('/imprimerticket/{id}', 'VenteController@imprimerticket');
     Route::get('/imprimerfacture/{id}', 'VenteController@imprimerfacture');
+
+    Route::get('/email/{id}', 'VenteController@envoyerEmail');
 });
 
 // route générique

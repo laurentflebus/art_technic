@@ -9,10 +9,15 @@ use App\Models\Client;
 use App\Models\Modereglement;
 use App\Models\Facture;
 use App\Models\Societe;
+use App\Mail\FactureMail;
+
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+
 use Barryvdh\DomPDF\Facade as PDF;
-use FFI;
+use Illuminate\Support\Facades\Storage;
+
 use Rawilk\Printing\Receipts\ReceiptPrinter;
 use Rawilk\Printing\Facades\Printing;
 
@@ -316,7 +321,6 @@ class VenteController extends Controller
         // année de la vente
         $timestamp = strtotime($vente->date);
         $annee = date("y", $timestamp);
-
         // si pas de facture en bd
         if (!$numfacture) {
             $numfacture = 0;
@@ -324,13 +328,15 @@ class VenteController extends Controller
         // si il n'y a pas de facture pour cette vente
         if (!$vente->facture) {
             $numfacture++;
-            Facture::create([
+            $facture = Facture::create([
                 'numero' => 'V/' . $annee . '/'.$numfacture,
                 'vente_id' => $vente->id,
             ]);
-        } 
+        } else {
+            $facture = $vente->facture->numero;
+        }
         
-        $nomPdf = 'facture_' . $vente->facture->numero . '_'. substr($vente->created_at, 0, 9);
+        $nomPdf = 'facture_' . $facture . '_'. substr($vente->created_at, 0, 9);
         
         $societe = Societe::get()->first();
         // charge la vue facture.blade.php  
@@ -365,13 +371,44 @@ class VenteController extends Controller
         //   'donnees' => $donnees,
         // ];
         $societe = Societe::get()->first();
-        $pdf = PDF::loadView('pdf.facture-pdf', [
+        $pdf = PDF::loadView('pdf.facture', [
             'vente' => $vente,
             'societe' => $societe,
         ]);
 
         return $pdf;
     }
+    /**
+     * Envoie un email
+     * @param $id
+     */
+    public function envoyerEmail($id) {
+
+        
+        $vente = Vente::where('id', $id)->firstOrFail();
+        // Si il n'y a pas de client pour cette vente
+        if (!$vente->client) {
+            flash('Pas de client pour cette vente')->error();
+            return back();
+        }
+        $nomPdf = 'facture_' . $vente->facture->numero . '_'. substr($vente->created_at, 0, 9). '_' . Crypt::decrypt($vente->client->nom) . '_' . Crypt::decrypt($vente->client->prenom);
+        $pdf = self::genererPDF($vente);
+
+        // crée et stocke provisoirement le pdf dans storage/app
+        Storage::put($nomPdf . '.pdf', $pdf->output());
+
+        //envoie de l'e-mail
+        Mail::to(Crypt::decrypt($vente->client->email))->send((new FactureMail($vente))->attach(storage_path('app/' . $nomPdf. '.pdf')) );
+
+        // efface le pdf
+        unlink(storage_path('app/' . $nomPdf. '.pdf'));
+
+        flash("L'e-mail a bien été envoyé")->success();
+        return back();
+
+
+
+      }
     
     //fonction qui va à partir d'un objet devis, parcourir tous ce qu'il contient (articles, etc) et générer des phrases de facture
     private function ticketcalcul($vente) {

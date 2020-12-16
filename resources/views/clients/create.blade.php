@@ -114,7 +114,6 @@
         <div class="form-group col-md-4">
             <label>Pays</label>
             <select id="pays" name="pays" class="form-control">
-                <option>Saisissez</option>
                 <option>Belgique</option>
                 <option>France</option>
             </select>
