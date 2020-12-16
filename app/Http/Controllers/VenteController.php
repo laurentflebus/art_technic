@@ -8,7 +8,13 @@ use App\Models\Poste;
 use App\Models\Client;
 use App\Models\Modereglement;
 use App\Models\Facture;
+use App\Models\Societe;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
+use FFI;
+use Rawilk\Printing\Receipts\ReceiptPrinter;
+use Rawilk\Printing\Facades\Printing;
 
 class VenteController extends Controller
 {
@@ -264,5 +270,135 @@ class VenteController extends Controller
         
         flash('La vente ' . $vente->id . ' a bien été supprimée.')->success();
         return redirect('/ventes');
+    }
+
+    /**
+     * Imprimer un ticket de caisse
+     * @param int $id
+     */
+    public function imprimerticket($id)
+    {
+        $receipt = (string) (new ReceiptPrinter)
+            ->centerAlign()
+            ->text('My heading')
+            ->leftAlign()
+            ->line()
+            ->twoColumnText('Item 1', '2.00')
+            ->twoColumnText('Item 2', '4.00')
+            ->feed(2)
+            ->centerAlign()
+            ->barcode('1234')
+            ->cut();
+
+        $printerId = Printing::defaultPrinterId();
+
+        Printing::newPrintTask()
+            ->printer($printerId)
+            ->content($receipt)
+            ->send();
+        return back();
+
+    }
+
+    /**
+     * Télécharger la facture
+     * @param $id
+     */
+    public function imprimerfacture($id) 
+    {
+        // récupère de l'id de la vente (GET)
+        // crée d'un objet vente à partir de celui-ci
+        $vente = Vente::where('id', $id)->firstOrFail();
+        
+        // récupère la dernière facture avec son id (dernier numéro de facture)
+        $fact = DB::table('factures')->select('id')->latest()->first();
+        $numfacture = $fact->id;
+        // année de la vente
+        $timestamp = strtotime($vente->date);
+        $annee = date("y", $timestamp);
+
+        // si pas de facture en bd
+        if (!$numfacture) {
+            $numfacture = 0;
+        }
+        // si il n'y a pas de facture pour cette vente
+        if (!$vente->facture) {
+            $numfacture++;
+            Facture::create([
+                'numero' => 'V/' . $annee . '/'.$numfacture,
+                'vente_id' => $vente->id,
+            ]);
+        } 
+        
+        $nomPdf = 'facture_' . $vente->facture->numero . '_'. substr($vente->created_at, 0, 9);
+        
+        $societe = Societe::get()->first();
+        // charge la vue facture.blade.php  
+        $pdf = PDF::loadView('pdf.facture', [
+            'vente' => $vente,
+            'societe' => $societe,
+        ]);
+
+        // $printerId = Printing::defaultPrinterId();
+
+        // Printing::newPrintTask()
+        //     ->printer($printerId)
+        //     ->content($pdf->output())
+        //     ->send();
+        
+        // génère le pdf
+        return $pdf->download($nomPdf.'.pdf');
+
+    }
+
+    /**
+     * Générer et paramétrer PDF
+     */
+    private function genererPDF($vente) 
+    {
+        // récupère le texte du ticket de caisse
+        // $donnees = self::ticketcalcul($vente);
+
+        // // génère le PDF
+        // $data = [
+        //   'vente'=> $vente,
+        //   'donnees' => $donnees,
+        // ];
+        $societe = Societe::get()->first();
+        $pdf = PDF::loadView('pdf.facture-pdf', [
+            'vente' => $vente,
+            'societe' => $societe,
+        ]);
+
+        return $pdf;
+    }
+    
+    //fonction qui va à partir d'un objet devis, parcourir tous ce qu'il contient (articles, etc) et générer des phrases de facture
+    private function ticketcalcul($vente) {
+
+        $societe = Societe::get()->first();
+        //variable tableau qui va servir à recevoir les phrases de la facture
+        $texteticket = array();
+ 
+        //ajout des phrases de la facture et des calculs
+        $premiereligne = Crypt::decrypt($societe->nom) . '        ' . Crypt::decrypt($societe->localite->code_postal) . ' ' . Crypt::decrypt($societe->localite->intitule);
+        array_push($texteticket, $premiereligne);
+        $deuxiemeligne = Crypt::decrypt($societe->rue) . ', ' . Crypt::decrypt($societe->nrue) . ' ' . Crypt::decrypt($societe->telephone);
+        array_push($texteticket, $deuxiemeligne);
+        $troisiemeligne = 'Le ' . $vente->date;
+        array_push($texteticket, $troisiemeligne);
+        $quatriemeligne = '               Article           Qté             Montant    ';
+        array_push($texteticket, $quatriemeligne);
+        array_push($texteticket, '--------------------------------------------------------');
+        foreach ($vente->postes as $poste) {
+            $total = floatval($poste->quantite * $poste->prix_unitaire);
+            $ligneposte = $poste->intitule . '                    ' . $poste->pivot->quantite . '        ' . $poste->prix_unitaire;
+            array_push($texteticket, $ligneposte);
+            $barre = '                             ----------------------';
+            array_push($texteticket, $barre);
+            $somme = '                             = ' . $total;
+            array_push($texteticket, $somme);
+        }
+        return $texteticket;
     }
 }
