@@ -20,13 +20,13 @@
                 </thead>
                 <tbody>
                     @foreach($vente->postes as $poste)
-                        <input type="hidden" value="{{ $puhtva = $poste->prix_unitaire * (1 - $poste->tva->taux/100) }}">
+                        <input type="hidden" value="{{ $puhtva = $poste->pivot->prix_unitaire * (1 - $poste->tva->taux/100) }}">
                         <input type="hidden" value="{{ $totalttc = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}">
                         <tr>
                             <td>{{ $poste->numero }}</td>
                             <td>{{ $poste->intitule }}</td>
-                            <td>{{ $poste->pivot->quantite }}€</td>
-                            <td>{{ $poste->prix_unitaire }}€</td>
+                            <td>{{ $poste->pivot->quantite }}</td>
+                            <td>{{ $poste->pivot->prix_unitaire }}€</td>
                             <td>{{ number_format($puhtva, 4, '.', '') }}€</td>
                             <td>{{ number_format($totalttc, 2, '.', '') }}€</td>    
                         </tr>
