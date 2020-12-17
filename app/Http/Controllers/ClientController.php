@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Localite;
 use App\Models\Assujetti;
+use App\Models\Vente;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
@@ -339,7 +340,18 @@ class ClientController extends Controller
     public function destroy($id)
     {
         $client = Client::find($id);
+        // modifie les ventes de ce client à aucun client
+        foreach ($client->ventes as $vente) {
+            $vente->update([
+                'client_id' => null,
+            ]);
+        }
         $client->delete();
+
+        // modifier le client, appliquer sur tous les champs l'id du client et pas le supprimer
+        // $client->update([
+        //     'nom' => $client->id,
+        // ]);
 
         flash('Le client ' . Crypt::decrypt($client->nom) . ' ' . Crypt::decrypt($client->prenom) . ' a bien été supprimé.')->success();
         return redirect('/clients');

@@ -159,7 +159,7 @@ $(document).ready(function(){
     // datatable
     $('#table').DataTable({
         "language": {
-            "lengthMenu": "Entrées _MENU_ par page",
+            "lengthMenu": "_MENU_ entrées par page",
             "search": "Recherche ",
             "info": "_START_ à _END_ entrées",
             "infoEmpty": "0 entrées",
@@ -176,12 +176,50 @@ $(document).ready(function(){
         ] 
     });
 
+    $('#clientstable').DataTable({
+        "language": {
+            "lengthMenu": "_MENU_ entrées par page",
+            "search": "Recherche ",
+            "info": "_START_ à _END_ entrées",
+            "infoEmpty": "0 entrées",
+            "infoFiltered": "(Filtré sur _MAX_ au total)",
+            "zeroRecords": "Aucun résultat",
+            "paginate": {
+                "previous": "Précédent",
+                "next": "Suivant"
+            },
+        },
+        "columnDefs": [
+            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5] }
+        ] 
+    });
+
+    $('#postestable').DataTable({
+        "language": {
+            "lengthMenu": "_MENU_ entrées par page",
+            "search": "Recherche ",
+            "info": "_START_ à _END_ entrées",
+            "infoEmpty": "0 entrées",
+            "infoFiltered": "(Filtré sur _MAX_ au total)",
+            "zeroRecords": "Aucun résultat",
+            "paginate": {
+                "previous": "Précédent",
+                "next": "Suivant"
+            },
+        },
+        "columnDefs": [
+            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5, 6] }
+        ] 
+    });
+
+    
+
     // désactiver la touche enter sur le formulaire de vente pour le scanner
     $('#formvente').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) { 
-          e.preventDefault();
-          return false;
+            if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
         }
     });
 
@@ -189,8 +227,8 @@ $(document).ready(function(){
     $('#formposte').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) { 
-          e.preventDefault();
-          return false;
+            e.preventDefault();
+            return false;
         }
     });
 });

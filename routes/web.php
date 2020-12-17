@@ -28,6 +28,9 @@ Route::group([
     Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
     // Route qui répond aux requêtes de type POST
     Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
+
+    Route::get('/parametres/create', 'SocieteController@create');
+    Route::post('/parametres/create', 'SocieteController@store');
 });
 
 // Groupe de routes Middleware Auth (est identifié)
@@ -38,9 +41,6 @@ Route::group([
     Route::get('/accueil', 'CompteController@accueil');
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
-
-    Route::get('/parametres/create', 'SocieteController@create');
-    Route::post('/parametres/create', 'SocieteController@store');
 
     Route::get('/parametres/edit', 'SocieteController@edit');
     Route::post('/parametres/edit', 'SocieteController@update');

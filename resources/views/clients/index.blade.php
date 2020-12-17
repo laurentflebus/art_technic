@@ -15,7 +15,7 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table id="table" class="table table-striped table-bordered">
+            <table id="clientstable" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>Nom</th>
