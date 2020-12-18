@@ -1,19 +1,56 @@
 @extends('layout')
 
 @section('contenu')
-  <!-- Card -->
-    <div class="card text-center">
-        <h5 class="card-header">Client</h5>
-        <div class="card-body">
-            <h5 class="card-title">{{ Crypt::decrypt($client->civilite) }}  {{ Crypt::decrypt($client->nom) }}  {{ Crypt::decrypt($client->prenom) }}</h5>
-            <p class="card-text">
-                <strong>Adresse : </strong> {{ Crypt::decrypt($client->rue) }}, {{ Crypt::decrypt($client->nrue) }} <br>
-                <strong>Localité : </strong> {{ Crypt::decrypt($client->localite->code_postal) }} {{ Crypt::decrypt($client->localite->intitule) }}
-            </p>
+<div class="row">
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h5><strong>{{ Crypt::decrypt($client->civilite) }}  {{ Crypt::decrypt($client->nom) }}  {{ Crypt::decrypt($client->prenom) }}</strong></h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <strong>Adresse : </strong>
+                    </div>
+                    <div class="col-6">
+                        {{ Crypt::decrypt($client->rue) }}, {{ Crypt::decrypt($client->nrue) }} 
+                    </div>
+                    <div class="col-6">
+                        <strong>Localité : </strong>
+                    </div>
+                    <div class="col-6">
+                        {{ Crypt::decrypt($client->localite->code_postal) }} {{ Crypt::decrypt($client->localite->intitule) }} ({{ Crypt::decrypt($client->pays) }}) 
+                    </div>
+                    <div class="col-6">
+                        <strong>E-mail: </strong>
+                    </div>
+                    <div class="col-6">
+                        <a href="mailto:{{ Crypt::decrypt($client->email) }}">{{ Crypt::decrypt($client->email) }}</a> 
+                    </div>
+                    <div class="col-6">
+                        <strong>Téléphone: </strong>
+                    </div>
+                    <div class="col-6">
+                        {{ Crypt::decrypt($client->telephone) }} 
+                    </div>
+                    <div class="col-6">
+                        <strong>Mobile: </strong>
+                    </div>
+                    <div class="col-6">
+                        {{ Crypt::decrypt($client->mobile) }} 
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ URL::to('clients/' . $client->id . '/edit') }}" class="btn btn-success">Modifier</a>
+            </div>
         </div>
-        <div class="card-footer">
-            <a href="{{ URL::to('clients/' . $client->id . '/edit') }}" class="btn btn-success">Modifier</a>
-        </div>
-     
-    </div>  
+    </div>
+    <div class="col-md-2">
+
+    </div>
+</div>
 @endsection
