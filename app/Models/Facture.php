@@ -9,7 +9,7 @@ class Facture extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['numero', 'vente_id'];
+    protected $fillable = ['numero', 'date', 'vente_id'];
 
     public function vente()
     {

@@ -164,22 +164,30 @@ class VenteController extends Controller
                 'modereglement_id' => $modereglement->id, 
             ]);
         }
-        
+        // année facture
         $timestamp = strtotime(request('date'));
         $annee = date("y", $timestamp);
         $fact = DB::table('factures')->select('id')->latest()->first();
-        $numfacture = $fact->id;
-        if (!$numfacture) {
-            $numfacture = 0;
+        // Si la requete a une facture (request(facture)) et pas de facture en BD
+        if ($facture && !$fact) {
+            $numfacture = 1;
+            $facture = Facture::create([
+                'numero' => 'V/' . $annee . '/'.$numfacture,
+                'date' => request('date'),
+                'vente_id' => $vente->id,
+            ]);
         }
-        if ($facture) {
+        // Si la requete a une facture (request(facture)) et qu'il y a des factures en BD
+        if ($facture && $fact) {
+            $numfacture = $fact->id;
             $numfacture++;
             $facture = Facture::create([
                 'numero' => 'V/' . $annee . '/'.$numfacture,
+                'date' => request('date'),
                 'vente_id' => $vente->id,
             ]);
         } 
-            
+          
         // Boucle pour les ajouts de postes de vente
         for ($i=1; $i <= $nbPoste; $i++) {           
             $poste = Poste::where('numero', request('numeroposte'.$i))->first();
@@ -283,24 +291,32 @@ class VenteController extends Controller
      */
     public function imprimerticket($id)
     {
-        $receipt = (string) (new ReceiptPrinter)
-            ->centerAlign()
-            ->text('My heading')
-            ->leftAlign()
-            ->line()
-            ->twoColumnText('Item 1', '2.00')
-            ->twoColumnText('Item 2', '4.00')
-            ->feed(2)
-            ->centerAlign()
-            ->barcode('1234')
-            ->cut();
+        $societe = Societe::get()->first();
+        $vente = Vente::where('id', $id)->firstOrFail();
+        $pdf = PDF::loadView('pdf.ticket', [
+            'vente' => $vente,
+            'societe' => $societe,
+        ]);
 
         $printerId = Printing::defaultPrinterId();
 
-        Printing::newPrintTask()
-            ->printer($printerId)
-            ->content($receipt)
-            ->send();
+        Printing::newPrintTask()->printer($printerId)->content($pdf->output())->send();
+
+        // $receipt = (string) (new ReceiptPrinter)
+        //     ->centerAlign()
+        //     ->text('My heading')
+        //     ->line()
+        //     ->twoColumnText('Item 1', '2.00')
+        //     ->twoColumnText('Item 2', '4.00');
+
+        
+        // $printerId = Printing::defaultPrinterId();
+
+        // $printJob = Printing::newPrintTask()
+        //     ->printer($printerId)
+        //     ->content($receipt)
+        //     ->send();
+
         return back();
 
     }
@@ -314,6 +330,11 @@ class VenteController extends Controller
         // récupère de l'id de la vente (GET)
         // crée d'un objet vente à partir de celui-ci
         $vente = Vente::where('id', $id)->firstOrFail();
+        // Si pas de facture messsage d'erreur et retour
+        if (!$vente->facture) {
+            flash("Pas de client pour cette vente !")->error();
+            return back();
+        }
         
         // récupère la dernière facture avec son id (dernier numéro de facture)
         $fact = DB::table('factures')->select('id')->latest()->first();
@@ -330,15 +351,18 @@ class VenteController extends Controller
             $numfacture++;
             $facture = Facture::create([
                 'numero' => 'V/' . $annee . '/'.$numfacture,
+                'date' => date('Y-m-d'),
                 'vente_id' => $vente->id,
             ]);
         } else {
-            $facture = $vente->facture->numero;
+            $facture = $vente->facture;
         }
         
-        $nomPdf = 'facture_' . $facture . '_'. substr($vente->created_at, 0, 9);
+        $nomPdf = 'facture_' . $facture->numero . '_'. substr($vente->created_at, 0, 9);
         
         $societe = Societe::get()->first();
+
+        $vente = Vente::where('id', $id)->firstOrFail();
         // charge la vue facture.blade.php  
         $pdf = PDF::loadView('pdf.facture', [
             'vente' => $vente,
@@ -386,9 +410,10 @@ class VenteController extends Controller
 
         
         $vente = Vente::where('id', $id)->firstOrFail();
+        
         // Si il n'y a pas de client pour cette vente
         if (!$vente->client) {
-            flash('Pas de client pour cette vente')->error();
+            flash('Pas de client pour cette vente !')->error();
             return back();
         }
         $nomPdf = 'facture_' . $vente->facture->numero . '_'. substr($vente->created_at, 0, 9). '_' . Crypt::decrypt($vente->client->nom) . '_' . Crypt::decrypt($vente->client->prenom);

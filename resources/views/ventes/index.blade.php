@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="table" class="table table-striped table-bordered">
+            <table id="tablevente" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>ID</th>
@@ -17,7 +17,7 @@
                         <th>Total TTC</th>
                         <th>Total HT</th>
                         <th>Mode règlement</th>
-                        <th>A Fact.</th>
+                        {{-- <th>A Fact.</th> --}}
                         <th>Est Fact</th>
                         <th>Est Payé</th>
                         <th>Bon</th>
@@ -56,14 +56,13 @@
                             <td>{{ number_format($totalht, 2, '.', '') }}€</td>
                             
                             <td>{{ $vente->modereglement->intitule }}</td>
-
-                            <td>
+                            {{-- <td>
                                 <input type="checkbox"
                                 @if ($vente->a_facturer)
                                     checked
                                 @endif
                                 >
-                            </td>
+                            </td> --}}
                             <td>
                                 <input type="checkbox"
                                 {{-- Si une facture existe pour cette vente --}}
@@ -88,7 +87,6 @@
                             </td>
                             <td>
                                 <form action= "{{ URL::to('ventes/' . $vente->id) }}" method="post">
-                                    
                                     {{-- Affiche la vente (utilise la méthode show avec la route GET /ventes/{id}) --}}
                                     <a class="btn btn-small btn-success" href="{{ URL::to('ventes/' . $vente->id) }}" title="Afficher le détail de la vente">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -96,25 +94,7 @@
                                             <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
                                         </svg>
                                     </a>
-                                    {{-- Modifie la vente (utilise la méthode edit avec la route GET /postes/{id}/edit) --}}
-                                    {{-- Imprime le ticket de caisse --}}
-                                    <a class="btn btn-small btn-info" href="{{ URL::to('imprimerticket/' . $vente->id) }}" title="Imprimer le ticket de caisse">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
-                                            <path d="M11 2H5a1 1 0 0 0-1 1v2H3V3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h-1V3a1 1 0 0 0-1-1zm3 4H2a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h1v1H2a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/>
-                                            <path fill-rule="evenodd" d="M11 9H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM5 8a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H5z"/>
-                                            <path d="M3 7.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                                        </svg>
-                                    </a>
-                                    {{-- Imprime la facture --}}
-                                    <a class="btn btn-small btn-info" href="{{ URL::to('imprimerfacture/' . $vente->id) }}" title="Imprimer la facture">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
-                                            <path d="M11 2H5a1 1 0 0 0-1 1v2H3V3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h-1V3a1 1 0 0 0-1-1zm3 4H2a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h1v1H2a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/>
-                                            <path fill-rule="evenodd" d="M11 9H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM5 8a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H5z"/>
-                                            <path d="M3 7.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                                        </svg>
-                                    </a>
-            
-                                    {{-- Supprime la vente (utilise la méthode destroy avec la route DELETE /postes/{id}) --}}
+                                    {{-- Supprime la vente (utilise la méthode destroy avec la route DELETE /ventes/{id}) --}}
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce vente de vente ?')" title="Supprimer la vente">

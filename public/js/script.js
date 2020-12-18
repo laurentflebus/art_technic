@@ -157,7 +157,7 @@ $(document).ready(function(){
     });
 
     // datatable
-    $('#table').DataTable({
+    $('#tablevente').DataTable({
         "language": {
             "lengthMenu": "_MENU_ entrées par page",
             "search": "Recherche ",
@@ -171,8 +171,7 @@ $(document).ready(function(){
             },
         },
         "columnDefs": [
-            { className: "right", "targets": [ 2, 3 ] },
-            { className: "center", "targets": [ 4, 5] }
+            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
         ] 
     });
 
