@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     // cache le bouton supprimer
     $('#supprimerposte').hide();
@@ -48,7 +47,6 @@ $(document).ready(function(){
     $('#quantite').keyup(function(e){
         var quantite = $('#quantite').val();
         var codebarre = $('#codebarre').val();
-        
         $.ajax({                        
             url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
             type: 'GET', // Type de la requête HTTP
@@ -58,11 +56,9 @@ $(document).ready(function(){
             success: function(data) {
                 // code pour gérer le retour de l'appel AJAX
                 console.log(data);
-                // var qte = data[0].quantite;
-                // // Si la quantité insérée dans le champs est supérieur à la quantité en stock on stoppe le processus
-                // if (quantite > qte) {
-                //     alert("Quantité insérée supérieure au stock !");
-                // } else {
+                var qte = data[0].quantite;
+                // Si la quantité en bd est >= à la quantite insérée dans le champs ou quantite bd null (photocopie par ex)
+                if (qte >= quantite || qte == null) {
                     var prixunitaire = data[0].prix_unitaire;
                     var total = quantite * prixunitaire;
                     
@@ -77,7 +73,14 @@ $(document).ready(function(){
                         totalttc += Number($('#totalttca'+i).val());
                     }
                     $('#totalttc').val(totalttc.toFixed(2));
-                // }
+                    // si la quantite insérée est vide
+                } else if (!quantite) {
+
+                } 
+                // sinon on stoppe le proccessus avec un message d'erreur
+                else {
+                    alert("Quantité insérée supérieure au stock !");
+                }  
             },           
         });        
     });
@@ -131,15 +134,14 @@ $(document).ready(function(){
         }
         console.log(cPoste);
     });
+
     // événement lors du click sur le bouton supprimer (-)    
     $('#supprimerposte').click(function(e) {
         // supprime le clone
         $('#clone'+cPoste).remove();
-
         // Décrémente le compteur poste et on le transforme en chaine de caractère
         cptPoste--;
         cPoste = cptPoste.toString();
-        console.log(cPoste);
         // change la valeur de l'input caché avec la dernière valeur de cPoste
         $('#nbPoste').val(cPoste);
         // si nombre de poste = 1, cache le bouton supprimer
@@ -210,8 +212,6 @@ $(document).ready(function(){
             { className: "center", "targets": [ 0, 1, 2, 3, 4, 5, 6] }
         ] 
     });
-
-    
 
     // désactiver la touche enter sur le formulaire de vente pour le scanner
     $('#formvente').on('keyup keypress', function(e) {
