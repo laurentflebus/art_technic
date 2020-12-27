@@ -15,6 +15,7 @@
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
+  color: chocolate;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -24,6 +25,12 @@
 
 #sidebar-wrapper .list-group {
   width: 15rem;
+}
+#sidebar-wrapper .list-group-item {
+  color: bisque;
+}
+#sidebar-wrapper .list-group-item:hover {
+  color: chocolate;
 }
 
 #page-content-wrapper {
@@ -50,8 +57,9 @@
 }
 body {
   /* background-image: url('/img/fond.jpg'); */
-  background-color: rgb(105,105,105);
+  background-color: darkgrey;
 }
+/* classes datatable */
 .right {
   text-align: right;
 }
