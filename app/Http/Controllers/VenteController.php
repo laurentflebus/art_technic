@@ -330,8 +330,8 @@ class VenteController extends Controller
         // récupère de l'id de la vente (GET)
         // crée d'un objet vente à partir de celui-ci
         $vente = Vente::where('id', $id)->firstOrFail();
-        // Si pas de facture messsage d'erreur et retour
-        if (!$vente->facture) {
+        // Si pas de client messsage d'erreur et retour
+        if (!$vente->client) {
             flash("Pas de client pour cette vente !")->error();
             return back();
         }
