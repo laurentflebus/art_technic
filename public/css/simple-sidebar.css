@@ -26,8 +26,11 @@
 #sidebar-wrapper .list-group {
   width: 15rem;
 }
-#sidebar-wrapper .list-group svg{
+#sidebar-wrapper .list-group svg {
   width: 3rem;
+}
+#sidebar-wrapper .list-group ul {
+  margin-left: 1rem;
 }
 #sidebar-wrapper .list-group-item {
   color: bisque;
@@ -60,7 +63,7 @@
 }
 body {
   /* background-image: url('/img/fond.jpg'); */
-  background-color: rgb(199, 197, 197);
+  background-color: rgb(216, 213, 213);
 }
 /* classes datatable */
 .right {

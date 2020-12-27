@@ -360,9 +360,13 @@ class VenteController extends Controller
             $facture = $vente->facture;
         }
         
-        $nomPdf = 'facture_' . $facture->numero . '_'. substr($vente->created_at, 0, 9);
+        $nomPdf = 'facture_' . $facture->numero . '_'. substr($vente->created_at, 0, 10);
         
-        $societe = Societe::get()->first();
+        $societe = Societe::get()->firstOrFail();
+        if (!$societe) {
+            flash("Veuillez créer une société !")->error();
+            return back();
+        }
 
         // rechargement de la vente
         $vente = Vente::where('id', $id)->firstOrFail();

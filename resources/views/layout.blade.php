@@ -151,7 +151,7 @@
             <div id="page-content-wrapper">
 
                 <div class="container-fluid">
-                    <button type="button" id="menu-toggle" class="btn btn-primary">
+                    <button type="button" id="menu-toggle" class="btn btn-dark">
                         <i class="fa fa-bars"></i>
                         <span class="sr-only">Menu</span>
                     </button>
