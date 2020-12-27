@@ -338,14 +338,16 @@ class VenteController extends Controller
         
         // récupère la dernière facture avec son id (dernier numéro de facture)
         $fact = DB::table('factures')->select('id')->latest()->first();
-        $numfacture = $fact->id;
+        // si pas de facture en bd (première utilisation)
+        if (!$fact) {
+            $numfacture = 0;
+        } else {
+            $numfacture = $fact->id;
+        }
         // année de la vente
         $timestamp = strtotime($vente->date);
         $annee = date("y", $timestamp);
-        // si pas de facture en bd
-        if (!$numfacture) {
-            $numfacture = 0;
-        }
+        
         // si il n'y a pas de facture pour cette vente
         if (!$vente->facture) {
             $numfacture++;
@@ -362,6 +364,7 @@ class VenteController extends Controller
         
         $societe = Societe::get()->first();
 
+        // rechargement de la vente
         $vente = Vente::where('id', $id)->firstOrFail();
         // charge la vue facture.blade.php  
         $pdf = PDF::loadView('pdf.facture', [
