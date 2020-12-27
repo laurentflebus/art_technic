@@ -91,15 +91,13 @@
 
                 </div>
             </div>
-    
-            
+        </div>   
     <div class="card-footer text-center">
         <button type="reset" class="btn btn-danger">Annuler</button>
         <button type="submit" class="btn btn-primary">Valider</button>
             
         </form>
-    </div>
-    </div>
+    </div>   
 </div>
     
 

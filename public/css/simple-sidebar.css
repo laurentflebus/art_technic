@@ -15,7 +15,7 @@
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
-  color: chocolate;
+  color: peru;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -26,11 +26,14 @@
 #sidebar-wrapper .list-group {
   width: 15rem;
 }
+#sidebar-wrapper .list-group svg{
+  width: 3rem;
+}
 #sidebar-wrapper .list-group-item {
   color: bisque;
 }
 #sidebar-wrapper .list-group-item:hover {
-  color: chocolate;
+  color: peru;
 }
 
 #page-content-wrapper {
@@ -57,7 +60,7 @@
 }
 body {
   /* background-image: url('/img/fond.jpg'); */
-  background-color: darkgrey;
+  background-color: rgb(199, 197, 197);
 }
 /* classes datatable */
 .right {
