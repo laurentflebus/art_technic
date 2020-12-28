@@ -293,9 +293,11 @@ class VenteController extends Controller
     {
         $societe = Societe::get()->first();
         $vente = Vente::where('id', $id)->firstOrFail();
+        $donnees = self::facturecalcultotaux($vente);
         $pdf = PDF::loadView('pdf.ticket', [
             'vente' => $vente,
             'societe' => $societe,
+            'donnees' => $donnees,
         ]);
 
         $printerId = Printing::defaultPrinterId();
@@ -362,7 +364,7 @@ class VenteController extends Controller
         
         $nomPdf = 'facture_' . $facture->numero . '_'. substr($vente->created_at, 0, 10);
         
-        $societe = Societe::get()->firstOrFail();
+        $societe = Societe::get()->first();
         if (!$societe) {
             flash("Veuillez créer une société !")->error();
             return back();
@@ -370,11 +372,8 @@ class VenteController extends Controller
 
         // rechargement de la vente
         $vente = Vente::where('id', $id)->firstOrFail();
-        // charge la vue facture.blade.php  
-        $pdf = PDF::loadView('pdf.facture', [
-            'vente' => $vente,
-            'societe' => $societe,
-        ]);
+        // appel de la fonction privée genererPDF
+        $pdf = self::genererPDF($vente);
 
         // $printerId = Printing::defaultPrinterId();
 
@@ -383,7 +382,7 @@ class VenteController extends Controller
         //     ->content($pdf->output())
         //     ->send();
         
-        // génère le pdf
+        // télécharger le pdf
         return $pdf->download($nomPdf.'.pdf');
 
     }
@@ -393,20 +392,16 @@ class VenteController extends Controller
      */
     private function genererPDF($vente) 
     {
-        // récupère le texte du ticket de caisse
-        // $donnees = self::ticketcalcul($vente);
-
-        // // génère le PDF
-        // $data = [
-        //   'vente'=> $vente,
-        //   'donnees' => $donnees,
-        // ];
+        // récupère les totaux de la facture
+        $donnees = self::facturecalcultotaux($vente);
+        //génère le PDF
         $societe = Societe::get()->first();
+        // charge la vue facture.blade.php
         $pdf = PDF::loadView('pdf.facture', [
             'vente' => $vente,
             'societe' => $societe,
+            'donnees' => $donnees,
         ]);
-
         return $pdf;
     }
     /**
@@ -415,7 +410,6 @@ class VenteController extends Controller
      */
     public function envoyerEmail($id) {
 
-        
         $vente = Vente::where('id', $id)->firstOrFail();
         
         // Si il n'y a pas de client pour cette vente
@@ -438,9 +432,29 @@ class VenteController extends Controller
         flash("L'e-mail a bien été envoyé")->success();
         return back();
 
+    }
 
-
-      }
+      private function facturecalcultotaux($vente) {
+          $totalht = 0;
+          $totaltva = 0;
+          $totalttc = 0;
+          $totaltva6 = 0;
+          $totaltva21 = 0;
+        foreach ($vente->postes as $poste) {
+            $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire);
+            $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
+            $totalht += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval(1 - $poste->tva->taux/100);
+            if ($poste->tva->taux == 6.0) {
+                $totaltva6 += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
+            }
+            if ($poste->tva->taux == 21.0) {
+                $totaltva21 += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
+            }
+        }
+        
+        
+        return ['totalht' => $totalht, 'totaltva' => $totaltva, 'totalttc' => $totalttc, 'totaltva6' => $totaltva6, 'totaltva21' => $totaltva21];
+    }
     
     //fonction qui va à partir d'un objet devis, parcourir tous ce qu'il contient (articles, etc) et générer des phrases de facture
     private function ticketcalcul($vente) {
