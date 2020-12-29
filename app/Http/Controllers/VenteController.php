@@ -293,12 +293,14 @@ class VenteController extends Controller
     {
         $societe = Societe::get()->first();
         $vente = Vente::where('id', $id)->firstOrFail();
-        $donnees = self::facturecalcultotaux($vente);
+        $donnees = self::calcultotaux($vente);
         $pdf = PDF::loadView('pdf.ticket', [
             'vente' => $vente,
             'societe' => $societe,
             'donnees' => $donnees,
         ]);
+
+        // return $pdf->download();
 
         $printerId = Printing::defaultPrinterId();
 
@@ -393,7 +395,7 @@ class VenteController extends Controller
     private function genererPDF($vente) 
     {
         // récupère les totaux de la facture
-        $donnees = self::facturecalcultotaux($vente);
+        $donnees = self::calcultotaux($vente);
         //génère le PDF
         $societe = Societe::get()->first();
         // charge la vue facture.blade.php
@@ -434,12 +436,12 @@ class VenteController extends Controller
 
     }
 
-      private function facturecalcultotaux($vente) {
-          $totalht = 0;
-          $totaltva = 0;
-          $totalttc = 0;
-          $totaltva6 = 0;
-          $totaltva21 = 0;
+    private function calcultotaux($vente) {
+        $totalht = 0;
+        $totaltva = 0;
+        $totalttc = 0;
+        $totaltva6 = 0;
+        $totaltva21 = 0;
         foreach ($vente->postes as $poste) {
             $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire);
             $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
@@ -451,37 +453,6 @@ class VenteController extends Controller
                 $totaltva21 += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
             }
         }
-        
-        
         return ['totalht' => $totalht, 'totaltva' => $totaltva, 'totalttc' => $totalttc, 'totaltva6' => $totaltva6, 'totaltva21' => $totaltva21];
-    }
-    
-    //fonction qui va à partir d'un objet devis, parcourir tous ce qu'il contient (articles, etc) et générer des phrases de facture
-    private function ticketcalcul($vente) {
-
-        $societe = Societe::get()->first();
-        //variable tableau qui va servir à recevoir les phrases de la facture
-        $texteticket = array();
- 
-        //ajout des phrases de la facture et des calculs
-        $premiereligne = Crypt::decrypt($societe->nom) . '        ' . Crypt::decrypt($societe->localite->code_postal) . ' ' . Crypt::decrypt($societe->localite->intitule);
-        array_push($texteticket, $premiereligne);
-        $deuxiemeligne = Crypt::decrypt($societe->rue) . ', ' . Crypt::decrypt($societe->nrue) . ' ' . Crypt::decrypt($societe->telephone);
-        array_push($texteticket, $deuxiemeligne);
-        $troisiemeligne = 'Le ' . $vente->date;
-        array_push($texteticket, $troisiemeligne);
-        $quatriemeligne = '               Article           Qté             Montant    ';
-        array_push($texteticket, $quatriemeligne);
-        array_push($texteticket, '--------------------------------------------------------');
-        foreach ($vente->postes as $poste) {
-            $total = floatval($poste->quantite * $poste->prix_unitaire);
-            $ligneposte = $poste->intitule . '                    ' . $poste->pivot->quantite . '        ' . $poste->prix_unitaire;
-            array_push($texteticket, $ligneposte);
-            $barre = '                             ----------------------';
-            array_push($texteticket, $barre);
-            $somme = '                             = ' . $total;
-            array_push($texteticket, $somme);
-        }
-        return $texteticket;
     }
 }
