@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Modereglement;
 use App\Models\Facture;
 use App\Models\Societe;
+use App\Models\Tva;
 use App\Mail\FactureMail;
 
 use Illuminate\Support\Facades\Crypt;
@@ -454,5 +455,19 @@ class VenteController extends Controller
             }
         }
         return ['totalht' => $totalht, 'totaltva' => $totaltva, 'totalttc' => $totalttc, 'totaltva6' => $totaltva6, 'totaltva21' => $totaltva21];
+    }
+    /**
+     * Afficher une vue d'ensemble sur les ventes réalisées par le magasin
+     */
+    public function showlisting() {
+        $postes = DB::table('poste_vente')
+                        ->leftJoin('postes', 'poste_vente.poste_id', '=', 'postes.id')
+                        ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, postes.numero as numero, postes.intitule as intitule'))
+                        ->groupBy('poste_id')->get();
+        $tvas = Tva::all();
+        return view('ventes.listing', [
+            'postes' => $postes,
+            'tvas' => $tvas,
+        ]);
     }
 }

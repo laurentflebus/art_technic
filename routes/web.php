@@ -50,6 +50,7 @@ Route::group([
     Route::resource('/clients', 'ClientController');
     Route::resource('/postes', 'PosteController');
     Route::resource('/ventes', 'VenteController');
+    Route::get('/listing', 'VenteController@showlisting');
 
     Route::get('/imprimerticket/{id}', 'VenteController@imprimerticket');
     Route::get('/imprimerfacture/{id}', 'VenteController@imprimerfacture');
