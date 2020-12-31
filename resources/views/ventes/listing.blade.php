@@ -118,8 +118,8 @@
                         <table  class="listingtable table table-striped table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>NumPoste</th>
-                                    <th>Intitule</th>
+                                    <th>Numéro de vente</th>
+                                    <th>Nom du client</th>
                                     <th>TVAC</th>
                                     <th>HTVA</td>
                                 </tr>
@@ -147,8 +147,8 @@
                         <table class="listingtable table table-striped table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>NumPoste</th>
-                                    <th>Intitule</th>
+                                    <th>Numéro de vente</th>
+                                    <th>Nom du client</th>
                                     <th>TVAC</th>
                                     <th>HTVA</td>
                                 </tr>
