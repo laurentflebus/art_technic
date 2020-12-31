@@ -460,13 +460,52 @@ class VenteController extends Controller
      * Afficher une vue d'ensemble sur les ventes réalisées par le magasin
      */
     public function showlisting() {
+        // récupère les totaux des ventes
         $postes = DB::table('poste_vente')
                         ->leftJoin('postes', 'poste_vente.poste_id', '=', 'postes.id')
                         ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, postes.numero as numero, postes.intitule as intitule'))
                         ->groupBy('poste_id')->get();
+        // récupère les totaux des ventes facturées par poste
+        $postesfactures = DB::table('poste_vente')
+                        ->leftJoin('postes', 'poste_vente.poste_id', '=', 'postes.id')
+                        ->leftJoin('factures', 'poste_vente.vente_id', '=', 'factures.vente_id')
+                        ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, postes.numero as numero, postes.intitule as intitule'))
+                        ->whereNotNull('factures.vente_id')
+                        ->groupBy('poste_id')->get();
+        // récupère les totaux des ventes non facturées par poste
+        $postesnonfactures = DB::table('poste_vente')
+                        ->leftJoin('postes', 'poste_vente.poste_id', '=', 'postes.id')
+                        ->leftJoin('factures', 'poste_vente.vente_id', '=', 'factures.vente_id')
+                        ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, postes.numero as numero, postes.intitule as intitule'))
+                        ->whereNull('factures.vente_id')
+                        ->groupBy('poste_id')->get();
+        // récupère les totaux des ventes facturées par client
+        $clientsfactures = DB::table('ventes')
+                        ->rightJoin('clients', 'clients.id', '=', 'ventes.client_id')
+                        ->rightJoin('factures', 'ventes.id', '=', 'factures.vente_id')
+                        ->rightJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
+                        ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
+                        ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, clients.nom as nom, clients.prenom as prenom, ventes.id as id'))
+                        ->whereNotNull('factures.vente_id')
+                        ->whereNotNull('ventes.client_id')
+                        ->groupBy('poste_id')->get();
+        // récupère les totaux des ventes non facturées par client
+        $clientsnonfactures = DB::table('ventes')
+                        ->rightJoin('clients', 'clients.id', '=', 'ventes.client_id')
+                        ->rightJoin('factures', 'ventes.id', '=', 'factures.vente_id')
+                        ->rightJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
+                        ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
+                        ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, clients.nom as nom, clients.prenom as prenom, ventes.id as id'))
+                        ->whereNull('factures.vente_id')
+                        ->whereNotNull('ventes.client_id')
+                        ->groupBy('poste_id')->get();
         $tvas = Tva::all();
         return view('ventes.listing', [
             'postes' => $postes,
+            'postesfactures' => $postesfactures,
+            'postesnonfactures' => $postesnonfactures,
+            'clientsfactures' => $clientsfactures,
+            'clientsnonfactures' => $clientsnonfactures,
             'tvas' => $tvas,
         ]);
     }

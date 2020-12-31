@@ -213,7 +213,7 @@ $(document).ready(function(){
         ] 
     });
 
-    $('#listingtable').DataTable({
+    $('.listingtable').DataTable({
         "language": {
             "lengthMenu": "_MENU_ entrées par page",
             "search": "Recherche ",
