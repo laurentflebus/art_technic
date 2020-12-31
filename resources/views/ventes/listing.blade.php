@@ -128,7 +128,7 @@
                                 @foreach ($clientsfactures as $client)
                                     <tr>
                                         <td>{{ $client->id }}</td>
-                                        <td>{{ Crypt::decypt($client->nom) ?? "" }} {{ Crypt::decrypt($client->prenom) ?? "" }}</td>
+                                        <td>{{ Crypt::decrypt($client->nom) ?? "" }} {{ Crypt::decrypt($client->prenom) ?? "" }}</td>
                                         <td>{{ $client->total }}€</td>
                                         @foreach ($tvas as $tva)
                                             @if ($client->tva_id == $tva->id)

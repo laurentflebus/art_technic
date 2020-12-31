@@ -488,7 +488,7 @@ class VenteController extends Controller
                         ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, clients.nom as nom, clients.prenom as prenom, ventes.id as id'))
                         ->whereNotNull('factures.vente_id')
                         ->whereNotNull('ventes.client_id')
-                        ->groupBy('poste_id')->get();
+                        ->groupBy('clients.id')->get();
         // récupère les totaux des ventes non facturées par client
         $clientsnonfactures = DB::table('ventes')
                         ->rightJoin('clients', 'clients.id', '=', 'ventes.client_id')
@@ -498,7 +498,7 @@ class VenteController extends Controller
                         ->select(DB::raw('tva_id, SUM(poste_vente.prix_unitaire*poste_vente.quantite) as total, clients.nom as nom, clients.prenom as prenom, ventes.id as id'))
                         ->whereNull('factures.vente_id')
                         ->whereNotNull('ventes.client_id')
-                        ->groupBy('poste_id')->get();
+                        ->groupBy('clients.id')->get();
         $tvas = Tva::all();
         return view('ventes.listing', [
             'postes' => $postes,
