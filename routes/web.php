@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//routes concernant l'authentification
-// 1er paramètre : chemin de l'URL, 2ème paramètre : la vue à afficher
+// Routes concernant l'authentification
+// 1er paramètre : chemin de l'URL, 2ème paramètre : nom du controller @ fonction à appeler
 Route::get('/', 'CompteController@afficherFormulaire');
 Route::post('/', 'CompteController@traiterFormulaire');
 
@@ -25,9 +23,9 @@ Route::group([
     'middleware' => 'App\Http\Middleware\Admin',
 ], function () {
     // Route qui répond aux requêtes de type GET
-    Route::get('/inscriptionAuthentification', 'CompteController@visualiserFormulaire');
+    Route::get('/inscription', 'CompteController@visualiserFormulaire');
     // Route qui répond aux requêtes de type POST
-    Route::post('/inscriptionAuthentification', 'CompteController@gererFormulaire');
+    Route::post('/inscription', 'CompteController@gererFormulaire');
 
     Route::get('/parametres/create', 'SocieteController@create');
     Route::post('/parametres/create', 'SocieteController@store');
@@ -50,6 +48,7 @@ Route::group([
     Route::resource('/clients', 'ClientController');
     Route::resource('/postes', 'PosteController');
     Route::resource('/ventes', 'VenteController');
+
     Route::get('/listing', 'VenteController@showlisting');
 
     Route::get('/imprimerticket/{id}', 'VenteController@imprimerticket');
@@ -57,6 +56,5 @@ Route::group([
 
     Route::get('/email/{id}', 'VenteController@envoyerEmail');
 });
-
-// route générique
+// Route générique
 //Route::get('/{nomclient}', 'ClientController@voir');

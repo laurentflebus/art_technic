@@ -3,10 +3,10 @@
 @section('contenu')
 <div class="card">
     <div class="card-header text-center">
-        <h3>Ajout d'un utilisateur</h3>
+        <h3>Ajout d'un Utilisateur</h3>
     </div>
     <div class="card-body">
-        <form action="/inscriptionAuthentification" method="post">
+        <form action="/inscription" method="post">
                 
             {{-- Ajoute un input de type hidden avec un nombre aléatoire généré qui permet à Laravel
                  de vérifier que le formulaire est bien envoyé depuis le site --}}
@@ -35,7 +35,7 @@
 
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="password">Password</label>
+                    <label for="password">Mot de passe</label>
                     <input type="password" class="form-control" id="password" name="password">
                     @if ($errors->has('password'))
                         <p class="alert alert-danger">{{ $errors->first('password') }}</p>
@@ -51,7 +51,7 @@
 
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="password_confirmation">Confirmation</label>
+                    <label for="password_confirmation">Confirmation (mot de passe)</label>
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                     @if ($errors->has('password_confirmation'))
                         <p class="alert alert-danger">{{ $errors->first('password_confirmation') }}</p>

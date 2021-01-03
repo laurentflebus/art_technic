@@ -25,7 +25,7 @@ class CompteController extends Controller
     // afficher le formulaire d'inscription
     public function visualiserFormulaire()
     {
-        return view('inscriptionAuthentification');
+        return view('inscription');
     }
     
     public function gererFormulaire()
