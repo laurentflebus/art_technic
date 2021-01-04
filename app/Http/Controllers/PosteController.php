@@ -200,4 +200,12 @@ class PosteController extends Controller
         flash('Le poste de vente ' . $poste->intitule . ' a bien été supprimé.')->success();
         return redirect('/postes');
     }
+
+    public function showinventory()
+    {
+        $postes = Poste::all();
+        return view('postes.inventaire', [
+            'postes' => $postes,
+        ]);
+    }
 }

@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="tablevente" class="table table-striped table-bordered">
+            <table id="ventestable" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>ID</th>
