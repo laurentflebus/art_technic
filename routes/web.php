@@ -39,6 +39,7 @@ Route::group([
     Route::get('/accueil', 'CompteController@accueil');
     Route::get('/deconnexion', 'CompteController@deconnexion');
     Route::post('/modification-mot-de-passe', 'CompteController@modificationMotDePasse');
+    Route::post('/supprimer/{id}', 'CompteController@supprimer');
 
     Route::get('/parametres/edit', 'SocieteController@edit');
     Route::post('/parametres/edit', 'SocieteController@update');

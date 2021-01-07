@@ -250,6 +250,25 @@ $(document).ready(function(){
         ] 
     });
 
+    $('#utilisateurstable').DataTable({
+        "language": {
+            "lengthMenu": "_MENU_ entrées par page",
+            "search": "Recherche ",
+            "info": "_START_ à _END_ entrées",
+            "infoEmpty": "0 entrées",
+            "infoFiltered": "(Filtré sur _MAX_ au total)",
+            "zeroRecords": "Aucun résultat",
+            "paginate": {
+                "previous": "Précédent",
+                "next": "Suivant"
+            },
+        },
+        "columnDefs": [
+            { className: "center", "targets": [ 0, 1, 2, 3] },
+        ] 
+    });
+ 
+
     // désactiver la touche enter sur le formulaire de vente pour le scanner
     $('#formvente').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;

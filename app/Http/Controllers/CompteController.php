@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Authentification;
+use App\Models\Societe;
 
 class CompteController extends Controller
 {
     public function accueil() 
     {
-        return view('/accueil');
+        $utilisateurs = Authentification::all();
+        $societe = Societe::get()->first();
+        return view('/accueil', [
+            'utilisateurs' => $utilisateurs,
+            'societe' => $societe,
+        ]);
     }
 
     public function deconnexion()
@@ -30,13 +36,14 @@ class CompteController extends Controller
     
     public function gererFormulaire()
     {
-            // on récupère toute la requête de l'utilisateur et on appelle la fonction validate pour valider les données
+        // on récupère toute la requête de l'utilisateur et on appelle la fonction validate pour valider les données
         request()->validate([
             // tableau de règles
-            'user' => ['required'],
-            'password' => ['required', 'confirmed', 'min:3'],
+            'user' => ['required', 'max:8'],
+            'password' => ['required', 'confirmed', 'min:8'],
             'password_confirmation' => ['required'],
         ],[
+            'user.max' => 'Le nom d\'utilisateur doit faire maximum :max caractères.',
             'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire :min caractères.'
         ]);
         // fonction create de Eloquent qui permet de faire un new et un save
@@ -46,19 +53,10 @@ class CompteController extends Controller
             'password' => bcrypt(request('password')),
             'admin' => request('admin')
         ]);
-        
-        return redirect('/');
+        flash('Le nouvel utilisateur a bien été enregistré.')->success();
+        return redirect('/accueil');
     }
 
-    public function liste()
-    {
-        // fonction Eloquent qui récupère tous les Authentifications (utilisateurs)
-        $authentifications = Authentification::all();
-
-        return view('utilisateurs', [
-            'authentifications' => $authentifications,
-        ]);
-    }
     // afficher le formulaire de connexion
     public function afficherFormulaire()
     {
@@ -85,11 +83,16 @@ class CompteController extends Controller
             'password' => request('password'),
         ]);
 
-        // Rediriger vers la page mon-compte si connexion réussie
+        // Redirige vers la page d'accueil si connexion réussie
         if($resultat)
         {
+            $utilisateurs = Authentification::all();
+            $societe = Societe::get()->first();
             flash('Vous êtes connecté.')->success();
-            return redirect('/accueil');
+            return view('/accueil', [
+                'utilisateurs' => $utilisateurs,
+                'societe' => $societe,
+            ]);
         }
         // Sinon retour vers la page précédente et renvoit également les données qui ont été envoyées par l'utilisateur
         return back()->withInput()->withErrors([
@@ -114,5 +117,15 @@ class CompteController extends Controller
 
         return redirect('/mon-compte');
     }
-    
+    /**
+     * Supprimer un compte utilisateur
+     * @param int $id
+     */
+    public function supprimer($id)
+    {
+        $utilisateur = Authentification::find($id);
+        $utilisateur->delete();
+        flash('L\'utilisateur ' . $utilisateur->user . ' a été supprimé avec succès.')->success();
+        return back();
+    }
 }
