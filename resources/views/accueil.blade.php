@@ -99,7 +99,7 @@
                                             </svg>
                                         </a> --}}
         
-                                        {{-- Supprime le client (utilise la méthode destroy avec la route DELETE /clients/{id}) --}}
+                                        {{-- Supprime l'utilisateur' --}}
                                         {{ csrf_field() }}
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer cet utilisateur ?')" title="Supprimer l'utilisateur'">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

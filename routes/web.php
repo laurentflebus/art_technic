@@ -57,6 +57,9 @@ Route::group([
     Route::get('/imprimerfacture/{id}', 'VenteController@imprimerfacture');
 
     Route::get('/email/{id}', 'VenteController@envoyerEmail');
+
+    Route::get('/tva', 'TvaController@index');
+    Route::post('/tva', 'TvaController@telecharger');
 });
 // Route générique
 //Route::get('/{nomclient}', 'ClientController@voir');
