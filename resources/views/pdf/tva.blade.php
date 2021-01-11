@@ -6,137 +6,156 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <style type="text/css">
 
-.footer p {
-    margin:0;
-    font-size:10px;
-    color:#999;
-}
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
 table thead th {
-    width:100px;
+    border-bottom: 1px dashed black; 
+    border-collapse: collapse;
+    width: 90px;
     padding:5px;
-    text-align: center;
-}
-table thead th.large {
-    width:150px;
-    padding:5px;
-    text-align: left;
+    text-align: center;  
 }
 table tbody tr td {
     padding: 5px;
+    text-align: right;
+}
+table {
+  margin-bottom: 20px;
+}
+table#totaux {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table#totaux thead th {
+    border: 1px solid black; 
+    border-collapse: collapse;
+    width: 125px;
+    padding:5px;
+    text-align: center;  
+}
+table#totaux tbody tr td {
+    padding: 5px;
     border: 1px solid;
-    text-align: center;
+    text-align: right;
 }
-table tbody tr td.large{
-    text-align: left;
-}
-table tr.total{
-      background: #000;
-    color:#FFF;
-}
-div#header div {
-  display: inline-block; 
-}
-div#header .left {
-  text-align: left;
-  width: 70%;
-}
-div#header .right {
-  width: 29%;
-}
-div#header .right p {
-  border: solid 1px;
-  margin-top: 1px;
-  padding : 5px;
-}
-#info p {
-  text-align: center;
-  border: solid 1px;
-  padding : 5px;
+td.totalposte {
+  border-top: 1px dashed black;
+  border-bottom: 1px dashed black;
+  font-weight: bold;
 }
 body {
-  padding: 5%
+  padding: 2%;
 }
-img {
-  width: 50%;
-}
-#total p {
-  display: inline-block;
-  width: 150px;
+div#titre h3 {
+  text-align: center;
+  border-bottom: solid 1px;
+  padding : 10px;
 }
 </style>
 </head>
 <body>
-    <div class="text-center">
+    <div id="titre">
         <h3>Impression des opérations relatives aux clients {{ date('Y') }}</h3>
+    </div>
+
+    <div>
+      <p>Période de départ : {{ $depart }}</p>
+      <p>Période d'arrêt &nbsp; &nbsp; &nbsp;: {{ $arret }}</p>
     </div>
 
     <table>
       <thead>
           <tr>
+              <th></th>
               <th>Nr facture</th>
               <th>Mont. HTVA</th>
               <th>Mont. TVAC</th>
+              <th>Mont. TVA</th>
               <th>Total fact.</th>
               <th>Nom Client</th>
           </tr>
       </thead>
+      <input type="hidden" value="{{ $flag = false }}">
       <tbody>
             @foreach ($postes as $poste)
+                @foreach ($facturespostes as $facturesposte)
+                    @if($poste->id == $facturesposte->id)
+                      <tr>
+                        <td>{{ $poste->numero }}</td>
+                        <td>{{ $poste->intitule }}</td>
+                        <td>( TVA {{ $poste->tva->taux }} % )</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @break
+                    @endif
+                @endforeach
                 @foreach ($factures as $facture)
-                    @foreach ($facture->vente->postes as $item)
-                      @if ($poste->intitule == $item->intitule)
-                        <tr>
-                          <td>{{ $poste->numero }}</td>
-                          <td>{{ $poste->intitule }}</td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        @foreach ($factures as $facture)
-                          @foreach ($facture->vente->postes as $item)
-                            @if ($poste->intitule == $item->intitule)
-                              <tr>
-                                <td>{{ $facture->numero }}</td>
-                                <td>{{ floatval($item->pivot->prix_unitaire * $item->pivot->quantite) }}</td>
-                                <td></td>
-                                <td></td>
-                                <td>{{ $facture->vente->client->nom ?? "" }}</td>
-                              </tr> 
-                              @endif
-                          @endforeach
+                  @foreach ($facture->vente->postes as $item)
+                    @if ($poste->intitule == $item->intitule)
+                      <tr>
+                        <td></td>
+                        <td>{{ $facture->numero }}</td>
+                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite), 2, ".", "") }}</td>
+                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+                        @foreach ($totaux as $item)
+                          @if ($item->id == $facture->id)
+                            <td>{{ number_format($item->total, 2, ".", "") }}</td>
+                          @endif  
                         @endforeach
-                      @endif 
-                    @endforeach
+                        <td>{{ $facture->vente->client->nom ?? "" }}</td>
+                      </tr> 
+                    @endif
+                  @endforeach
+                @endforeach
+                @foreach ($totauxparposte as $item)
+                      @if ($item->id == $poste->id)
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="totalposte">{{ number_format(floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td class="totalposte">{{ number_format($item->total, 2, ".", "") }}</td>
+                        <td class="totalposte">{{ number_format(floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                 @endforeach
             @endforeach
-           
-            {{-- <tr>
-
-                <td>{{ $facture->numero }}</td>
-                <td>{{ $totalhta = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval(1 - $poste->tva->taux/100) }}</td>
-                <td>{{ $poste->tva->taux }}%</td>
-                <td>{{ $totaltvaa = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100) }}</td>
-                <td>{{ $totalttca = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}</td>
-            </tr>
-        
-        <tr>
-            <td class="large"><strong>Totaux</strong></td>
-            <td><strong>{{ number_format($donnees['totalht'], 2, '.', '') }}</strong></td>
-            <td></td>
-            <td><strong>{{ number_format($donnees['totaltva'], 2, '.', '') }}</strong></td>
-            <td><strong>{{ number_format($donnees['totalttc'], 2, '.', '') }}</strong></td>
-        </tr> --}}
       </tbody>
   </table>
-  {{-- <p>TVA 6,00% : {{ number_format($donnees['totaltva6'], 2, '.', '') }}</p>
-  <p>TVA 21.00% : {{ number_format($donnees['totaltva21'], 2, '.', '') }}</p> --}}
-  <div class="footer">
-      <hr/>
-      
-  </div>
+<input type="hidden" value="{{ $totalhtva = 0 }}">
+<input type="hidden" value="{{ $totaltvac = 0 }}">
+<input type="hidden" value="{{ $totaltva = 0 }}">
+  <table id="totaux">
+    <thead>
+      <tr>
+        <th></th>
+        <th>HTVA</th>
+        <th>TVAC</th>
+        <th>TVA</th>
+      </tr> 
+    </thead>
+    <tbody>
+      @foreach ($totauxpartva as $item)
+        <tr>
+          <td>Totaux des ventes à {{ $item->taux }} % de TVA</td>
+          <td>{{ number_format(floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+          <td>{{ number_format($item->total, 2, ".", "") }}</td>
+          <td>{{ number_format(floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+        </tr>
+      @endforeach
+      @foreach ($totauxpartva as $item)
+        <tr>
+          <td></td>
+          <td>{{ number_format($totalhtva += floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+          <td>{{ number_format($totaltvac += $item->total, 2, ".", "") }}</td>
+          <td>{{ number_format($totaltva += floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
 </body>
 </html>
