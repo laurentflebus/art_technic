@@ -84,7 +84,7 @@ class TvaController extends Controller
                 $factures->forget($factures->search($facture));
             }
         }
-        if (empty($factures)) {
+        if (sizeof($factures) == 0) {
             flash("Pas de facture pour l'année en cours")->error();
             return back();
         }
