@@ -76,7 +76,13 @@ class TvaController extends Controller
             if ($mois < $depart || $mois > $arret) {
                 // retire du tableau de factures, la facture qui correspond à la condition
                 $factures->forget($factures->search($facture));
-            } 
+            }
+            // récupère l'année de la facture
+            $annee = (int) substr($facture->date, 0, 4);
+            // compare avec la date actuelle
+            if ($annee != (int) date('Y')) {
+                $factures->forget($factures->search($facture));
+            }
         }
         // récupère les id de poste des factures (évite de faire un double foreach)
         $facturespostes= DB::table('ventes')
@@ -85,7 +91,9 @@ class TvaController extends Controller
                         ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
                         ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
                         ->select(DB::raw('postes.id as id'))
-                        ->whereNotNull('factures.vente_id')                        
+                        ->whereNotNull('factures.vente_id')
+                        // condition pour la tva de l'année courante
+                        ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])                      
                         ->get();
         // récupère les totaux par facture + id de facture
         $totaux = DB::table('ventes')
@@ -94,7 +102,8 @@ class TvaController extends Controller
                     ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
                     ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
                     ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, factures.id as id'))
-                    ->whereNotNull('factures.vente_id') 
+                    ->whereNotNull('factures.vente_id')
+                    ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31']) 
                     ->groupBy('factures.id')                       
                     ->get();
         // récupère les totaux par poste + id du poste
@@ -105,6 +114,7 @@ class TvaController extends Controller
                 ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
                 ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, postes.id as id'))
                 ->whereNotNull('factures.vente_id') 
+                ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])
                 ->groupBy('postes.id')                       
                 ->get();
         // récupère les totaux par taux de tva + id du taux
@@ -115,11 +125,12 @@ class TvaController extends Controller
                 ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id')
                 ->rightJoin('tvas', 'tvas.id', '=', 'postes.tva_id') 
                 ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, tvas.taux as taux'))
-                ->whereNotNull('factures.vente_id') 
+                ->whereNotNull('factures.vente_id')
+                ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])
                 ->groupBy('tvas.id')                       
                 ->get();
         $postes = Poste::all();
-        $nomPdf = "tvaclientsposte";
+        $nomPdf = "tvaclientsposte". date('Y');
         // charger la vue tva.blade.php
         $pdf = PDF::loadView('pdf.tva', [
             'factures' => $factures,

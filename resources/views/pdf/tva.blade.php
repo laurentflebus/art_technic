@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <style type="text/css">
-
 table thead th {
     border-bottom: 1px dashed black; 
     border-collapse: collapse;
@@ -28,7 +27,7 @@ table#totaux {
 table#totaux thead th {
     border: 1px solid black; 
     border-collapse: collapse;
-    width: 125px;
+    width: 135px;
     padding:5px;
     text-align: center;  
 }
