@@ -84,6 +84,10 @@ class TvaController extends Controller
                 $factures->forget($factures->search($facture));
             }
         }
+        if (empty($factures)) {
+            flash("Pas de facture pour l'année en cours")->error();
+            return back();
+        }
         // récupère les id de poste des factures (évite de faire un double foreach)
         $facturespostes= DB::table('ventes')
                         ->leftJoin('clients', 'clients.id', '=', 'ventes.client_id')
