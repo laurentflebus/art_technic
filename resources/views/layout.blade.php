@@ -158,8 +158,8 @@
                     <div class="text-center">
                         <br>
                         <p>
-                            PaperMill &copy; <script>document.write(new Date().getFullYear());</script> <br>
-                            Laurent Flebus prod.
+                            a Laurent Flebus production <br>
+                            PaperMill &copy; <script>document.write(new Date().getFullYear());</script>
                         </p>
                     </div>
                 </div>
