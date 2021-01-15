@@ -245,16 +245,16 @@ class TvaController extends Controller
                     ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31']) 
                     ->groupBy('factures.id')                       
                     ->get();
-        // récupère les totaux par poste + id du poste
-        $totauxparposte = DB::table('ventes')
+        // récupère les totaux par client + id du client
+        $totauxparclient = DB::table('ventes')
                 ->leftJoin('clients', 'clients.id', '=', 'ventes.client_id')
                 ->leftJoin('factures', 'ventes.id', '=', 'factures.vente_id')
                 ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
                 ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
-                ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, postes.id as id'))
+                ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, clients.id as id'))
                 ->whereNotNull('factures.vente_id') 
                 ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])
-                ->groupBy('postes.id')                       
+                ->groupBy('client.id')                       
                 ->get();
         // récupère les totaux par taux de tva + id du taux
         $totauxpartva = DB::table('ventes')
@@ -276,7 +276,7 @@ class TvaController extends Controller
             'clients' => $clients,
             'facturesclients' => $facturesclients,
             'totaux' => $totaux,
-            'totauxparposte' => $totauxparposte,
+            'totauxparposte' => $totauxparclient,
             'totauxpartva' => $totauxpartva,
             'depart' => request('depart'),
             'arret' => request('arret'),

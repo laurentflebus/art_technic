@@ -36,7 +36,7 @@ table#totaux tbody tr td {
     border: 1px solid;
     text-align: right;
 }
-td.totalposte {
+td.totalclient {
   border-top: 1px dashed black;
   border-bottom: 1px dashed black;
   font-weight: bold;
@@ -70,7 +70,6 @@ div#titre h3 {
               <th>Mont. TVAC</th>
               <th>Mont. TVA</th>
               <th>Total fact.</th>
-              <th>Nom Client</th>
           </tr>
       </thead>
       <input type="hidden" value="{{ $flag = false }}">
@@ -85,14 +84,13 @@ div#titre h3 {
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                       </tr>
                       @break
                     @endif
                 @endforeach
                 @foreach ($factures as $facture)
-                  @foreach ($facture->vente->postes as $item)
-                    @if ($poste->intitule == $item->intitule)
+                  @if ($client->id == $facture->vente->client->id)
+                    @foreach ($facture->vente->postes as $item)  
                       <tr>
                         <td></td>
                         <td>{{ $facture->numero }}</td>
@@ -104,20 +102,18 @@ div#titre h3 {
                             <td>{{ number_format($item->total, 2, ".", "") }}</td>
                           @endif  
                         @endforeach
-                        <td>{{ $facture->vente->client->nom ?? "" }}</td>
                       </tr> 
-                    @endif
-                  @endforeach
+                    @endforeach
+                  @endif
                 @endforeach
-                @foreach ($totauxparposte as $item)
-                      @if ($item->id == $poste->id)
+                @foreach ($totauxparclient as $item)
+                      @if ($item->id == $client->id)
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class="totalposte">{{ number_format(floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
-                        <td class="totalposte">{{ number_format($item->total, 2, ".", "") }}</td>
-                        <td class="totalposte">{{ number_format(floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
-                        <td></td>
+                        <td class="totalclient">{{ number_format(floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td class="totalclient">{{ number_format($item->total, 2, ".", "") }}</td>
+                        <td class="totalclient">{{ number_format(floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
                         <td></td>
                       </tr>
                       @endif
