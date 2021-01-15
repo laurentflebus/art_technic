@@ -254,7 +254,7 @@ class TvaController extends Controller
                 ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, clients.id as id'))
                 ->whereNotNull('factures.vente_id') 
                 ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])
-                ->groupBy('client.id')                       
+                ->groupBy('clients.id')                       
                 ->get();
         // récupère les totaux par taux de tva + id du taux
         $totauxpartva = DB::table('ventes')
