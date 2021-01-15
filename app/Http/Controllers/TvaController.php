@@ -138,7 +138,7 @@ class TvaController extends Controller
         $postes = Poste::all();
         $nomPdf = "tvaclients". date('Y');
         // charger la vue tva.blade.php
-        $pdf = PDF::loadView('pdfposte.tva', [
+        $pdf = PDF::loadView('pdf.tvaposte', [
             'factures' => $factures,
             'postes' => $postes,
             'facturespostes' => $facturespostes,

@@ -38,6 +38,7 @@
 }
 #sidebar-wrapper .list-group-item:hover {
   color: peru;
+  transition: 0.3s all;
 }
 
 #page-content-wrapper {
