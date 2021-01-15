@@ -104,7 +104,7 @@ div#titre h3 {
                             <td>{{ number_format($item->total, 2, ".", "") }}</td>
                           @endif  
                         @endforeach
-                        <td>{{ $facture->vente->client->nom ?? "" }}</td>
+                        <td>{{ Crypt::decrypt($facture->vente->client->nom) ?? "" }} {{ Crypt::decrypt($facture->vente->client->prenom) ?? "" }}</td>
                       </tr> 
                     @endif
                   @endforeach

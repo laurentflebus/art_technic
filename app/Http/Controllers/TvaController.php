@@ -274,7 +274,7 @@ class TvaController extends Controller
         $pdf = PDF::loadView('pdf.tvaclient', [
             'factures' => $factures,
             'clients' => $clients,
-            'facturespostes' => $facturesclients,
+            'facturesclients' => $facturesclients,
             'totaux' => $totaux,
             'totauxparposte' => $totauxparposte,
             'totauxpartva' => $totauxpartva,
