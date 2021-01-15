@@ -393,7 +393,7 @@ class VenteController extends Controller
     /**
      * Générer et paramétrer PDF
      */
-    private function genererPDF($vente) 
+    private static function genererPDF($vente) 
     {
         // récupère les totaux de la facture
         $donnees = self::calcultotaux($vente);
@@ -437,7 +437,7 @@ class VenteController extends Controller
 
     }
 
-    private function calcultotaux($vente) {
+    private static function calcultotaux($vente) {
         $totalht = 0;
         $totaltva = 0;
         $totalttc = 0;

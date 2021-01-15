@@ -85,6 +85,10 @@ class TvaController extends Controller
             if ($annee != (int) date('Y')) {
                 $factures->forget($factures->search($facture));
             }
+            // si pas de client attaché à la facture
+            if ($facture->vente->client_id == null) {
+                $factures->forget($factures->search($facture));
+            }
         }
         if (sizeof($factures) == 0) {
             flash("Pas de facture pour l'année en cours")->error();
@@ -218,51 +222,49 @@ class TvaController extends Controller
             if ($annee != (int) date('Y')) {
                 $factures->forget($factures->search($facture));
             }
+            // si pas de client attaché à la facture
+            if ($facture->vente->client_id == null) {
+                $factures->forget($factures->search($facture));
+            }
         }
         if (sizeof($factures) == 0) {
             flash("Pas de facture pour l'année en cours")->error();
             return back();
         }
-        // récupère les id de poste des factures (évite de faire un double foreach)
-        $facturesclients= DB::table('ventes')
-                        ->leftJoin('clients', 'clients.id', '=', 'ventes.client_id')
-                        ->leftJoin('factures', 'ventes.id', '=', 'factures.vente_id')
-                        ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
-                        ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
-                        ->select(DB::raw('clients.id as id'))
-                        ->whereNotNull('factures.vente_id')
-                        // condition pour la tva de l'année courante
-                        ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])                      
-                        ->get();
-        // récupère les totaux par facture + id de facture
-        $totaux = DB::table('ventes')
-                    ->leftJoin('clients', 'clients.id', '=', 'ventes.client_id')
-                    ->leftJoin('factures', 'ventes.id', '=', 'factures.vente_id')
-                    ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
-                    ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
-                    ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, factures.id as id'))
-                    ->whereNotNull('factures.vente_id')
-                    ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31']) 
-                    ->groupBy('factures.id')                       
-                    ->get();
-        // récupère les totaux par client + id du client
-        $totauxparclient = DB::table('ventes')
-                ->leftJoin('clients', 'clients.id', '=', 'ventes.client_id')
-                ->leftJoin('factures', 'ventes.id', '=', 'factures.vente_id')
-                ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
-                ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id') 
-                ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, clients.id as id'))
-                ->whereNotNull('factures.vente_id') 
-                ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])
-                ->groupBy('clients.id')                       
-                ->get();
+        $facturesdetaillees = array();
+        foreach ($factures as $facture) {
+            $totaltvac = 0;
+            $totalhtva = 0;
+            $totaltva = 0;
+            foreach ($facture->vente->postes as $poste) {
+                $totalhtva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) * floatval(1 - $poste->tva->taux/100);
+                $totaltvac += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite);
+                $totaltva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) * floatval($poste->tva->taux/100);
+            }
+            array_push($facturesdetaillees,['numero' => $facture->numero, 'idclient' => $facture->vente->client_id,'totalhtva' =>$totalhtva, 'totaltvac' =>$totaltvac, 'totaltva'=>$totaltva]);
+        }
+        $totauxfacturesclients = array();
+        $clients = Client::all();
+        foreach ($clients as $client) {
+            $totaltvac = 0;
+            $totalhtva = 0;
+            $totaltva = 0;
+            foreach ($facturesdetaillees as $facture) {  
+                if ($client->id == $facture['idclient']) {
+                    $totaltvac += $facture['totaltvac'];
+                    $totalhtva += $facture['totalhtva'];
+                    $totaltva += $facture['totaltva'];
+                }
+            }
+            array_push($totauxfacturesclients, ['idclient' => $client->id, 'totaltvac'=>$totaltvac, 'totalhtva'=>$totalhtva, 'totaltva'=>$totaltva]);
+        }
         // récupère les totaux par taux de tva + id du taux
         $totauxpartva = DB::table('ventes')
                 ->leftJoin('clients', 'clients.id', '=', 'ventes.client_id')
                 ->leftJoin('factures', 'ventes.id', '=', 'factures.vente_id')
                 ->leftJoin('poste_vente', 'ventes.id', '=', 'poste_vente.vente_id')
-                ->rightJoin('postes', 'postes.id', '=', 'poste_vente.poste_id')
-                ->rightJoin('tvas', 'tvas.id', '=', 'postes.tva_id') 
+                ->leftJoin('postes', 'postes.id', '=', 'poste_vente.poste_id')
+                ->leftJoin('tvas', 'tvas.id', '=', 'postes.tva_id') 
                 ->select(DB::raw('SUM(poste_vente.quantite*poste_vente.prix_unitaire) as total, tvas.taux as taux'))
                 ->whereNotNull('factures.vente_id')
                 ->whereBetween('ventes.date', [date('Y').'-01-01', date('Y') . '-12-31'])
@@ -274,10 +276,9 @@ class TvaController extends Controller
         $pdf = PDF::loadView('pdf.tvaclient', [
             'factures' => $factures,
             'clients' => $clients,
-            'facturesclients' => $facturesclients,
-            'totaux' => $totaux,
-            'totauxparposte' => $totauxparclient,
             'totauxpartva' => $totauxpartva,
+            'facturesdetaillees' => $facturesdetaillees,
+            'totauxfacturesclients' =>$totauxfacturesclients,
             'depart' => request('depart'),
             'arret' => request('arret'),
         ]);;

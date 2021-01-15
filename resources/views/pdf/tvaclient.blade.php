@@ -8,7 +8,7 @@
 table thead th {
     border-bottom: 1px dashed black; 
     border-collapse: collapse;
-    width: 90px;
+    width: 125px;
     padding:5px;
     text-align: center;  
 }
@@ -52,6 +52,8 @@ div#titre h3 {
 </style>
 </head>
 <body>
+  
+  
     <div id="titre">
         <h3>Impression des opérations relatives aux clients {{ date('Y') }}</h3>
     </div>
@@ -69,17 +71,15 @@ div#titre h3 {
               <th>Mont. HTVA</th>
               <th>Mont. TVAC</th>
               <th>Mont. TVA</th>
-              <th>Total fact.</th>
           </tr>
       </thead>
-      <input type="hidden" value="{{ $flag = false }}">
       <tbody>
             @foreach ($clients as $client)
-                @foreach ($facturesclients as $facturesclient)
-                    @if($client->id == $facturesclient->id)
+            
+                @foreach ($factures as $facture)
+                    @if($client->id == $facture->vente->client_id)
                       <tr>
-                        <td>{{ Crypt::decrypt($client->nom) ?? "" }}</td>
-                        <td>{{ Crypt::decrypt($client->prenom) ?? "" }}</td>
+                        <td>{{ Crypt::decrypt($client->nom) ?? "" }} {{ Crypt::decrypt($client->prenom) ?? "" }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -88,32 +88,25 @@ div#titre h3 {
                       @break
                     @endif
                 @endforeach
-                @foreach ($factures as $facture)
-                  @if ($client->id == $facture->vente->client->id)
-                    @foreach ($facture->vente->postes as $item)  
+                @foreach ($facturesdetaillees as $facture)
+                  @if ($client->id == $facture['idclient'])       
                       <tr>
                         <td></td>
-                        <td>{{ $facture->numero }}</td>
-                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
-                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite), 2, ".", "") }}</td>
-                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
-                        @foreach ($totaux as $item)
-                          @if ($item->id == $facture->id)
-                            <td>{{ number_format($item->total, 2, ".", "") }}</td>
-                          @endif  
-                        @endforeach
+                        <td>{{ $facture['numero'] }}</td>
+                        <td>{{ number_format($facture['totalhtva'], 2, ".", "") }}</td>
+                        <td>{{ number_format($facture['totaltvac'], 2, ".", "") }}</td>
+                        <td>{{ number_format($facture['totaltva'], 2, ".", "") }}</td>  
                       </tr> 
-                    @endforeach
                   @endif
                 @endforeach
-                @foreach ($totauxparclient as $item)
-                      @if ($item->id == $client->id)
+                @foreach ($totauxfacturesclients as $item)
+                      @if ($item['idclient'] == $client->id)
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class="totalclient">{{ number_format(floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
-                        <td class="totalclient">{{ number_format($item->total, 2, ".", "") }}</td>
-                        <td class="totalclient">{{ number_format(floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td class="totalclient">{{ number_format($item['totalhtva'], 2, ".", "") }}</td>
+                        <td class="totalclient">{{ number_format($item['totaltvac'], 2, ".", "") }}</td>
+                        <td class="totalclient">{{ number_format($item['totaltva'], 2, ".", "") }}</td>
                         <td></td>
                       </tr>
                       @endif
