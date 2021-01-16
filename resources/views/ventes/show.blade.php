@@ -13,7 +13,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
+            <table id="detailtable1" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>Client</th>
@@ -119,7 +119,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">  
-            <table class="table table-striped table-bordered">
+            <table id="detailtable2" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>Référence</th>

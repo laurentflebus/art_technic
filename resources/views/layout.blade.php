@@ -26,6 +26,7 @@
         <script src="/js/bootstrap.bundle.min.js"></script>
         {{-- Datatable --}}
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+        <script src="/js/datatable.js"></script>
     </head>
     <body>
         <div class="d-flex" id="wrapper">

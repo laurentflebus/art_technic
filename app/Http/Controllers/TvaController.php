@@ -141,7 +141,7 @@ class TvaController extends Controller
                 ->get();
         $postes = Poste::all();
         $nomPdf = "tvaclients". date('Y');
-        // charger la vue tva.blade.php
+        // charger la vue tvaposte.blade.php
         $pdf = PDF::loadView('pdf.tvaposte', [
             'factures' => $factures,
             'postes' => $postes,
@@ -231,8 +231,10 @@ class TvaController extends Controller
             flash("Pas de facture pour l'année en cours")->error();
             return back();
         }
+        // crée un tableau à 2 dimensions avec les totaux tva calculés par facture
         $facturesdetaillees = array();
         foreach ($factures as $facture) {
+            // initialise les totaux pour chaque facture
             $totaltvac = 0;
             $totalhtva = 0;
             $totaltva = 0;
@@ -241,11 +243,19 @@ class TvaController extends Controller
                 $totaltvac += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite);
                 $totaltva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) * floatval($poste->tva->taux/100);
             }
-            array_push($facturesdetaillees,['numero' => $facture->numero, 'idclient' => $facture->vente->client_id,'totalhtva' =>$totalhtva, 'totaltvac' =>$totaltvac, 'totaltva'=>$totaltva]);
+            array_push($facturesdetaillees, [
+                'numero' => $facture->numero,
+                'idclient' => $facture->vente->client_id,
+                'totalhtva' => $totalhtva,
+                'totaltvac' =>$totaltvac,
+                'totaltva'=>$totaltva
+            ]);
         }
+        // crée un tableau à 2 dimensions avec les totaux tva calculés par client
         $totauxfacturesclients = array();
         $clients = Client::all();
         foreach ($clients as $client) {
+            // initialise les totaux à chaque client
             $totaltvac = 0;
             $totalhtva = 0;
             $totaltva = 0;
@@ -256,7 +266,12 @@ class TvaController extends Controller
                     $totaltva += $facture['totaltva'];
                 }
             }
-            array_push($totauxfacturesclients, ['idclient' => $client->id, 'totaltvac'=>$totaltvac, 'totalhtva'=>$totalhtva, 'totaltva'=>$totaltva]);
+            array_push($totauxfacturesclients, [
+                'idclient' => $client->id,
+                'totaltvac'=> $totaltvac,
+                'totalhtva'=> $totalhtva,
+                 'totaltva'=> $totaltva
+            ]);
         }
         // récupère les totaux par taux de tva + id du taux
         $totauxpartva = DB::table('ventes')
@@ -272,7 +287,7 @@ class TvaController extends Controller
                 ->get();
         $clients = Client::all();
         $nomPdf = "tvaclients". date('Y');
-        // charger la vue tva.blade.php
+        // charge la vue tvaclient.blade.php
         $pdf = PDF::loadView('pdf.tvaclient', [
             'factures' => $factures,
             'clients' => $clients,

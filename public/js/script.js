@@ -149,8 +149,6 @@ $(document).ready(function(){
             $('#supprimerposte').hide()
         }
     });
-    
-    
 
     // événement menu aside
     $("#menu-toggle").click(function(e) {
@@ -158,117 +156,7 @@ $(document).ready(function(){
         $("#wrapper").toggleClass("toggled");
     });
 
-    // datatable
-    $('#ventestable').DataTable({
-        "language": {
-            "lengthMenu": "_MENU_ entrées par page",
-            "search": "Recherche ",
-            "info": "_START_ à _END_ entrées",
-            "infoEmpty": "0 entrées",
-            "infoFiltered": "(Filtré sur _MAX_ au total)",
-            "zeroRecords": "Aucun résultat",
-            "paginate": {
-                "previous": "Précédent",
-                "next": "Suivant"
-            },
-        },
-        "columnDefs": [
-            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
-        ] 
-    });
-
-    $('#clientstable').DataTable({
-        "language": {
-            "lengthMenu": "_MENU_ entrées par page",
-            "search": "Recherche ",
-            "info": "_START_ à _END_ entrées",
-            "infoEmpty": "0 entrées",
-            "infoFiltered": "(Filtré sur _MAX_ au total)",
-            "zeroRecords": "Aucun résultat",
-            "paginate": {
-                "previous": "Précédent",
-                "next": "Suivant"
-            },
-        },
-        "columnDefs": [
-            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5] }
-        ] 
-    });
-
-    $('#postestable').DataTable({
-        "language": {
-            "lengthMenu": "_MENU_ entrées par page",
-            "search": "Recherche ",
-            "info": "_START_ à _END_ entrées",
-            "infoEmpty": "0 entrées",
-            "infoFiltered": "(Filtré sur _MAX_ au total)",
-            "zeroRecords": "Aucun résultat",
-            "paginate": {
-                "previous": "Précédent",
-                "next": "Suivant"
-            },
-        },
-        "columnDefs": [
-            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5, 6] }
-        ] 
-    });
-
-    $('.listingtable').DataTable({
-        "language": {
-            "lengthMenu": "_MENU_ entrées par page",
-            "search": "Recherche ",
-            "info": "_START_ à _END_ entrées",
-            "infoEmpty": "0 entrées",
-            "infoFiltered": "(Filtré sur _MAX_ au total)",
-            "zeroRecords": "Aucun résultat",
-            "paginate": {
-                "previous": "Précédent",
-                "next": "Suivant"
-            },
-        },
-        "columnDefs": [
-            { className: "center", "targets": [ 0, 1] },
-            { className: "right", "targets": [2, 3] },
-        ] 
-    });
-
-    $('#inventairetable').DataTable({
-        "language": {
-            "lengthMenu": "_MENU_ entrées par page",
-            "search": "Recherche ",
-            "info": "_START_ à _END_ entrées",
-            "infoEmpty": "0 entrées",
-            "infoFiltered": "(Filtré sur _MAX_ au total)",
-            "zeroRecords": "Aucun résultat",
-            "paginate": {
-                "previous": "Précédent",
-                "next": "Suivant"
-            },
-        },
-        "columnDefs": [
-            { className: "center", "targets": [ 0, 1, 2, 3, 4, 5, 6] },
-        ] 
-    });
-
-    $('#utilisateurstable').DataTable({
-        "language": {
-            "lengthMenu": "_MENU_ entrées par page",
-            "search": "Recherche ",
-            "info": "_START_ à _END_ entrées",
-            "infoEmpty": "0 entrées",
-            "infoFiltered": "(Filtré sur _MAX_ au total)",
-            "zeroRecords": "Aucun résultat",
-            "paginate": {
-                "previous": "Précédent",
-                "next": "Suivant"
-            },
-        },
-        "columnDefs": [
-            { className: "center", "targets": [ 0, 1, 2, 3] },
-        ] 
-    });
- 
-
+    
     // désactiver la touche enter sur le formulaire de vente pour le scanner
     $('#formvente').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
