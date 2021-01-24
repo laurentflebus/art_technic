@@ -276,12 +276,22 @@ class VenteController extends Controller
      */
     public function destroy($id)
     {
-        $vente = Vente::find($id);
-        $vente->delete();
+        $vente = Vente::find($id);   
+        $postes = Poste::all();
         foreach ($vente->postes as $poste) {
+            foreach ($postes as $post) {
+                // Si une quantité (en stock) existe pour ce poste 
+                if ($post->id == $poste->id && $post->quantite) {
+                    // rétablit la quantite du poste de vente en stock
+                    $quantitemaj = $post->quantite + $poste->pivot->quantite;
+                    $poste->update([
+                        'quantite' => $quantitemaj,
+                    ]);
+                }
+            }
             $vente->postes()->detach($poste);
         }
-        
+        $vente->delete();
         flash('La vente ' . $vente->id . ' a bien été supprimée.')->success();
         return redirect('/ventes');
     }
