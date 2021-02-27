@@ -429,7 +429,7 @@ class VenteController extends Controller
             flash('Pas de client pour cette vente !')->error();
             return back();
         }
-        $nomPdf = 'facture_' . $vente->facture->numero . '_'. substr($vente->created_at, 0, 9). '_' . Crypt::decrypt($vente->client->nom) . '_' . Crypt::decrypt($vente->client->prenom);
+        $nomPdf = 'facture_' . $vente->facture->numero . '_'. $vente->facture->date . '_' . Crypt::decrypt($vente->client->nom) . '_' . Crypt::decrypt($vente->client->prenom);
         $pdf = self::genererPDF($vente);
 
         // crée et stocke provisoirement le pdf dans storage/app

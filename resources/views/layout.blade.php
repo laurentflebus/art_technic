@@ -23,7 +23,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         {{-- <script src="/js/jquery-3.5.1.min.js"></script> --}}
         <script src="/js/script.js"></script>
-        <script src="/js/bootstrap.bundle.min.js"></script>
+        {{-- <script src="/js/bootstrap.bundle.min.js"></script>
         {{-- Datatable --}}
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
         <script src="/js/datatable.js"></script>

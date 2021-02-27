@@ -62,9 +62,7 @@ $(document).ready(function(){
                     var prixunitaire = data[0].prix_unitaire;
                     var total = quantite * prixunitaire;
                     
-
                     $('#totalttca'+ $('#nbPoste').val()).val(total.toFixed(2));
-                    $('#totalttc'+ $('#nbPoste').val()).val(total.toFixed(2));
                     $('#quantite'+$('#nbPoste').val()).val(quantite);
 
                     // Calcul du total TTC
