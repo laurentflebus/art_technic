@@ -313,7 +313,7 @@ class ClientController extends Controller
         // $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
 
         $client->update([
-                'civilite' => request('civilite'),
+                'civilite' => Crypt::encrypt(request('civilite')),
                 'nom' => Crypt::encrypt(request('nom')),
                 'prenom' => Crypt::encrypt(request('prenom')),
                 'email' => Crypt::encrypt(request('email')),

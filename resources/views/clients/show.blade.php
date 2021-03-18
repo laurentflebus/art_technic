@@ -25,22 +25,28 @@
                         {{ Crypt::decrypt($client->localite->code_postal) }} {{ Crypt::decrypt($client->localite->intitule) }} ({{ Crypt::decrypt($client->pays) }}) 
                     </div>
                     <div class="col-6">
-                        <strong>E-mail: </strong>
+                        <strong>E-mail : </strong>
                     </div>
                     <div class="col-6">
                         <a href="mailto:{{ Crypt::decrypt($client->email) }}">{{ Crypt::decrypt($client->email) }}</a> 
                     </div>
                     <div class="col-6">
-                        <strong>Téléphone: </strong>
+                        <strong>Téléphone : </strong>
                     </div>
                     <div class="col-6">
                         {{ Crypt::decrypt($client->telephone) }} 
                     </div>
                     <div class="col-6">
-                        <strong>Mobile: </strong>
+                        <strong>Mobile : </strong>
                     </div>
                     <div class="col-6">
                         {{ Crypt::decrypt($client->mobile) }} 
+                    </div>
+                    <div class="col-6">
+                        <strong>Numéro TVA : </strong>
+                    </div>
+                    <div class="col-6">
+                        {{ Crypt::decrypt($client->assujetti->num_tva) }} 
                     </div>
                 </div>
             </div>

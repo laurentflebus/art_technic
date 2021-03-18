@@ -71,7 +71,7 @@ class SocieteController extends Controller
     {
         //$societe = DB::table('societes')->get()->first();
         $societes = Societe::all();
-        $pays = DB::table('clients')->select('pays')->distinct()->get();
+        $pays = DB::table('societes')->select('pays')->get();        
         return view('societes.edit', [
             'societes' => $societes,
             'pays' => $pays,
