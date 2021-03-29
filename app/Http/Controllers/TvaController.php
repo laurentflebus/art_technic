@@ -259,19 +259,22 @@ class TvaController extends Controller
             $totaltvac = 0;
             $totalhtva = 0;
             $totaltva = 0;
-            foreach ($facturesdetaillees as $facture) {  
-                if ($client->id == $facture['idclient']) {
-                    $totaltvac += $facture['totaltvac'];
-                    $totalhtva += $facture['totalhtva'];
-                    $totaltva += $facture['totaltva'];
+            // si le client n'est pas associé à une vente
+            if (sizeof($client->ventes) != 0) {
+                foreach ($facturesdetaillees as $facture) {  
+                    if ($client->id == $facture['idclient']) {
+                        $totaltvac += $facture['totaltvac'];
+                        $totalhtva += $facture['totalhtva'];
+                        $totaltva += $facture['totaltva'];
+                    }
                 }
-            }
-            array_push($totauxfacturesclients, [
-                'idclient' => $client->id,
-                'totaltvac'=> $totaltvac,
-                'totalhtva'=> $totalhtva,
-                 'totaltva'=> $totaltva
-            ]);
+                array_push($totauxfacturesclients, [
+                    'idclient' => $client->id,
+                    'totaltvac'=> $totaltvac,
+                    'totalhtva'=> $totalhtva,
+                     'totaltva'=> $totaltva
+                ]);    
+            }          
         }
         // récupère les totaux par taux de tva + id du taux
         $totauxpartva = DB::table('ventes')

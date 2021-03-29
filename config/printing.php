@@ -48,7 +48,7 @@ return [
     | If you know the id of a default printer you want to use, enter it here.
     |
     */
-    'default_printer_id' => 69942289,
+    'default_printer_id' => 70202938,
 
     /*
     |--------------------------------------------------------------------------

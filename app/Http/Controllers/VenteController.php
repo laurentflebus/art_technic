@@ -311,11 +311,11 @@ class VenteController extends Controller
             'donnees' => $donnees,
         ]);
 
-        return $pdf->download();
+        // return $pdf->download();
 
-        // $printerId = Printing::defaultPrinterId();
+        $printerId = Printing::defaultPrinterId();
 
-        // Printing::newPrintTask()->printer($printerId)->content($pdf->output())->send();
+        Printing::newPrintTask()->printer($printerId)->content($pdf->output())->send();
 
         // $receipt = (string) (new ReceiptPrinter)
         //     ->centerAlign()
@@ -332,7 +332,7 @@ class VenteController extends Controller
         //     ->content($receipt)
         //     ->send();
 
-        // return back();
+        return back();
 
     }
 

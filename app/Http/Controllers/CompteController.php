@@ -103,7 +103,7 @@ class CompteController extends Controller
     public function modificationMotDePasse()
     {
         request()->validate([
-            'password' => ['required', 'confirmed', 'min:3'],
+            'password' => ['required', 'confirmed', 'min:8'],
             'password_confirmation' => ['required'],
         ]);
 
