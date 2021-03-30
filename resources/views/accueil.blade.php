@@ -7,7 +7,7 @@
             <p>Vous êtes connecté en tant que <strong>{{ auth()->user()->user }}</strong></p>
         </div>
         <div class="card-body">
-            <form class="section" action="/modification-mot-de-passe" method="post">
+            <form action="/modification-mot-de-passe" method="post">
                 
                 {{ csrf_field() }}
                 <div class="row">
