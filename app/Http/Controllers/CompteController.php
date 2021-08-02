@@ -40,11 +40,13 @@ class CompteController extends Controller
         request()->validate([
             // tableau de règles
             'user' => ['required', 'max:8'],
-            'password' => ['required', 'confirmed', 'min:8'],
+            // le mot de passe doit contenir une minuscule, une majuscule et un chiffre
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/^\S*(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[0-9])\S*$/'],
             'password_confirmation' => ['required'],
         ],[
             'user.max' => 'Le nom d\'utilisateur doit faire maximum :max caractères.',
-            'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire :min caractères.'
+            'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire au minimum :min caractères.',
+            'password.regex' => 'Le mot de passe doit contenir une majuscule, une minuscule et un chiffre.'
         ]);
         // fonction create de Eloquent qui permet de faire un new et un save
         $authentification = Authentification::create([
@@ -102,20 +104,26 @@ class CompteController extends Controller
 
     public function modificationMotDePasse()
     {
-        request()->validate([
-            'password' => ['required', 'confirmed', 'min:8'],
-            'password_confirmation' => ['required'],
-        ]);
-
-        // 
-        auth()->user()->update([
-            // nom colonne bd | name input formulaire, requête client
-            'password' => bcrypt(request('password')),
-        ]);
-
-        flash('Votre mot de passe a bien été mis à jour.')->success();
-
-        return redirect('/mon-compte');
+       $resultat = request()->validate([
+                'password' => ['required', 'confirmed', 'min:8', 'regex:/^\S*(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[0-9])\S*$/'],
+                'password_confirmation' => ['required'],
+            ],[
+                'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire au minimum :min caractères.',
+                'password.regex' => 'Le mot de passe doit contenir une majuscule, une minuscule et un chiffre.'    
+            ]);
+        // Si la requête est valide
+        if ($resultat) {
+            auth()->user()->update([
+                // nom colonne bd | name input formulaire, requête client
+                'password' => bcrypt(request('password')),
+            ]);
+    
+            flash('Votre mot de passe a bien été mis à jour.')->success();
+            return redirect('/accueil');
+        }
+        
+        // Sinon
+        return back();
     }
     /**
      * Supprimer un compte utilisateur
