@@ -122,7 +122,7 @@ class CompteController extends Controller
             return redirect('/accueil');
         }
         
-        // Sinon
+        // Sinon 
         return back();
     }
     /**
