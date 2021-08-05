@@ -49,6 +49,7 @@ Route::group([
     Route::resource('/clients', 'ClientController');
     Route::resource('/postes', 'PosteController');
     Route::resource('/ventes', 'VenteController');
+    Route::resource('/fournisseurs', 'FournisseurController');
 
     Route::get('/listing', 'VenteController@showlisting');
     Route::get('/inventaire', 'PosteController@showinventory');

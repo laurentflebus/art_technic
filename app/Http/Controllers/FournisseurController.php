@@ -1,0 +1,279 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Fournisseur;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+
+class FournisseurController extends Controller
+{
+    /**
+     * Affiche la liste des fournisseurs
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $fournisseurs = Fournisseur::all();
+        return view('fournisseurs.index', [
+            'fournisseurs' => $fournisseurs,
+        ]);
+    }
+
+    /**
+     * Affiche le formulaire pour créer un nouveau fournisseur
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('fournisseurs.create');
+    }
+
+    /**
+     * Enregistre un nouveau fournisseur
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // Validation des champs du formulaire d'inscription
+        $request->validate([
+            'civilite' => ['required'],
+            'nom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
+            'prenom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
+            'email' => ['required', 'regex:/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/' ,'email'],
+            'telephone' => ['required', 'numeric', 'min:8'],
+            'mobile' => ['required', 'numeric', 'min:8'],
+            'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'nrue' => ['required', 'alpha_num'],
+            'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
+            'localite' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'assujetti' => ['required', 'regex:/^[a-z ]+$/i'],
+            'numcompte' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'delai' => ['required']
+        ]);
+        
+        // Vérifie si la localite existe déjà en bd
+        $localite = "";       
+        $localites = DB::table('localites')->get();
+         
+        foreach ($localites as $item) {
+            if (Crypt::decrypt($item->intitule) == request('localite') &&
+                Crypt::decrypt($item->code_postal) == request('codepostal')) {
+                $localite = $item;
+            } 
+        }
+
+        // Vérifie si le type d'assujetissement existe déjà
+        $assujetti = "";
+        $assujettis = DB::table('assujettis')->get();   
+        foreach ($assujettis as $item) {
+            if (Crypt::decrypt($item->intitule) == request('assujetti') &&
+                Crypt::decrypt($item->num_tva) == request('numtva')) {
+                $assujetti = $item;
+            }  
+        }
+
+        // Vérifie si le fournisseur existe déjà
+        $fournisseurs = Fournisseur::all();       
+        foreach($fournisseurs as $fournisseur) {           
+            if ( Crypt::decrypt($fournisseur->nom) == request('nom') &&
+                 Crypt::decrypt($fournisseur->email) == request('email') ) {
+                    flash('Le fournisseur existe déjà.')->error();
+                    return back();
+             }
+        }
+        
+        // Si la localité et l'assujetissement n'existe pas
+       if (!$localite && !$assujetti) {
+            $assujetti = Assujetti::create([
+                'intitule' => Crypt::encrypt(request('assujetti')),
+                'num_tva' => Crypt::encrypt(request('numtva')),
+            ]);
+            $localite = Localite::create([
+                'intitule' => Crypt::encrypt(request('localite')),
+                'code_postal' => Crypt::encrypt(request('codepostal')),
+            ]);           
+            $fournisseur = Fournisseur::create([
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
+                'num_compte' => Crypt::encrypt(request('numcompte')),
+                'delai_paiement' => Crypt::encrypt(request('delai')),
+                'reference_personnel' => Crypt::encrypt(request('reference')),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);           
+        // Si l'assujetissement n'existe pas
+       } elseif (!$assujetti) {
+           // Insertion de l'assujetissement en bd
+            $assujetti = Assujetti::create([
+               'intitule' => Crypt::encrypt(request('assujetti')),
+               'num_tva' => Crypt::encrypt(request('numtva')),
+            ]);
+            $fournisseur = Fournisseur::create([
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
+                'num_compte' => Crypt::encrypt(request('numcompte')),
+                'delai_paiement' => Crypt::encrypt(request('delai')),
+                'reference_personnel' => Crypt::encrypt(request('reference')),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+        // Si la localite n'existe pas
+       } elseif (!$localite) {
+           // Insertion de la localité en bd
+            $localite = Localite::create([
+                'intitule' => Crypt::encrypt(request('localite')),
+                'code_postal' => Crypt::encrypt(request('codepostal')),
+            ]);
+            $fournisseur = Fournisseur::create([
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
+                'num_compte' => Crypt::encrypt(request('numcompte')),
+                'delai_paiement' => Crypt::encrypt(request('delai')),
+                'reference_personnel' => Crypt::encrypt(request('reference')),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+        } else {
+            //Insertion du fournisseur en base de données
+            $fournisseur = Fournisseur::create([
+                'civilite' => Crypt::encrypt(request('civilite')),
+                'nom' => Crypt::encrypt(request('nom')),
+                'prenom' => Crypt::encrypt(request('prenom')),
+                'email' => Crypt::encrypt(request('email')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'mobile' => Crypt::encrypt(request('mobile')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
+                'num_compte' => Crypt::encrypt(request('numcompte')),
+                'delai_paiement' => Crypt::encrypt(request('delai')),
+                'reference_personnel' => Crypt::encrypt(request('reference')),
+                'localite_id' => $localite->id,
+                'assujetti_id' => $assujetti->id,
+            ]);
+        }
+        
+         flash('Le nouveau fournisseur a bien été enregistré.')->success();
+         return redirect('/fournisseurs');
+    }
+
+    /**
+     * Afficher un fournisseur
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        // récupère le fournisseur
+        $fournisseur = Fournisseur::find($id);
+        // affiche la vue et passe la variable
+        return view('fournisseurs.show',[
+            'fournisseur' => $fournisseur
+        ]);
+    }
+
+    /**
+     * Afficher le formulaire pour modifier le fournisseur
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        // selectionne toutes les valeurs de la colonne intitule de la table assujettis 
+        $assujettis = DB::table('assujettis')->select('intitule')->get();
+        // boucle car même si les valeurs sont égales décryptées elles ne le sont pas dans la table
+        $compare = null;
+        foreach ($assujettis as $assujetti) {      
+            if ($compare == Crypt::decrypt($assujetti->intitule)) {
+                $assujettis->forget($assujettis->search($assujetti));
+            }
+            $compare = Crypt::decrypt($assujetti->intitule);
+        }
+
+        $pays = DB::table('fournisseurs')->select('pays')->get();        
+        foreach ($pays as $pay) { 
+            if ($compare == Crypt::decrypt($pay->pays)) {
+                $pays->forget($pays->search($pay));
+            }
+            $compare = Crypt::decrypt($pay->pays);
+        }
+
+        $civilites = DB::table('fournisseurs')->select('civilite')->get();
+        foreach ($civilites as $item) { 
+            if ($compare == Crypt::decrypt($item->civilite)) {
+                $civilites->forget($civilites->search($item));
+            }
+            $compare = Crypt::decrypt($item->civilite);
+        }
+
+        $delais = DB::table('fournisseurs')->select('delai_paiement')->get();
+        foreach ($delais as $item) {
+            if ($compare == Crypt::decrypt($item->delai_paiement)) {
+                $delais->forget($delais->search($item));
+            }
+            $compare = Crypt::decrypt($item->delai_paiement);
+        }
+        $fournisseur = Fournisseur::find($id);
+
+        return view('fournisseurs.edit', [
+            'fournisseur' => $fournisseur,
+            'pays' => $pays,
+            'assujettis' => $assujettis,
+            'civilites' => $civilites,
+            'delais' => $delais,
+        ]);
+    }
+
+    /**
+     * Modifier le fournisseur spécifié
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        
+    }
+
+    /**
+     * Supprimer un fournisseur
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}
