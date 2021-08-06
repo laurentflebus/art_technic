@@ -11,7 +11,7 @@
         </h3>
     </div>
     <div class="card-body">
-    <form action="/clients" method="post">
+    <form action="/fournisseurs" method="post">
     {{ csrf_field() }}
     <div class="form-row">
 

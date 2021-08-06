@@ -333,7 +333,6 @@ class ClientController extends Controller
     /**
      * Supprimer un client
      * 
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

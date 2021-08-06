@@ -3,10 +3,10 @@
 @section('contenu')
 <div class="card">
     <div class="card-header text-center">
-        <h3>Modification du contact : {{ Crypt::decrypt($fournisseur->nom) }} {{ Crypt::decrypt($fournisseur->prenom) }}</h3>
+        <h3>Modification du fournisseur : {{ Crypt::decrypt($fournisseur->nom) }} {{ Crypt::decrypt($fournisseur->prenom) }}</h3>
     </div>
     <div class="card-body">
-        <form action="/$fournisseurs/{{ $$fournisseur->id }}" method="post">
+        <form action="/fournisseurs/{{ $fournisseur->id }}" method="post">
             {{ csrf_field() }}
             {{ method_field('PUT') }}
             <div class="form-row">
@@ -19,11 +19,15 @@
                                 @foreach ($civilites as $item)
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="civilite" value="{{ $item->civilite }}"
-                                        @if (Crypt::decrypt($$fournisseur->civilite) == Crypt::decrypt($item->civilite))
+                                        @if (Crypt::decrypt($fournisseur->civilite) == Crypt::decrypt($item->civilite))
                                             checked
                                         @endif
                                         >
-                                        <label class="form-check-label">{{ Crypt::decrypt($item->civilite) }}</label>
+                                        @if (Crypt::decrypt($item->civilite) == null)
+                                            <label class="form-check-label">Aucune</label>
+                                        @else
+                                            <label class="form-check-label">{{ Crypt::decrypt($item->civilite) }}</label>
+                                        @endif    
                                     </div>
                                 @endforeach
                                 

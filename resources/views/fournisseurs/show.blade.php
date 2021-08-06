@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header text-center">
-                    <h5><strong>{{ Crypt::decrypt($fournisseur->civilite) }}  {{ Crypt::decrypt($fournisseur->nom) }}  {{ Crypt::decrypt($fournisseur->prenom) }}</strong></h5>
+                    <h5><strong>{{ Crypt::decrypt($fournisseur->civilite) ?? "" }}  {{ Crypt::decrypt($fournisseur->nom) }}  {{ Crypt::decrypt($fournisseur->prenom) ?? "" }}</strong></h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -45,7 +45,7 @@
                             <strong>Numéro TVA : </strong>
                         </div>
                         <div class="col-6">
-                            {{ Crypt::decrypt($fournisseur->assujetti->num_tva) }} 
+                            {{ Crypt::decrypt($fournisseur->assujetti->num_tva) ?? "" }} 
                         </div>
                         <div class="col-6">
                             <strong>Numéro de compte : </strong>
@@ -57,7 +57,7 @@
                             <strong>Référence personnel : </strong>
                         </div>
                         <div class="col-6">
-                            {{ Crypt::decrypt($fournisseur->reference_personnel) }} 
+                            {{ Crypt::decrypt($fournisseur->reference_personnel) ?? "" }} 
                         </div>
                         <div class="col-6">
                             <strong>Délai de paiement : </strong>
@@ -69,7 +69,7 @@
                             <strong>Remarque : </strong>
                         </div>
                         <div class="col-6">
-                            {{ Crypt::decrypt($fournisseur->remarque) }} 
+                            {{ Crypt::decrypt($fournisseur->remarque) ?? "" }} 
                         </div>
                     </div>
                 </div>

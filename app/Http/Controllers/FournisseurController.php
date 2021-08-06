@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Fournisseur;
+use App\Models\Localite;
+use App\Models\Assujetti;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
@@ -42,9 +44,8 @@ class FournisseurController extends Controller
     {
         // Validation des champs du formulaire d'inscription
         $request->validate([
-            'civilite' => ['required'],
             'nom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
-            'prenom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
+            'prenom' => ['nullable', 'regex:/^[a-zA-Z éèàùç\'-]+$/i'],
             'email' => ['required', 'regex:/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/' ,'email'],
             'telephone' => ['required', 'numeric', 'min:8'],
             'mobile' => ['required', 'numeric', 'min:8'],
@@ -55,7 +56,7 @@ class FournisseurController extends Controller
             'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'assujetti' => ['required', 'regex:/^[a-z ]+$/i'],
             'numcompte' => ['required', 'regex:/^[a-z0-9]+$/i'],
-            'delai' => ['required']
+            'delai' => ['required'],
         ]);
         
         // Vérifie si la localite existe déjà en bd
@@ -112,6 +113,7 @@ class FournisseurController extends Controller
                 'num_compte' => Crypt::encrypt(request('numcompte')),
                 'delai_paiement' => Crypt::encrypt(request('delai')),
                 'reference_personnel' => Crypt::encrypt(request('reference')),
+                'remarque' => Crypt::encrypt(request('remarque')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);           
@@ -135,6 +137,7 @@ class FournisseurController extends Controller
                 'num_compte' => Crypt::encrypt(request('numcompte')),
                 'delai_paiement' => Crypt::encrypt(request('delai')),
                 'reference_personnel' => Crypt::encrypt(request('reference')),
+                'remarque' => Crypt::encrypt(request('remarque')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);
@@ -158,6 +161,7 @@ class FournisseurController extends Controller
                 'num_compte' => Crypt::encrypt(request('numcompte')),
                 'delai_paiement' => Crypt::encrypt(request('delai')),
                 'reference_personnel' => Crypt::encrypt(request('reference')),
+                'remarque' => Crypt::encrypt(request('remarque')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);
@@ -176,6 +180,7 @@ class FournisseurController extends Controller
                 'num_compte' => Crypt::encrypt(request('numcompte')),
                 'delai_paiement' => Crypt::encrypt(request('delai')),
                 'reference_personnel' => Crypt::encrypt(request('reference')),
+                'remarque' => Crypt::encrypt(request('remarque')),
                 'localite_id' => $localite->id,
                 'assujetti_id' => $assujetti->id,
             ]);
@@ -263,7 +268,65 @@ class FournisseurController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validation des champs du formulaire d'inscription
+        $request->validate([
+            'nom' => ['required', 'regex:/^[a-z éèàùç\'-]+$/i'],
+            'prenom' => ['nullable', 'regex:/^[a-zA-Z éèàùç\'-]+$/i'],
+            'email' => ['required', 'regex:/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/' ,'email'],
+            'telephone' => ['required', 'numeric', 'min:8'],
+            'mobile' => ['required', 'numeric', 'min:8'],
+            'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'nrue' => ['required', 'alpha_num'],
+            'codepostal' => ['required', 'regex:/^([0-9]{4,5})$/'],
+            'localite' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'pays' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
+            'assujetti' => ['required', 'regex:/^[a-z ]+$/i'],
+            'numcompte' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'delai' => ['required']
+        ]);
+        // Récupère le fournisseur grâce à son id
+        $fournisseur = Fournisseur::find($id);
         
+        // Récupère la localite
+        $localite="";       
+        $localites = DB::table('localites')->get();        
+        foreach ($localites as $item) {
+            if (Crypt::decrypt($item->intitule) == request('localite') &&
+                Crypt::decrypt($item->code_postal) == request('codepostal')) {
+                $localite = $item;
+            } 
+        }
+
+        // Récupère le type d'assujetissement
+        $assujetti = "";
+        $assujettis = DB::table('assujettis')->get();   
+        foreach ($assujettis as $item) {
+            if (Crypt::decrypt($item->intitule) == request('assujetti') &&
+                Crypt::decrypt($item->num_tva) == request('numtva')) {
+                $assujetti = $item;
+            }  
+        }
+
+        $fournisseur->update([
+            'civilite' => Crypt::encrypt(request('civilite')),
+            'nom' => Crypt::encrypt(request('nom')),
+            'prenom' => Crypt::encrypt(request('prenom')),
+            'email' => Crypt::encrypt(request('email')),
+            'telephone' => Crypt::encrypt(request('telephone')),
+            'mobile' => Crypt::encrypt(request('mobile')),
+            'rue' => Crypt::encrypt(request('rue')),
+            'nrue' => Crypt::encrypt(request('nrue')),
+            'pays' => Crypt::encrypt(request('pays')),
+            'num_compte' => Crypt::encrypt(request('numcompte')),
+            'delai_paiement' => Crypt::encrypt(request('delai')),
+            'reference_personnel' => Crypt::encrypt(request('reference')),
+            'remarque' => Crypt::encrypt(request('remarque')),
+            'localite_id' => $localite->id,
+            'assujetti_id' => $assujetti->id,
+            
+        ]);
+        flash('Le fournisseur a bien été mis à jour.')->success();
+        return redirect('/fournisseurs');
     }
 
     /**
@@ -274,6 +337,21 @@ class FournisseurController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $fournisseur = Fournisseur::find($id);
+        // modifie les achats de ce fournisseur à aucun fournisseur
+        foreach ($fournisseur->achats as $achat) {
+            $achat->update([
+                'fournisseur_id' => null,
+            ]);
+        }
+        $fournisseur->delete();
+
+        // modifier le fournisseur, appliquer sur tous les champs l'id du fournisseur et pas le supprimer
+        // $fournisseur->update([
+        //     'nom' => $fournisseur->id,
+        // ]);
+
+        flash('Le fournisseur ' . Crypt::decrypt($fournisseur->nom) . ' ' . Crypt::decrypt($fournisseur->prenom) . ' a bien été supprimé.')->success();
+        return redirect('/fournisseurs');
     }
 }
