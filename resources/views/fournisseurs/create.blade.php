@@ -21,7 +21,7 @@
                   <legend class="col-form-label col-sm-4 pt-0">Civilité</legend>
                     <div class="col-sm-8">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="civilite" value="">
+                            <input class="form-check-input" type="radio" name="civilite" value="Aucune">
                             <label class="form-check-label">Aucune</label>
                         </div>
                         <div class="form-check">

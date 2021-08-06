@@ -50,6 +50,7 @@ Route::group([
     Route::resource('/postes', 'PosteController');
     Route::resource('/ventes', 'VenteController');
     Route::resource('/fournisseurs', 'FournisseurController');
+    Route::resource('/achats', 'AchatController');
 
     Route::get('/listing', 'VenteController@showlisting');
     Route::get('/inventaire', 'PosteController@showinventory');

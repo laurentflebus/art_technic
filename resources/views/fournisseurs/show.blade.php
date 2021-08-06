@@ -7,7 +7,12 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header text-center">
-                    <h5><strong>{{ Crypt::decrypt($fournisseur->civilite) ?? "" }}  {{ Crypt::decrypt($fournisseur->nom) }}  {{ Crypt::decrypt($fournisseur->prenom) ?? "" }}</strong></h5>
+                    <h5><strong>@if (Crypt::decrypt($fournisseur->civilite) == "Aucune")
+
+                    @else
+                        {{ Crypt::decrypt($fournisseur->civilite) }}
+                    @endif  
+                    {{ Crypt::decrypt($fournisseur->nom) }}  {{ Crypt::decrypt($fournisseur->prenom) ?? "" }}</strong></h5>
                 </div>
                 <div class="card-body">
                     <div class="row">

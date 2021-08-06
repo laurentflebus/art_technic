@@ -23,11 +23,7 @@
                                             checked
                                         @endif
                                         >
-                                        @if (Crypt::decrypt($item->civilite) == null)
-                                            <label class="form-check-label">Aucune</label>
-                                        @else
-                                            <label class="form-check-label">{{ Crypt::decrypt($item->civilite) }}</label>
-                                        @endif    
+                                          <label class="form-check-label">{{ Crypt::decrypt($item->civilite) }}</label>   
                                     </div>
                                 @endforeach
                                 

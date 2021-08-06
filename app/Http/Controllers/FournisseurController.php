@@ -234,6 +234,7 @@ class FournisseurController extends Controller
         }
 
         $civilites = DB::table('fournisseurs')->select('civilite')->get();
+
         foreach ($civilites as $item) { 
             if ($compare == Crypt::decrypt($item->civilite)) {
                 $civilites->forget($civilites->search($item));
