@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Achat;
 use App\Models\Fournisseur;
+use App\Models\Poste;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -148,7 +149,7 @@ class AchatController extends Controller
             $prixtvac = floatval($montanttvac/$quantite);
             $achat->postes()->attach($poste, [
                 'quantite' => request('quantite'.$i),
-                'prix_unitaire' => request($prixtvac),
+                'prix_unitaire' => $prixtvac,
                 'detail' => 'Aucun détail',
             ]);
             // Si une quantité (en stock) existe pour ce poste 

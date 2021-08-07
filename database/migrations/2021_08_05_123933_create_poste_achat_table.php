@@ -13,7 +13,7 @@ class CreatePosteAchatTable extends Migration
      */
     public function up()
     {
-        Schema::create('poste_achat', function (Blueprint $table) {
+        Schema::create('achat_poste', function (Blueprint $table) {
             $table->unsignedBigInteger('achat_id');
             $table->unsignedBigInteger('poste_id');
             $table->integer('quantite');
@@ -33,6 +33,6 @@ class CreatePosteAchatTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('poste_achat');
+        Schema::dropIfExists('achat_poste');
     }
 }
