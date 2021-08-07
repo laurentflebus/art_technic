@@ -18,7 +18,7 @@
                             <div class="col-sm-8">
                                 @foreach ($civilites as $item)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="civilite" value="{{ $item->civilite }}"
+                                        <input class="form-check-input" type="radio" name="civilite" value="{{ Crypt::decrypt($item->civilite) }}"
                                         @if (Crypt::decrypt($fournisseur->civilite) == Crypt::decrypt($item->civilite))
                                             checked
                                         @endif
