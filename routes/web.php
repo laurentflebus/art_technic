@@ -60,6 +60,8 @@ Route::group([
 
     Route::get('/email/{id}', 'VenteController@envoyerEmail');
 
+    Route::get('/payerachat/{id}', 'AchatController@payer');
+
     Route::get('/tva', 'TvaController@index');
     Route::post('/tvaclientsposte', 'TvaController@telecharger');
     Route::post('/tvaclient', 'TvaController@download');

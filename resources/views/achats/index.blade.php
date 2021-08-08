@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="ventestable" class="table table-striped table-bordered">
+            <table id="achatstable" class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>ID</th>
@@ -17,6 +17,7 @@
                         <th>Date</td>
                         
                         <th>Echéance</th>
+                        <th>Est Payé</th>
                         <th>Total HT</th>
                         <th>Total TTC</th>
                         <th>Actions</th>
@@ -37,6 +38,13 @@
                             <td>{{ $achat->numero }}</td>
                             <td>{{ $datefr }}</td>
                             <td>{{ $dateapayer }}</td>
+                            <td>
+                                <input type="checkbox"
+                                @if ($achat->est_paye)
+                                    checked
+                                @endif
+                                >
+                            </td>
                             @foreach ($achat->postes as $poste)
 
                                 <input type="hidden" value="{{ $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}">            

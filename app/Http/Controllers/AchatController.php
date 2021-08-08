@@ -115,9 +115,6 @@ class AchatController extends Controller
             }
 
         }
-        $date_a_payer = date('Y-m-d', strtotime(request('date'). '+15 days'));
-        dump($date_a_payer);
-        die();
         // date à payer 
         $delai = request('delai');
         switch ($delai) {
@@ -252,4 +249,22 @@ class AchatController extends Controller
     {
         //
     }
+
+    /**
+     * Payer l'achat
+     * 
+     * @param int $id
+     */
+
+     public function payer($id)
+     {
+        $achat = Achat::find($id);
+
+        $achat->update([
+            'est_paye' => true,
+        ]);
+
+        flash('L\'achat ' . $achat->numero . ' a bien été payé.')->success();
+        return redirect('/achats');
+     }
 }
