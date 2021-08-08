@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Achat;
 use App\Models\Fournisseur;
 use App\Models\Poste;
+use DateTime;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -114,7 +115,34 @@ class AchatController extends Controller
             }
 
         }
-        
+        // date à payer 
+        $delai = request('delai');
+        switch ($delai) {
+            case '30 jours fin de mois':
+                $date_achat = new DateTime(request('date'));
+                $date_achat->modify('+30 days');
+                $date_achat->modify('last day of this month');
+                $date_a_payer = $date_achat->format('Y-m-d');
+                break;
+            case '60 jours fin de mois':
+                $date_achat = new DateTime(request('date'));
+                $date_achat->modify('+60 days');
+                $date_achat->modify('last day of this month');
+                $date_a_payer = $date_achat->format('Y-m-d');
+                break;
+            case '90 jours fin de mois':
+                $date_achat = new DateTime(request('date'));
+                $date_achat->modify('+90 days');
+                $date_achat->modify('last day of this month');
+                $date_a_payer = $date_achat->format('Y-m-d');
+                break;
+            case '120 jours fin de mois':
+                $date_achat = new DateTime(request('date'));
+                $date_achat->modify('+120 days');
+                $date_achat->modify('last day of this month');
+                $date_a_payer = $date_achat->format('Y-m-d');
+                break;
+        }
         // année de l'achat
         $timestamp = strtotime(request('date'));
         $annee = date("y", $timestamp);
@@ -126,7 +154,7 @@ class AchatController extends Controller
             $achat = Achat::create([
                 'numero' => 'A/' . $annee . '/'.$numachat,
                 'date' => request('date'),
-                'date_a_payer' => request('date'),
+                'date_a_payer' => $date_a_payer,
                 'est_paye' => false,
                 'fournisseur_id' => request('fournisseur'),
             ]);
@@ -135,7 +163,7 @@ class AchatController extends Controller
             $achat = Achat::create([
                 'numero' => 'A/' . $annee . '/'.$numachat,
                 'date' => request('date'),
-                'date_a_payer' => request('date'),
+                'date_a_payer' => $date_a_payer,
                 'est_paye' => false,
                 'fournisseur_id' => request('fournisseur'),
             ]);

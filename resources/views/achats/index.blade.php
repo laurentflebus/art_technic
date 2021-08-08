@@ -27,9 +27,9 @@
                         <input type="hidden" value="{{ $totalttc = 0 }}">
                         <input type="hidden" value="{{ $totaltva = 0 }}">
                         <input type="hidden" value="{{ $timestamp = strtotime($achat->date) }}">
-                        <input type="hidden" value="{{ $datefr = date("d/m/y", $timestamp) }}">
+                        <input type="hidden" value="{{ $datefr = date("d/m/Y", $timestamp) }}">
                         <input type="hidden" value="{{ $timestamp = strtotime($achat->date_a_payer) }}">
-                        <input type="hidden" value="{{ $dateapayer = date("d/m/y", $timestamp) }}">
+                        <input type="hidden" value="{{ $dateapayer = date("d/m/Y", $timestamp) }}">
                         <tr>
                             <td>{{ $achat->id }}</td>
                             <td>{{ Crypt::decrypt($achat->fournisseur->nom) }} {{ Crypt::decrypt($achat->fournisseur->prenom) ?? "" }}</td>
