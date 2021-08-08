@@ -115,6 +115,9 @@ class AchatController extends Controller
             }
 
         }
+        $date_a_payer = date('Y-m-d', strtotime(request('date'). '+15 days'));
+        dump($date_a_payer);
+        die();
         // date à payer 
         $delai = request('delai');
         switch ($delai) {
@@ -142,10 +145,18 @@ class AchatController extends Controller
                 $date_achat->modify('last day of this month');
                 $date_a_payer = $date_achat->format('Y-m-d');
                 break;
+            case 'Comptant':
+                $date_a_payer = request('date');
+                break;
+            case '15 jours': 
+                $date_a_payer = date('Y-m-d', strtotime(request('date'). '+15 days'));
+                break;
+            case '30 jours':
+                $date_a_payer = date('Y-m-d', strtotime(request('date')));
+                break;
         }
         // année de l'achat
-        $timestamp = strtotime(request('date'));
-        $annee = date("y", $timestamp);
+        $annee = date("y", strtotime(request('date')));
         $achat = DB::table('achats')->select('id')->latest()->first();
         // Si il n'y a pas d'achat en BD
         if ($achat) {
