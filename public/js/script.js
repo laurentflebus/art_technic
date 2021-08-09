@@ -33,7 +33,7 @@ $(document).ready(function(){
                     
                     var prixunitaire = data[0].prix_unitaire;
                     var taux = data[1].taux;
-                    var prixhtva = prixunitaire * (1-(taux/100));                           
+                    var prixhtva = prixunitaire / (1+(taux/100));                           
                     $('#prixhtva'+ $('#nbPoste').val()).val(prixhtva.toFixed(2));
                     //console.log($('#nbPoste').val());
                     // réinitiale le compteur de touche

@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Facture;
 use App\Models\Poste;
 use App\Models\Client;
+use App\Models\Fournisseur;
 use Illuminate\Support\Facades\DB;
 
 class TvaController extends Controller
@@ -239,9 +240,9 @@ class TvaController extends Controller
             $totalhtva = 0;
             $totaltva = 0;
             foreach ($facture->vente->postes as $poste) {
-                $totalhtva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) * floatval(1 - $poste->tva->taux/100);
+                $totalhtva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) / floatval(1 + $poste->tva->taux/100);
                 $totaltvac += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite);
-                $totaltva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) * floatval($poste->tva->taux/100);
+                $totaltva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) / floatval(1+$poste->tva->taux/100) * floatval($poste->tva->taux/100);
             }
             array_push($facturesdetaillees, [
                 'numero' => $facture->numero,
@@ -302,5 +303,116 @@ class TvaController extends Controller
         ]);;
         // télécharger le pdf
         return $pdf->download($nomPdf.'.pdf');
+    }
+    /**
+     * Télécharger la tva relative aux fournisseurs par poste
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function telechargerlisting(Request $request)
+    {
+        // Valide les champs du formulaire
+        $request->validate([
+            'depart' => ['required'],
+            'arret' => ['required'],
+        ]);
+
+        $depart = request('depart');
+        switch ($depart) {
+            // janvier
+            case '1':
+                $depart = 1;
+                break;
+            // avril
+            case '2':
+                $depart = 4;
+                break;
+            // juillet
+            case '3':
+                $depart = 7;
+                break;
+            // octobre
+            case '4':
+                $depart = 10;
+                break;
+        }
+      
+        $arret = request('arret');
+        switch ($arret) {
+            // mars
+            case '1':
+                $arret = 3;
+                break;
+            // juin
+            case '2':
+                $arret = 6;
+                break;
+            // septembre
+            case '3':
+                $arret = 9;
+                break;
+            // decembre
+            case '4':
+                $arret = 12;
+                break;
+        }
+        
+        $achats = Achat::all();
+        foreach ($achats as $achat) {
+            // récupère le mois de la date d'achat en nombre entier
+            $mois = (int) substr($achat->date, 5, 7);
+            // compare le mois de la date d'achat avec la période de départ et d'arrêt
+            if ($mois < $depart || $mois > $arret) {
+                // retire du tableau d'achat', la date qui correspond à la condition
+                $achats->forget($achats->search($achat));
+            }
+            // récupère l'année de l'achat'
+            $annee = (int) substr($achat->date, 0, 4);
+            // compare avec la date actuelle
+            if ($annee != (int) date('Y')) {
+                $achats->forget($achats->search($achat));
+            }
+        }
+        if (sizeof($achats) == 0) {
+            flash("Pas de facture pour l'année en cours")->error();
+            return back();
+        }
+        // récupère les totaux par poste + id du poste
+        $totauxparposte = DB::table('achats')
+                ->leftJoin('achat_poste', 'achats.id', '=', 'achat_poste.achat_id')
+                ->rightJoin('postes', 'postes.id', '=', 'achat_poste.poste_id') 
+                ->select(DB::raw('SUM(achat_poste.quantite*achat_poste.prix_unitaire) as total, postes.id as id'))
+                ->whereBetween('achats.date', [date('Y').'-01-01', date('Y') . '-12-31'])
+                ->groupBy('postes.id')                       
+                ->get();
+        // récupère les totaux par taux de tva + id du taux
+        $totauxpartva = DB::table('achats')
+                ->leftJoin('achat_poste', 'achats.id', '=', 'achat_poste.achat_id')
+                ->rightJoin('postes', 'postes.id', '=', 'achat_poste.poste_id')
+                ->rightJoin('tvas', 'tvas.id', '=', 'postes.tva_id') 
+                ->select(DB::raw('SUM(achat_poste.quantite*achat_poste.prix_unitaire) as total, tvas.taux as taux'))
+                ->whereBetween('achats.date', [date('Y').'-01-01', date('Y') . '-12-31'])
+                ->groupBy('tvas.id')                       
+                ->get();
+        $postes = Poste::all();
+        $nomPdf = "tvafournisseurs". date('Y');
+        // charger la vue tvapostefournisseur.blade.php
+        $pdf = PDF::loadView('pdf.tvapostefournisseur', [
+            'achats' => $achats,
+            'postes' => $postes,
+            'totauxparposte' => $totauxparposte,
+            'totauxpartva' => $totauxpartva,
+            'depart' => request('depart'),
+            'arret' => request('arret'),
+        ]);;
+        // télécharger le pdf
+        return $pdf->download($nomPdf.'.pdf');
+    }
+    /**
+     * Télécharger la tva relative aux fournisseurs par nom
+     *  @param \Illuminate\Http\Request $request
+     */
+    public function downloadlisting(Request $request)
+    {
+
     }
 }

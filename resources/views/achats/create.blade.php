@@ -165,21 +165,6 @@
                     @endif
                 </div>  
             </div>
-            {{-- <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label>Date d'échéance</label>
-                    <input type="text" id="echeance" name="echeance" class="form-control" readonly>
-                    @if ($errors->has('echeance'))
-                        <p class="alert alert-danger">{{ $errors->first('echeance') }}</p>
-                    @endif
-                </div>
-                <div class="form-group col-md-4">
-
-                </div>
-                <div class="form-group col-md-4">
-
-                </div>
-            </div> --}}
     </div>
     
     <div class="card-footer text-center">

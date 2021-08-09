@@ -17,7 +17,7 @@
                 <a class="nav-link active" data-toggle="tab" href="#menu1">Listing TVA clients</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#menu2">Solde</a>
+                <a class="nav-link" data-toggle="tab" href="#menu2">Listing TVA fournisseurs</a>
             </li>
         </ul>
         
@@ -139,7 +139,122 @@
                 
             </div>
             <div class="tab-pane container fade" id="menu2">
+                <div class="tab-pane container" id="menu2">
+                    <div class="text-center">
+                        <h5>Impressions relatives aux fournisseurs</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form action="/tvafournisseursposte" method="post">
+                                {{ csrf_field() }}
+                                <fieldset class="form-group">
+                                    <legend class="col-form-label">Période de départ</legend>
+                                    <div class="form-row">
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="1" checked>
+                                            <label class="form-check-label">1</label>
+                                        </div>
+                                        
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="2">
+                                            <label class="form-check-label">2</label>
+                                        </div>
                 
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="3">
+                                            <label class="form-check-label">3</label>
+                                        </div>
+            
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="4">
+                                            <label class="form-check-label">4</label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <legend class="col-form-label">Période d'arrêt</legend>
+                                    <div class="form-row">
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="1" checked>
+                                            <label class="form-check-label">1</label>
+                                        </div>
+                                        
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="2">
+                                            <label class="form-check-label">2</label>
+                                        </div>
+                
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="3">
+                                            <label class="form-check-label">3</label>
+                                        </div>
+            
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="4">
+                                            <label class="form-check-label">4</label>
+                                        </div>
+                                    </div>
+                                </fieldset>   
+                                <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Listing TVA par Poste</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <form action="/tvafournisseurs" method="post">
+                                {{ csrf_field() }}
+                                <fieldset class="form-group">
+                                    <legend class="col-form-label">Période de départ</legend>
+                                    <div class="form-row">
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="1" checked>
+                                            <label class="form-check-label">1</label>
+                                        </div>
+                                        
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="2">
+                                            <label class="form-check-label">2</label>
+                                        </div>
+                
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="3">
+                                            <label class="form-check-label">3</label>
+                                        </div>
+            
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="depart" value="4">
+                                            <label class="form-check-label">4</label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <legend class="col-form-label">Période d'arrêt</legend>
+                                    <div class="form-row">
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="1" checked>
+                                            <label class="form-check-label">1</label>
+                                        </div>
+                                        
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="2">
+                                            <label class="form-check-label">2</label>
+                                        </div>
+                
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="3">
+                                            <label class="form-check-label">3</label>
+                                        </div>
+            
+                                        <div class="form-check col-md-2">
+                                            <input class="form-check-input" type="radio" name="arret" value="4">
+                                            <label class="form-check-label">4</label>
+                                        </div>
+                                    </div>
+                                </fieldset>   
+                                <button type="submit" class="btn btn-primary" onclick="return confirm('Êtes-vous sur de vos données ?')">Listing TVA par Fournisseur</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
             
         </div>

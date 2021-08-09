@@ -43,7 +43,6 @@ $(document).ready(function(){
     $('#montantAchat').keyup(function(e){
         var montant = Number($('#montantAchat').val());
         var codebarre = $('#codebarreAchat').val();
-        var quantite = $('#quantiteAchat').val();
         $('#montanttvac'+$('#nbPoste').val()).val(montant.toFixed(2));
         $.ajax({                        
             url : '/ajax', // fichier cible coté serveur, script qui récupère les infos du poste de vente
@@ -55,7 +54,7 @@ $(document).ready(function(){
                 // code pour gérer le retour de l'appel AJAX
                 console.log(data);
                 var taux = data[1].taux;
-                var montanthtva = montant * (1-(taux/100));                           
+                var montanthtva = montant / (1+(taux/100));                           
                 $('#montanthtva'+ $('#nbPoste').val()).val(montanthtva.toFixed(2));
                     
                 // Calcul du total TTC

@@ -44,8 +44,8 @@ class CompteController extends Controller
             'password' => ['required', 'confirmed', 'min:8', 'regex:/^\S*(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[0-9])\S*$/'],
             'password_confirmation' => ['required'],
         ],[
-            'user.max' => 'Le nom d\'utilisateur doit faire maximum :max caractères.',
-            'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire au minimum :min caractères.',
+            'user.max' => 'Le nom d\'utilisateur doit contenir au maximum :max caractères.',
+            'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit contenir au minimum :min caractères.',
             'password.regex' => 'Le mot de passe doit contenir une majuscule, une minuscule et un chiffre.'
         ]);
         // fonction create de Eloquent qui permet de faire un new et un save

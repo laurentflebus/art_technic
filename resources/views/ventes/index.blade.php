@@ -27,7 +27,7 @@
                 <tbody>
                     @foreach($ventes as $vente)
                         <input type="hidden" value="{{ $totalttc = 0 }}">
-                        <input type="hidden" value="{{ $totaltva = 0 }}">
+                        <input type="hidden" value="{{ $totalht = 0 }}">
                         <input type="hidden" value="{{ $timestamp = strtotime($vente->date) }}">
                         <input type="hidden" value="{{ $datefr = date("d/m/y", $timestamp) }}">
                         <tr>
@@ -47,8 +47,7 @@
                             @foreach ($vente->postes as $poste)
 
                                 <input type="hidden" value="{{ $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) }}">            
-                                <input type="hidden" value="{{ $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100) }}">
-                                <input type="hidden" value="{{ $totalht = $totalttc -  $totaltva }}"> 
+                                <input type="hidden" value="{{ $totalht += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) / floatval(1+$poste->tva->taux/100) }}">
 
                             @endforeach
 

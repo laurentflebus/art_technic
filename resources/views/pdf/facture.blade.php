@@ -106,9 +106,9 @@ img {
         @foreach ($vente->postes as $poste)
             <tr>
                 <td class="large">{{ $poste->intitule }}</td>
-                <td>{{ number_format($totalhta = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval(1 - $poste->tva->taux/100), 2, '.', '') }}</td>
+                <td>{{ number_format($totalhtva = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) / floatval(1 + $poste->tva->taux/100), 2, '.', '') }}</td>
                 <td>{{ $poste->tva->taux }}%</td>
-                <td>{{ number_format($totaltvaa = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100), 2, '.', '') }}</td>
+                <td>{{ number_format($totaltvaa = floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * $poste->tva->taux/100) * $poste->pivot->quantite, 2, '.', '') }}</td>
                 <td>{{ number_format($totalttca = floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire), 2, '.', '') }}</td>
             </tr>
         @endforeach

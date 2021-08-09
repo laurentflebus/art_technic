@@ -44,7 +44,7 @@
                                         <td>{{ $poste->total }}€</td>
                                         @foreach ($tvas as $tva)
                                             @if ($poste->tva_id == $tva->id)
-                                                <td>{{ number_format(floatval($poste->total * (1 - $tva->taux/100)), 2, '.', '') }}€</td>
+                                                <td>{{ number_format(floatval($poste->total / (1 + $tva->taux/100)), 2, '.', '') }}€</td>
                                             @endif    
                                         @endforeach
                                         
@@ -73,7 +73,7 @@
                                         <td>{{ $poste->total }}€</td>
                                         @foreach ($tvas as $tva)
                                             @if ($poste->tva_id == $tva->id)
-                                                <td>{{ number_format(floatval($poste->total * (1 - $tva->taux/100)), 2, '.', '') }}€</td>
+                                                <td>{{ number_format(floatval($poste->total / (1 + $tva->taux/100)), 2, '.', '') }}€</td>
                                             @endif
                                             
                                         @endforeach
@@ -103,7 +103,7 @@
                                         <td>{{ $poste->total }}€</td>
                                         @foreach ($tvas as $tva)
                                             @if ($poste->tva_id == $tva->id)
-                                                <td>{{ number_format(floatval($poste->total * (1 - $tva->taux/100)), 2, '.', '') }}€</td>
+                                                <td>{{ number_format(floatval($poste->total / (1 + $tva->taux/100)), 2, '.', '') }}€</td>
                                             @endif    
                                         @endforeach
                                         
@@ -132,7 +132,7 @@
                                         <td>{{ $client->total }}€</td>
                                         @foreach ($tvas as $tva)
                                             @if ($client->tva_id == $tva->id)
-                                                <td>{{ number_format(floatval($client->total * (1 - $tva->taux/100)), 2, '.', '') }}€</td>
+                                                <td>{{ number_format(floatval($client->total / (1 + $tva->taux/100)), 2, '.', '') }}€</td>
                                             @endif    
                                         @endforeach
                                         
@@ -161,7 +161,7 @@
                                         <td>{{ $client->total }}€</td>
                                         @foreach ($tvas as $tva)
                                             @if ($client->tva_id == $tva->id)
-                                                <td>{{ number_format(floatval($client->total * (1 - $tva->taux/100)), 2, '.', '') }}€</td>
+                                                <td>{{ number_format(floatval($client->total / (1 + $tva->taux/100)), 2, '.', '') }}€</td>
                                             @endif    
                                         @endforeach
                                         

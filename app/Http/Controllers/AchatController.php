@@ -115,7 +115,7 @@ class AchatController extends Controller
             }
 
         }
-        // date à payer 
+        // calcul de la date à payer 
         $delai = request('delai');
         switch ($delai) {
             case '30 jours fin de mois':

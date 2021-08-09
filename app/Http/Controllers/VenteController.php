@@ -311,11 +311,11 @@ class VenteController extends Controller
             'donnees' => $donnees,
         ]);
 
-        // return $pdf->download();
+        return $pdf->download();
 
-        $printerId = Printing::defaultPrinterId();
+        // $printerId = Printing::defaultPrinterId();
 
-        Printing::newPrintTask()->printer($printerId)->content($pdf->output())->send();
+        // Printing::newPrintTask()->printer($printerId)->content($pdf->output())->send();
 
         // $receipt = (string) (new ReceiptPrinter)
         //     ->centerAlign()
@@ -332,7 +332,7 @@ class VenteController extends Controller
         //     ->content($receipt)
         //     ->send();
 
-        return back();
+        // return back();
 
     }
 
@@ -454,13 +454,13 @@ class VenteController extends Controller
         $totaltva21 = 0;
         foreach ($vente->postes as $poste) {
             $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire);
-            $totaltva += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
-            $totalht += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval(1 - $poste->tva->taux/100);
+            $totalht += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) / floatval(1+$poste->tva->taux/100);
+            $totaltva += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
             if ($poste->tva->taux == 6.0) {
-                $totaltva6 += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
+                $totaltva6 += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
             }
             if ($poste->tva->taux == 21.0) {
-                $totaltva21 += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) * floatval($poste->tva->taux/100);
+                $totaltva21 += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
             }
         }
         return ['totalht' => $totalht, 'totaltva' => $totaltva, 'totalttc' => $totalttc, 'totaltva6' => $totaltva6, 'totaltva21' => $totaltva21];
