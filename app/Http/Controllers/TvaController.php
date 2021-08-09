@@ -8,6 +8,7 @@ use App\Models\Facture;
 use App\Models\Poste;
 use App\Models\Client;
 use App\Models\Fournisseur;
+use App\Models\Achat;
 use Illuminate\Support\Facades\DB;
 
 class TvaController extends Controller
@@ -260,22 +261,25 @@ class TvaController extends Controller
             $totaltvac = 0;
             $totalhtva = 0;
             $totaltva = 0;
-            // si le client n'est pas associé à une vente
-            if (sizeof($client->ventes) != 0) {
-                foreach ($facturesdetaillees as $facture) {  
+            // si le client est pas associé à une vente
+            if (sizeof($client->ventes) != null) {
+                foreach ($facturesdetaillees as $facture) {
                     if ($client->id == $facture['idclient']) {
                         $totaltvac += $facture['totaltvac'];
                         $totalhtva += $facture['totalhtva'];
                         $totaltva += $facture['totaltva'];
                     }
                 }
-                array_push($totauxfacturesclients, [
-                    'idclient' => $client->id,
-                    'totaltvac'=> $totaltvac,
-                    'totalhtva'=> $totalhtva,
-                     'totaltva'=> $totaltva
-                ]);    
-            }          
+                // Si le client n'a pas de facture
+                if ($totaltvac != 0) {
+                    array_push($totauxfacturesclients, [
+                        'idclient' => $client->id,
+                        'totaltvac'=> $totaltvac,
+                        'totalhtva'=> $totalhtva,
+                        'totaltva'=> $totaltva
+                    ]);
+                }     
+            }         
         }
         // récupère les totaux par taux de tva + id du taux
         $totauxpartva = DB::table('ventes')
@@ -403,7 +407,7 @@ class TvaController extends Controller
             'totauxpartva' => $totauxpartva,
             'depart' => request('depart'),
             'arret' => request('arret'),
-        ]);;
+        ]);
         // télécharger le pdf
         return $pdf->download($nomPdf.'.pdf');
     }

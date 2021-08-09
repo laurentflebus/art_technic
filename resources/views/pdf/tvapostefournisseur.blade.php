@@ -95,9 +95,9 @@ div#titre h3 {
                       <tr>
                         <td>{{ $datefr = date("d/m/Y", strtotime($achat->date)) }}</td>
                         <td>{{ $achat->numero }}</td>
-                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) / floatval(1 + $poste->tva->taux/100), 2, ".", "") }}</td>
                         <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite), 2, ".", "") }}</td>
-                        <td>{{ number_format(floatval($item->pivot->prix_unitaire * $item->pivot->quantite) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td>{{ number_format(floatval($item->pivot->prix_unitaire *  $item->pivot->quantite / (1 + $poste->tva->taux/100) * $poste->tva->taux/100), 2, ".", "") }}</td>
                         
                         @foreach ($totaux as $item)
                           @if ($item->id == $facture->id)
@@ -114,9 +114,9 @@ div#titre h3 {
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class="totalposte">{{ number_format(floatval($item->total) * floatval(1 - $poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td class="totalposte">{{ number_format(floatval($item->total) / floatval(1 + $poste->tva->taux/100), 2, ".", "") }}</td>
                         <td class="totalposte">{{ number_format($item->total, 2, ".", "") }}</td>
-                        <td class="totalposte">{{ number_format(floatval($item->total) * floatval($poste->tva->taux/100), 2, ".", "") }}</td>
+                        <td class="totalposte">{{ number_format(floatval($item->total / (1 + $poste->tva->taux/100) * $poste->tva->taux/100), 2, ".", "") }}</td>
                         <td></td>
                         <td></td>
                       </tr>
@@ -141,17 +141,17 @@ div#titre h3 {
       @foreach ($totauxpartva as $item)
         <tr>
           <td>Totaux des ventes à {{ $item->taux }} % de TVA</td>
-          <td>{{ number_format(floatval($item->total) * floatval(1 - $item->taux/100), 2, ".", "") }}</td>
+          <td>{{ number_format(floatval($item->total / (1 + $item->taux/100)), 2, ".", "") }}</td>
           <td>{{ number_format($item->total, 2, ".", "") }}</td>
-          <td>{{ number_format(floatval($item->total) * floatval($item->taux/100), 2, ".", "") }}</td>
+          <td>{{ number_format(floatval($item->total / (1 + $item->taux/100) * $item->taux/100), 2, ".", "") }}</td>
         </tr>
       @endforeach
       @foreach ($totauxpartva as $item)
         <tr>
           <td></td>
-          <td>{{ number_format($totalhtva += floatval($item->total) * floatval(1 - $item->taux/100), 2, ".", "") }}</td>
+          <td>{{ number_format($totalhtva += floatval($item->total / (1 + $item->taux/100)), 2, ".", "") }}</td>
           <td>{{ number_format($totaltvac += $item->total, 2, ".", "") }}</td>
-          <td>{{ number_format($totaltva += floatval($item->total) * floatval($item->taux/100), 2, ".", "") }}</td>
+          <td>{{ number_format($totaltva += floatval($item->total / (1 + $item->taux/100) * $item->taux/100), 2, ".", "") }}</td>
         </tr>
       @endforeach
     </tbody>

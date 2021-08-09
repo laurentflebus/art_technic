@@ -111,7 +111,6 @@ class VenteController extends Controller
             }
 
         }
-
         $modereglement = "";
         $modereglement = Modereglement::where('intitule', request('modereglement'))->first();
 
