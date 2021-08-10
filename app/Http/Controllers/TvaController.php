@@ -261,7 +261,7 @@ class TvaController extends Controller
             $totaltvac = 0;
             $totalhtva = 0;
             $totaltva = 0;
-            // si le client est pas associé à une vente
+            // si le client est associé à une vente
             if (sizeof($client->ventes) != null) {
                 foreach ($facturesdetaillees as $facture) {
                     if ($client->id == $facture['idclient']) {
@@ -270,7 +270,7 @@ class TvaController extends Controller
                         $totaltva += $facture['totaltva'];
                     }
                 }
-                // Si le client n'a pas de facture
+                // Si le client a une de facture
                 if ($totaltvac != 0) {
                     array_push($totauxfacturesclients, [
                         'idclient' => $client->id,
@@ -383,7 +383,6 @@ class TvaController extends Controller
         }
         // récupère les totaux par facture d'achat + id de facture
         $totaux = DB::table('achats')
-                    ->leftJoin('fournisseurs', 'fournisseurs.id', '=', 'achats.fournisseur_id')
                     ->leftJoin('achat_poste', 'achats.id', '=', 'achat_poste.achat_id')
                     ->rightJoin('postes', 'postes.id', '=', 'achat_poste.poste_id') 
                     ->select(DB::raw('SUM(achat_poste.quantite*achat_poste.prix_unitaire) as total, achats.id as id'))
@@ -428,6 +427,144 @@ class TvaController extends Controller
      */
     public function downloadlisting(Request $request)
     {
+        // Valide les champs du formulaire
+        $request->validate([
+            'depart' => ['required'],
+            'arret' => ['required'],
+        ]);
 
+        $depart = request('depart');
+        switch ($depart) {
+            // janvier
+            case '1':
+                $depart = 1;
+                break;
+            // avril
+            case '2':
+                $depart = 4;
+                break;
+            // juillet
+            case '3':
+                $depart = 7;
+                break;
+            // octobre
+            case '4':
+                $depart = 10;
+                break;
+        }
+      
+        $arret = request('arret');
+        switch ($arret) {
+            // mars
+            case '1':
+                $arret = 3;
+                break;
+            // juin
+            case '2':
+                $arret = 6;
+                break;
+            // septembre
+            case '3':
+                $arret = 9;
+                break;
+            // decembre
+            case '4':
+                $arret = 12;
+                break;
+        }
+        
+        $achats = Achat::all();
+        foreach ($achats as $achat) {
+            // récupère le mois de la date d'achat en nombre entier
+            $mois = (int) substr($achat->date, 5, 7);
+            // compare le mois de la date d'achat avec la période de départ et d'arrêt
+            if ($mois < $depart || $mois > $arret) {
+                // retire du tableau d'achat', la date qui correspond à la condition
+                $achats->forget($achats->search($achat));
+            }
+            // récupère l'année de l'achat'
+            $annee = (int) substr($achat->date, 0, 4);
+            // compare avec la date actuelle
+            if ($annee != (int) date('Y')) {
+                $achats->forget($achats->search($achat));
+            }
+            
+        }
+        if (sizeof($achats) == 0) {
+            flash("Pas de facture d'achat pour l'année en cours")->error();
+            return back();
+        }
+        // crée un tableau à 2 dimensions avec les totaux tva calculés par facture d'achat
+        $facturesdetaillees = array();
+        foreach ($achats as $achat) {
+            // initialise les totaux pour chaque facture d'achat
+            $totaltvac = 0;
+            $totalhtva = 0;
+            $totaltva = 0;
+            $date = date("d/m/Y", strtotime($achat->date));
+            foreach ($achat->postes as $poste) {
+                $totalhtva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) / floatval(1 + $poste->tva->taux/100);
+                $totaltvac += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite);
+                $totaltva += floatval($poste->pivot->prix_unitaire * $poste->pivot->quantite) / floatval(1+$poste->tva->taux/100) * floatval($poste->tva->taux/100);
+            }
+            array_push($facturesdetaillees, [
+                'idfournisseur' => $achat->fournisseur_id,
+                'date' => $date,
+                'numero' => $achat->numero,
+                'totalhtva' => $totalhtva,
+                'totaltvac' =>$totaltvac,
+                'totaltva'=>$totaltva
+            ]);
+        }
+        // crée un tableau à 2 dimensions avec les totaux tva calculés par fournisseur
+        $totauxfacturesfournisseurs = array();
+        $fournisseurs = Fournisseur::all();
+        foreach ($fournisseurs as $fournisseur) {
+            // initialise les totaux à chaque fournisseur
+            $totaltvac = 0;
+            $totalhtva = 0;
+            $totaltva = 0;
+            // si le fournisseur est associé à un achat
+            if (sizeof($fournisseur->achats) != null) {
+                foreach ($facturesdetaillees as $facture) {
+                    if ($fournisseur->id == $facture['idfournisseur']) {
+                        $totaltvac += $facture['totaltvac'];
+                        $totalhtva += $facture['totalhtva'];
+                        $totaltva += $facture['totaltva'];
+                    }
+                }
+                // Si le fournisseur a pas une facture d'achat
+                if ($totaltvac != 0) {
+                    array_push($totauxfacturesfournisseurs, [
+                        'idfournisseur' => $fournisseur->id,
+                        'totaltvac'=> $totaltvac,
+                        'totalhtva'=> $totalhtva,
+                        'totaltva'=> $totaltva
+                    ]);
+                }     
+            }         
+        }
+        // récupère les totaux par taux de tva + id du taux
+        $totauxpartva = DB::table('achats')
+                ->leftJoin('achat_poste', 'achats.id', '=', 'achat_poste.achat_id')
+                ->rightJoin('postes', 'postes.id', '=', 'achat_poste.poste_id')
+                ->rightJoin('tvas', 'tvas.id', '=', 'postes.tva_id') 
+                ->select(DB::raw('SUM(achat_poste.quantite*achat_poste.prix_unitaire) as total, tvas.taux as taux'))
+                ->whereBetween('achats.date', [date('Y').'-01-01', date('Y') . '-12-31'])
+                ->groupBy('tvas.id')                       
+                ->get();
+        $nomPdf = "tvafournisseurs". date('Y');
+        // charge la vue tvaclient.blade.php
+        $pdf = PDF::loadView('pdf.tvafournisseur', [
+            'achats' => $achats,
+            'fournisseurs' => $fournisseurs,
+            'totauxpartva' => $totauxpartva,
+            'facturesdetaillees' => $facturesdetaillees,
+            'totauxfacturesfournisseurs' =>$totauxfacturesfournisseurs,
+            'depart' => request('depart'),
+            'arret' => request('arret'),
+        ]);;
+        // télécharger le pdf
+        return $pdf->download($nomPdf.'.pdf');
     }
 }

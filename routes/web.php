@@ -64,7 +64,7 @@ Route::group([
 
     Route::get('/tva', 'TvaController@index');
     Route::post('/tvaclientsposte', 'TvaController@telecharger');
-    Route::post('/tvaclient', 'TvaController@download');
+    Route::post('/tvaclients', 'TvaController@download');
     Route::post('/tvafournisseursposte', 'TvaController@telechargerlisting');
     Route::post('/tvafournisseurs', 'TvaController@downloadlisting');
 });

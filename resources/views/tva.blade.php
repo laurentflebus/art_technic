@@ -82,7 +82,7 @@
                         </form>
                     </div>
                     <div class="col-md-6">
-                        <form action="/tvaclient" method="post">
+                        <form action="/tvaclients" method="post">
                             {{ csrf_field() }}
                             <fieldset class="form-group">
                                 <legend class="col-form-label">Période de départ</legend>
