@@ -375,11 +375,21 @@ class TvaController extends Controller
             if ($annee != (int) date('Y')) {
                 $achats->forget($achats->search($achat));
             }
+            
         }
         if (sizeof($achats) == 0) {
-            flash("Pas de facture pour l'année en cours")->error();
+            flash("Pas de facture d'achat pour l'année en cours")->error();
             return back();
         }
+        // récupère les totaux par facture d'achat + id de facture
+        $totaux = DB::table('achats')
+                    ->leftJoin('fournisseurs', 'fournisseurs.id', '=', 'achats.fournisseur_id')
+                    ->leftJoin('achat_poste', 'achats.id', '=', 'achat_poste.achat_id')
+                    ->rightJoin('postes', 'postes.id', '=', 'achat_poste.poste_id') 
+                    ->select(DB::raw('SUM(achat_poste.quantite*achat_poste.prix_unitaire) as total, achats.id as id'))
+                    ->whereBetween('achats.date', [date('Y').'-01-01', date('Y') . '-12-31']) 
+                    ->groupBy('achats.id')                       
+                    ->get();
         // récupère les totaux par poste + id du poste
         $totauxparposte = DB::table('achats')
                 ->leftJoin('achat_poste', 'achats.id', '=', 'achat_poste.achat_id')
@@ -403,6 +413,7 @@ class TvaController extends Controller
         $pdf = PDF::loadView('pdf.tvapostefournisseur', [
             'achats' => $achats,
             'postes' => $postes,
+            'totaux' => $totaux,
             'totauxparposte' => $totauxparposte,
             'totauxpartva' => $totauxpartva,
             'depart' => request('depart'),

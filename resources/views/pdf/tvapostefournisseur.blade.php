@@ -75,7 +75,8 @@ div#titre h3 {
       </thead>
       <tbody>
             @foreach ($postes as $poste)
-                @foreach ($achats->postes as $item)
+              @foreach ($achats as $achat)
+                @foreach ($achat->postes as $item)
                     @if($poste->id == $item->id)
                       <tr>
                         <td>{{ $poste->numero }}</td>
@@ -89,6 +90,8 @@ div#titre h3 {
                       @break
                     @endif
                 @endforeach
+              @endforeach
+                
                 @foreach ($achats as $achat)
                   @foreach ($achat->postes as $item)
                     @if ($poste->intitule == $item->intitule)
@@ -100,11 +103,11 @@ div#titre h3 {
                         <td>{{ number_format(floatval($item->pivot->prix_unitaire *  $item->pivot->quantite / (1 + $poste->tva->taux/100) * $poste->tva->taux/100), 2, ".", "") }}</td>
                         
                         @foreach ($totaux as $item)
-                          @if ($item->id == $facture->id)
+                          @if ($item->id == $achat->id)
                             <td>{{ number_format($item->total, 2, ".", "") }}</td>
                           @endif  
                         @endforeach
-                        <td>{{ Crypt::decrypt($facture->vente->client->nom) ?? "" }} {{ Crypt::decrypt($facture->vente->client->prenom) ?? "" }}</td>
+                        <td>{{ Crypt::decrypt($achat->fournisseur->nom) ?? "" }} {{ Crypt::decrypt($achat->fournisseur->prenom) ?? "" }}</td>
                       </tr> 
                     @endif
                   @endforeach
