@@ -12,6 +12,7 @@ table thead th {
     padding:5px;
     text-align: center;  
 }
+
 table tbody tr td {
     padding: 5px;
     text-align: right;
@@ -32,6 +33,7 @@ table#totaux thead th {
     text-align: center;  
 }
 table#totaux tbody tr td {
+    width: 160px;
     padding: 5px;
     border: 1px solid;
     text-align: right;
@@ -127,17 +129,10 @@ div#titre h3 {
       </tr> 
     </thead>
     <tbody>
+      
       @foreach ($totauxpartva as $item)
         <tr>
-          <td>Totaux des ventes à {{ $item->taux }} % de TVA</td>
-          <td>{{ number_format(floatval($item->total) / floatval(1 + $item->taux/100), 2, ".", "") }}</td>
-          <td>{{ number_format($item->total, 2, ".", "") }}</td>
-          <td>{{ number_format(floatval($item->total / (1+$item->taux/100) * $item->taux/100), 2, ".", "") }}</td>
-        </tr>
-      @endforeach
-      @foreach ($totauxpartva as $item)
-        <tr>
-          <td></td>
+          <td>Totaux</td>
           <td>{{ number_format($totalhtva += floatval($item->total) / floatval(1 + $item->taux/100), 2, ".", "") }}</td>
           <td>{{ number_format($totaltvac += $item->total, 2, ".", "") }}</td>
           <td>{{ number_format($totaltva += floatval($item->total / (1+$item->taux/100) * $item->taux/100), 2, ".", "") }}</td>
