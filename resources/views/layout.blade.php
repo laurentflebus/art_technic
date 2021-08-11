@@ -119,7 +119,7 @@
                                     <a href="{{ URL::to('postes') }}" class="list-group-item list-group-item-action bg-dark">Les Postes</a>
                                 </li>
                                 <li>
-                                    <a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-dark">Créer un poste de vente</a>
+                                    <a href="{{ URL::to('postes/create') }}" class="list-group-item list-group-item-action bg-dark">Créer un poste</a>
                                 </li>
                                 
                             </ul>                   
