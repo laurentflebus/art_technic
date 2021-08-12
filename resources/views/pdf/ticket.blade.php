@@ -52,7 +52,7 @@ div#header .right {
           </p>
         </div>
     </div>
-    <p>Le {{ date('d/m/y') }}</p>
+    <p>Le {{ date("d/m/Y", strtotime($vente->date)) }}</p>
     <table>
         <thead>
             <tr>

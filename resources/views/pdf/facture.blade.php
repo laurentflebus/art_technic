@@ -75,7 +75,7 @@ img {
     <div class="right">
       <p>
         Facture n° : {{ $vente->facture->numero }} <br>
-        Date : {{ date('d/m/Y') }}
+        Date : {{ date("d/m/Y", strtotime($vente->facture->date)) }}
       </p>
       <p>
         <strong>{{ Crypt::decrypt($vente->client->nom) }} {{ Crypt::decrypt($vente->client->prenom) }} </strong> <br>
