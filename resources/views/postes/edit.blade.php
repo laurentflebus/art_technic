@@ -3,7 +3,7 @@
 @section('contenu')
 <div class="card">
     <div class="card-header text-center">
-        <h3>Modification d'un poste de vente</h3>
+        <h3>Modification d'un poste</h3>
     </div>
     <div class="card-body">
         <form action="/postes/{{ $poste->id }}" method="post">

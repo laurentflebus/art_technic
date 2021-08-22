@@ -416,6 +416,28 @@ class VenteController extends Controller
         return $pdf;
     }
     /**
+     * Calculer les totaux HT TVAC TVA6% TVA21%
+     */
+    private static function calcultotaux($vente) {
+        $totalht = 0;
+        $totaltva = 0;
+        $totalttc = 0;
+        $totaltva6 = 0;
+        $totaltva21 = 0;
+        foreach ($vente->postes as $poste) {
+            $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire);
+            $totalht += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) / floatval(1+$poste->tva->taux/100);
+            $totaltva += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
+            if ($poste->tva->taux == 6.0) {
+                $totaltva6 += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
+            }
+            if ($poste->tva->taux == 21.0) {
+                $totaltva21 += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
+            }
+        }
+        return ['totalht' => $totalht, 'totaltva' => $totaltva, 'totalttc' => $totalttc, 'totaltva6' => $totaltva6, 'totaltva21' => $totaltva21];
+    }
+    /**
      * Envoie un email
      * @param $id
      */
@@ -445,25 +467,7 @@ class VenteController extends Controller
 
     }
 
-    private static function calcultotaux($vente) {
-        $totalht = 0;
-        $totaltva = 0;
-        $totalttc = 0;
-        $totaltva6 = 0;
-        $totaltva21 = 0;
-        foreach ($vente->postes as $poste) {
-            $totalttc += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire);
-            $totalht += floatval($poste->pivot->quantite * $poste->pivot->prix_unitaire) / floatval(1+$poste->tva->taux/100);
-            $totaltva += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
-            if ($poste->tva->taux == 6.0) {
-                $totaltva6 += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
-            }
-            if ($poste->tva->taux == 21.0) {
-                $totaltva21 += floatval($poste->pivot->prix_unitaire / (1 + $poste->tva->taux/100) * ($poste->tva->taux/100)) * $poste->pivot->quantite;
-            }
-        }
-        return ['totalht' => $totalht, 'totaltva' => $totaltva, 'totalttc' => $totalttc, 'totaltva6' => $totaltva6, 'totaltva21' => $totaltva21];
-    }
+   
     /**
      * Afficher une vue d'ensemble sur les ventes réalisées par le magasin
      */

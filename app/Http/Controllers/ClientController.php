@@ -98,87 +98,93 @@ class ClientController extends Controller
                     return back();
              }
         }
-        
         // Si la localité et l'assujetissement n'existe pas
        if (!$localite && !$assujetti) {
-            $assujetti = Assujetti::create([
-                'intitule' => Crypt::encrypt(request('assujetti')),
-                'num_tva' => Crypt::encrypt(request('numtva')),
-            ]);
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
-            ]);
-            
-            $client = Client::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
-           
+            DB::transaction(function() use($localite, $assujetti) {
+                $assujetti = Assujetti::create([
+                    'intitule' => Crypt::encrypt(request('assujetti')),
+                    'num_tva' => Crypt::encrypt(request('numtva')),
+                ]);
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);
+                
+                $client = Client::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });   
         // Si l'assujetissement n'existe pas
        } elseif (!$assujetti) {
-           // Insertion l'assujetissement en bd
-            $assujetti = Assujetti::create([
-               'intitule' => Crypt::encrypt(request('assujetti')),
-               'num_tva' => Crypt::encrypt(request('numtva')),
-            ]);
-            $client = Client::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
+            DB::transaction(function() use($localite, $assujetti) {
+                // Insertion l'assujetissement en bd
+                $assujetti = Assujetti::create([
+                    'intitule' => Crypt::encrypt(request('assujetti')),
+                    'num_tva' => Crypt::encrypt(request('numtva')),
+                ]);
+                $client = Client::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });
         // Si la localite n'existe pas
        } elseif (!$localite) {
-           // Insertion de la localité en bd
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
-            ]);
-            $client = Client::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
+            DB::transaction(function() use($localite, $assujetti) {
+                // Insertion de la localité en bd
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);
+                $client = Client::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });
        } else {
-            //Insertion du client en base de données
-            $client = Client::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
+            DB::transaction(function() use($localite, $assujetti) {
+                //Insertion du client en base de données
+                $client = Client::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });   
        }
         
          flash('Le nouveau client a bien été enregistré.')->success();
