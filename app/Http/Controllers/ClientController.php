@@ -291,13 +291,6 @@ class ClientController extends Controller
                 $localite = $item;
             } 
         }
-        // si la localité n'existe pas
-        if (!$localite) {
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
-            ]);
-        }
 
         // Vérifie si le type d'assujetissement existe déjà
         $assujetti = "";
@@ -309,29 +302,39 @@ class ClientController extends Controller
             }  
         }
 
-        if (!$assujetti) {
-            $assujetti = Assujetti::create([
-                'intitule' => Crypt::encrypt(request('assujetti')),
-                'num_tva' => Crypt::encrypt(request('numtva')),
-            ]);
-        }
-        // $localite = Localite::where('intitule', request('localite'))->first();
-        // $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
+        DB::transaction(function() use($localite, $assujetti, $client) {
+            // si la localité n'existe pas
+            if (!$localite) {
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);
+            }
 
-        $client->update([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            
-        ]);
+            if (!$assujetti) {
+                $assujetti = Assujetti::create([
+                    'intitule' => Crypt::encrypt(request('assujetti')),
+                    'num_tva' => Crypt::encrypt(request('numtva')),
+                ]);
+            }
+            // $localite = Localite::where('intitule', request('localite'))->first();
+            // $assujetti = Assujetti::where('intitule', request('assujetti'))->first();
+
+            $client->update([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,  
+            ]);
+        });
+        
         flash('Le client a bien été mis à jour.')->success();
         return redirect('/clients');
     }

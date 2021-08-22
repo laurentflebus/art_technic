@@ -65,29 +65,32 @@ class PosteController extends Controller
         $tva = Tva::where('intitule', request('tva'))->first();
         // si la tva n'existe pas
         if (!$tva) {
-            // créé
-            $tva = Tva::create([
-                'intitule' => request('tva'),
-                'taux' => request('taux'),
-            ]);
-
-            $poste = Poste::create([
-                'numero' => request('numero'),
-                'intitule' => request('poste'),
-                'code_barre' => request('codebarre'),
-                'quantite' => request('quantite'),
-                'prix_unitaire' => request('prixunitaire'),
-                'tva_id' => $tva->id,
-            ]);
+            DB::transaction(function() {
+                $tva = Tva::create([
+                    'intitule' => request('tva'),
+                    'taux' => request('taux'),
+                ]);
+    
+                $poste = Poste::create([
+                    'numero' => request('numero'),
+                    'intitule' => request('poste'),
+                    'code_barre' => request('codebarre'),
+                    'quantite' => request('quantite'),
+                    'prix_unitaire' => request('prixunitaire'),
+                    'tva_id' => $tva->id,
+                ]);
+            });
         } else {
-            $poste = Poste::create([
-                'numero' => request('numero'),
-                'intitule' => request('poste'),
-                'code_barre' => request('codebarre'),
-                'quantite' => request('quantite'),
-                'prix_unitaire' => request('prixunitaire'),
-                'tva_id' => $tva->id,
-            ]);
+            DB::transaction(function() use($tva) {
+                $poste = Poste::create([
+                    'numero' => request('numero'),
+                    'intitule' => request('poste'),
+                    'code_barre' => request('codebarre'),
+                    'quantite' => request('quantite'),
+                    'prix_unitaire' => request('prixunitaire'),
+                    'tva_id' => $tva->id,
+                ]);
+            });
         }
 
         flash('Le nouveau poste de vente a bien été enregistré.')->success();
@@ -162,26 +165,25 @@ class PosteController extends Controller
                 $tva = $item;
             } 
         }
-        // si la localité n'existe pas
-        if (!$tva) {
-            $tva = Tva::create([
-                'intitule' => request('tva'),
-                'taux' => request('taux'),
+        DB::transaction(function() use($tva, $poste) {
+            // si la localité n'existe pas
+            if (!$tva) {
+                $tva = Tva::create([
+                    'intitule' => request('tva'),
+                    'taux' => request('taux'),
+                ]);
+            }
+            $poste->update([
+                    'numero' => request('numero'),
+                    'intitule' => request('poste'),
+                    'code_barre' => request('codebarre'),
+                    'quantite' => request('quantite'),
+                    'prix_unitaire' => request('prixunitaire'),
+                    'tva_id' => $tva->id,
+                
             ]);
-        }
-
-    
-        // $tva = Tva::where('intitule', request('tva'))->first();
-
-        $poste->update([
-                'numero' => request('numero'),
-                'intitule' => request('poste'),
-                'code_barre' => request('codebarre'),
-                'quantite' => request('quantite'),
-                'prix_unitaire' => request('prixunitaire'),
-                'tva_id' => $tva->id,
-            
-        ]);
+        });
+        
         flash('Le poste a bien été mis à jour.')->success();
         return redirect('/postes');
     }
@@ -200,7 +202,9 @@ class PosteController extends Controller
         flash('Le poste de vente ' . $poste->intitule . ' a bien été supprimé.')->success();
         return redirect('/postes');
     }
-
+    /**
+     * Afficher l'inventaire
+     */
     public function showinventory()
     {
         $postes = Poste::all();
