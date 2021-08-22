@@ -45,25 +45,27 @@ class SocieteController extends Controller
                 $localite = $item;
             } 
         }
-        // si elle n'existe pas
-        if (!$localite) {
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
+        DB::transaction(function() use($localite) {
+            // si elle n'existe pas
+            if (!$localite) {
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);
+            }
+            $societe = Societe::create([
+                'nom' => Crypt::encrypt(request('nom')),
+                'num_tva' => Crypt::encrypt(request('numtva')),
+                'registre' => Crypt::encrypt(request('registre')),
+                'num_compte' => Crypt::encrypt(request('numcompte')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
+                'remarque' => Crypt::encrypt(request('remarque')),
+                'localite_id' => $localite->id,
             ]);
-        }
-        $societe = Societe::create([
-            'nom' => Crypt::encrypt(request('nom')),
-            'num_tva' => Crypt::encrypt(request('numtva')),
-            'registre' => Crypt::encrypt(request('registre')),
-            'num_compte' => Crypt::encrypt(request('numcompte')),
-            'telephone' => Crypt::encrypt(request('telephone')),
-            'rue' => Crypt::encrypt(request('rue')),
-            'nrue' => Crypt::encrypt(request('nrue')),
-            'pays' => Crypt::encrypt(request('pays')),
-            'remarque' => Crypt::encrypt(request('remarque')),
-            'localite_id' => $localite->id,
-        ]);
+        });
         flash('Les informations de la société ' . Crypt::decrypt($societe->nom) .  ' ont bien été enregistrées.')->success();
         return redirect('/parametres/edit');
     }
@@ -106,26 +108,28 @@ class SocieteController extends Controller
                 $localite = $item;
             } 
         }
-        // si elle n'existe pas
-        if (!$localite) {
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
+        DB::transaction(function() use($localite, $societe) {
+            // si elle n'existe pas
+            if (!$localite) {
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);
+            }
+            $societe->update([
+                'nom' => Crypt::encrypt(request('nom')),
+                'num_tva' => Crypt::encrypt(request('numtva')),
+                'registre' => Crypt::encrypt(request('registre')),
+                'num_compte' => Crypt::encrypt(request('numcompte')),
+                'telephone' => Crypt::encrypt(request('telephone')),
+                'rue' => Crypt::encrypt(request('rue')),
+                'nrue' => Crypt::encrypt(request('nrue')),
+                'pays' => Crypt::encrypt(request('pays')),
+                'remarque' => Crypt::encrypt(request('remarque')),
+                'localite_id' => $localite->id,
             ]);
-        }
-        $societe->update([
-            'nom' => Crypt::encrypt(request('nom')),
-            'num_tva' => Crypt::encrypt(request('numtva')),
-            'registre' => Crypt::encrypt(request('registre')),
-            'num_compte' => Crypt::encrypt(request('numcompte')),
-            'telephone' => Crypt::encrypt(request('telephone')),
-            'rue' => Crypt::encrypt(request('rue')),
-            'nrue' => Crypt::encrypt(request('nrue')),
-            'pays' => Crypt::encrypt(request('pays')),
-            'remarque' => Crypt::encrypt(request('remarque')),
-            'localite_id' => $localite->id,
-        ]);
-
+        });
+        
         flash('Les nouvelles informations de la société ' . Crypt::decrypt($societe->nom) .  ' ont bien été enregistrées.')->success();
         return redirect('/parametres/edit');
 

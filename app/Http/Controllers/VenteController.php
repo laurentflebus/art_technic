@@ -205,9 +205,6 @@ class VenteController extends Controller
                 ]);
             }
         }
-        
-
-
         flash('La vente a bien été enregistrée.')->success();
         return redirect('/ventes');
         
@@ -238,11 +235,7 @@ class VenteController extends Controller
      */
     public function edit($id)
     {
-        $postes = Poste::all();
-        $clients = Client::all();
-        $vente = Vente::find($id);
 
-        return view('ventes.edit', ['postes' => $postes, 'clients' => $clients ,'vente' => $vente]);
     }
 
     /**
@@ -254,16 +247,6 @@ class VenteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'codebarre' => ['required'],
-            'numeroposte' => ['required'],
-            'intituleposte' => ['required'],
-            'quantite' => ['required'],
-            'prixtvac' => ['required'],
-            'client' => ['required'],
-            'modereglement' => ['required'],
-        ]);
-
         
     }
 
