@@ -92,98 +92,106 @@ class FournisseurController extends Controller
         
         // Si la localité et l'assujetissement n'existe pas
        if (!$localite && !$assujetti) {
-            $assujetti = Assujetti::create([
-                'intitule' => Crypt::encrypt(request('assujetti')),
-                'num_tva' => Crypt::encrypt(request('numtva')),
-            ]);
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
-            ]);           
-            $fournisseur = Fournisseur::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'num_compte' => Crypt::encrypt(request('numcompte')),
-                'delai_paiement' => Crypt::encrypt(request('delai')),
-                'reference_personnel' => Crypt::encrypt(request('reference')),
-                'remarque' => Crypt::encrypt(request('remarque')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);           
+            DB::transaction(function() {
+                $assujetti = Assujetti::create([
+                    'intitule' => Crypt::encrypt(request('assujetti')),
+                    'num_tva' => Crypt::encrypt(request('numtva')),
+                ]);
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);           
+                $fournisseur = Fournisseur::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'num_compte' => Crypt::encrypt(request('numcompte')),
+                    'delai_paiement' => Crypt::encrypt(request('delai')),
+                    'reference_personnel' => Crypt::encrypt(request('reference')),
+                    'remarque' => Crypt::encrypt(request('remarque')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });         
         // Si l'assujetissement n'existe pas
        } elseif (!$assujetti) {
-           // Insertion de l'assujetissement en bd
-            $assujetti = Assujetti::create([
-               'intitule' => Crypt::encrypt(request('assujetti')),
-               'num_tva' => Crypt::encrypt(request('numtva')),
-            ]);
-            $fournisseur = Fournisseur::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'num_compte' => Crypt::encrypt(request('numcompte')),
-                'delai_paiement' => Crypt::encrypt(request('delai')),
-                'reference_personnel' => Crypt::encrypt(request('reference')),
-                'remarque' => Crypt::encrypt(request('remarque')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
+           DB::transaction(function() use($localite) {
+                // Insertion de l'assujetissement en bd
+                $assujetti = Assujetti::create([
+                    'intitule' => Crypt::encrypt(request('assujetti')),
+                    'num_tva' => Crypt::encrypt(request('numtva')),
+                ]);
+                $fournisseur = Fournisseur::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'num_compte' => Crypt::encrypt(request('numcompte')),
+                    'delai_paiement' => Crypt::encrypt(request('delai')),
+                    'reference_personnel' => Crypt::encrypt(request('reference')),
+                    'remarque' => Crypt::encrypt(request('remarque')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+           });    
         // Si la localite n'existe pas
        } elseif (!$localite) {
-           // Insertion de la localité en bd
-            $localite = Localite::create([
-                'intitule' => Crypt::encrypt(request('localite')),
-                'code_postal' => Crypt::encrypt(request('codepostal')),
-            ]);
-            $fournisseur = Fournisseur::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'num_compte' => Crypt::encrypt(request('numcompte')),
-                'delai_paiement' => Crypt::encrypt(request('delai')),
-                'reference_personnel' => Crypt::encrypt(request('reference')),
-                'remarque' => Crypt::encrypt(request('remarque')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
+            DB::transaction(function() use($assujetti) {
+                // Insertion de la localité en bd
+                $localite = Localite::create([
+                    'intitule' => Crypt::encrypt(request('localite')),
+                    'code_postal' => Crypt::encrypt(request('codepostal')),
+                ]);
+                $fournisseur = Fournisseur::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'num_compte' => Crypt::encrypt(request('numcompte')),
+                    'delai_paiement' => Crypt::encrypt(request('delai')),
+                    'reference_personnel' => Crypt::encrypt(request('reference')),
+                    'remarque' => Crypt::encrypt(request('remarque')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });
         } else {
-            //Insertion du fournisseur en base de données
-            $fournisseur = Fournisseur::create([
-                'civilite' => Crypt::encrypt(request('civilite')),
-                'nom' => Crypt::encrypt(request('nom')),
-                'prenom' => Crypt::encrypt(request('prenom')),
-                'email' => Crypt::encrypt(request('email')),
-                'telephone' => Crypt::encrypt(request('telephone')),
-                'mobile' => Crypt::encrypt(request('mobile')),
-                'rue' => Crypt::encrypt(request('rue')),
-                'nrue' => Crypt::encrypt(request('nrue')),
-                'pays' => Crypt::encrypt(request('pays')),
-                'num_compte' => Crypt::encrypt(request('numcompte')),
-                'delai_paiement' => Crypt::encrypt(request('delai')),
-                'reference_personnel' => Crypt::encrypt(request('reference')),
-                'remarque' => Crypt::encrypt(request('remarque')),
-                'localite_id' => $localite->id,
-                'assujetti_id' => $assujetti->id,
-            ]);
+            DB::transaction(function() use($localite, $assujetti) {
+                //Insertion du fournisseur en base de données
+                $fournisseur = Fournisseur::create([
+                    'civilite' => Crypt::encrypt(request('civilite')),
+                    'nom' => Crypt::encrypt(request('nom')),
+                    'prenom' => Crypt::encrypt(request('prenom')),
+                    'email' => Crypt::encrypt(request('email')),
+                    'telephone' => Crypt::encrypt(request('telephone')),
+                    'mobile' => Crypt::encrypt(request('mobile')),
+                    'rue' => Crypt::encrypt(request('rue')),
+                    'nrue' => Crypt::encrypt(request('nrue')),
+                    'pays' => Crypt::encrypt(request('pays')),
+                    'num_compte' => Crypt::encrypt(request('numcompte')),
+                    'delai_paiement' => Crypt::encrypt(request('delai')),
+                    'reference_personnel' => Crypt::encrypt(request('reference')),
+                    'remarque' => Crypt::encrypt(request('remarque')),
+                    'localite_id' => $localite->id,
+                    'assujetti_id' => $assujetti->id,
+                ]);
+            });
         }
         
          flash('Le nouveau fournisseur a bien été enregistré.')->success();
@@ -288,7 +296,7 @@ class FournisseurController extends Controller
         // Récupère le fournisseur grâce à son id
         $fournisseur = Fournisseur::find($id);
         
-        // Récupère la localite
+        // Vérifie si la localité existe déjà en bd
         $localite="";       
         $localites = DB::table('localites')->get();        
         foreach ($localites as $item) {
@@ -297,8 +305,14 @@ class FournisseurController extends Controller
                 $localite = $item;
             } 
         }
-
-        // Récupère le type d'assujetissement
+        // Si la localité n'existe pas
+        if (!$localite) {
+            $localite = Localite::create([
+                'intitule' => Crypt::encrypt(request('localite')),
+                'code_postal' => Crypt::encrypt(request('codepostal')),
+            ]);
+        }
+        // Vérifie si le type d'assujetissement existe déjà
         $assujetti = "";
         $assujettis = DB::table('assujettis')->get();   
         foreach ($assujettis as $item) {
@@ -307,7 +321,13 @@ class FournisseurController extends Controller
                 $assujetti = $item;
             }  
         }
-
+        // Si le type d'assujetissement n'existe pas
+        if(!$assujetti) {
+            $assujetti = Assujetti::create([
+                'intitule' => Crypt::encrypt(request('assujetti')),
+                'num_tva' => Crypt::encrypt(request('numtva')),
+            ]);
+        }
         $fournisseur->update([
             'civilite' => Crypt::encrypt(request('civilite')),
             'nom' => Crypt::encrypt(request('nom')),

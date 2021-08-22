@@ -100,7 +100,7 @@ class ClientController extends Controller
         }
         // Si la localité et l'assujetissement n'existe pas
        if (!$localite && !$assujetti) {
-            DB::transaction(function() use($localite, $assujetti) {
+            DB::transaction(function() {
                 $assujetti = Assujetti::create([
                     'intitule' => Crypt::encrypt(request('assujetti')),
                     'num_tva' => Crypt::encrypt(request('numtva')),
@@ -126,7 +126,7 @@ class ClientController extends Controller
             });   
         // Si l'assujetissement n'existe pas
        } elseif (!$assujetti) {
-            DB::transaction(function() use($localite, $assujetti) {
+            DB::transaction(function() use($localite) {
                 // Insertion l'assujetissement en bd
                 $assujetti = Assujetti::create([
                     'intitule' => Crypt::encrypt(request('assujetti')),
@@ -148,7 +148,7 @@ class ClientController extends Controller
             });
         // Si la localite n'existe pas
        } elseif (!$localite) {
-            DB::transaction(function() use($localite, $assujetti) {
+            DB::transaction(function() use($assujetti) {
                 // Insertion de la localité en bd
                 $localite = Localite::create([
                     'intitule' => Crypt::encrypt(request('localite')),
@@ -187,8 +187,8 @@ class ClientController extends Controller
             });   
        }
         
-         flash('Le nouveau client a bien été enregistré.')->success();
-         return redirect('/clients');
+        flash('Le nouveau client a bien été enregistré.')->success();
+        return redirect('/clients');
     }
 
     /**
