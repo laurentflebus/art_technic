@@ -155,48 +155,51 @@ class AchatController extends Controller
         // année de l'achat
         $annee = date("y", strtotime(request('date')));
         $achat = DB::table('achats')->select('id')->latest()->first();
-        // Si il n'y a pas d'achat en BD
-        if ($achat) {
-            $numachat = $achat->id;
-            $numachat++;
-            $achat = Achat::create([
-                'numero' => 'A/' . $annee . '/'.$numachat,
-                'date' => request('date'),
-                'date_a_payer' => $date_a_payer,
-                'est_paye' => false,
-                'fournisseur_id' => request('fournisseur'),
-            ]);
-        } else {
-            $numachat = 1;   
-            $achat = Achat::create([
-                'numero' => 'A/' . $annee . '/'.$numachat,
-                'date' => request('date'),
-                'date_a_payer' => $date_a_payer,
-                'est_paye' => false,
-                'fournisseur_id' => request('fournisseur'),
-            ]);
-        }
-          
-        // Boucle pour les ajouts de postes d'achat
-        for ($i=1; $i <= $nbPoste; $i++) {           
-            $poste = Poste::where('numero', request('numeroposte'.$i))->first();
-            $montanttvac = request('montanttvac'.$i);
-            $quantite = request('quantite'.$i);
-            $prixtvac = floatval($montanttvac/$quantite);
-            $achat->postes()->attach($poste, [
-                'quantite' => request('quantite'.$i),
-                'prix_unitaire' => $prixtvac,
-                'detail' => 'Aucun détail',
-            ]);
-            // Si une quantité (en stock) existe pour ce poste 
-            if ($poste->quantite) {
-                // augmente la quantite du poste en stock
-                $quantitemaj = $poste->quantite + $quantite;
-                $poste->update([
-                    'quantite' => $quantitemaj,
+        DB::transaction(function() use($nbPoste ,$achat, $annee, $date_a_payer) {
+            // Si il y a un achat en BD
+            if ($achat) {
+                $numachat = $achat->id;
+                $numachat++;
+                $achat = Achat::create([
+                    'numero' => 'A/' . $annee . '/'.$numachat,
+                    'date' => request('date'),
+                    'date_a_payer' => $date_a_payer,
+                    'est_paye' => false,
+                    'fournisseur_id' => request('fournisseur'),
+                ]);
+            } else {
+                $numachat = 1;   
+                $achat = Achat::create([
+                    'numero' => 'A/' . $annee . '/'.$numachat,
+                    'date' => request('date'),
+                    'date_a_payer' => $date_a_payer,
+                    'est_paye' => false,
+                    'fournisseur_id' => request('fournisseur'),
                 ]);
             }
-        }
+            
+            // Boucle pour les ajouts de postes d'achat
+            for ($i=1; $i <= $nbPoste; $i++) {           
+                $poste = Poste::where('numero', request('numeroposte'.$i))->first();
+                $montanttvac = request('montanttvac'.$i);
+                $quantite = request('quantite'.$i);
+                $prixtvac = floatval($montanttvac/$quantite);
+                $achat->postes()->attach($poste, [
+                    'quantite' => request('quantite'.$i),
+                    'prix_unitaire' => $prixtvac,
+                    'detail' => 'Aucun détail',
+                ]);
+                // Si une quantité (en stock) existe pour ce poste 
+                if ($poste->quantite) {
+                    // augmente la quantite du poste en stock
+                    $quantitemaj = $poste->quantite + $quantite;
+                    $poste->update([
+                        'quantite' => $quantitemaj,
+                    ]);
+                }
+            }
+        });
+        
 
         flash('L\'achat a bien été enregistré.')->success();
         return redirect('/achats');

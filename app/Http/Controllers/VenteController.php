@@ -144,67 +144,70 @@ class VenteController extends Controller
         } else {
             $afacturer = true;
         }
-
         $client = request('client');
-        if (!$client) {
-            $vente = Vente::create([
-                'a_facturer' => $afacturer,
-                'est_paye' => $paye,
-                'a_un_bon_commande' => $b,
-                'date' => request('date'),
-                'modereglement_id' => $modereglement->id, 
-            ]);
-        } else {
-            $vente = Vente::create([
-                'a_facturer' => $afacturer,
-                'est_paye' => $paye,
-                'a_un_bon_commande' => $b,
-                'date' => request('date'),
-                'client_id' => request('client'),
-                'modereglement_id' => $modereglement->id, 
-            ]);
-        }
-        // année facture
-        $timestamp = strtotime(request('date'));
-        $annee = date("y", $timestamp);
-        $fact = DB::table('factures')->select('id')->latest()->first();
-        // Si la requete a une facture (request(facture)) et pas de facture en BD
-        if ($facture && !$fact) {
-            $numfacture = 1;
-            $facture = Facture::create([
-                'numero' => 'V/' . $annee . '/'.$numfacture,
-                'date' => request('date'),
-                'vente_id' => $vente->id,
-            ]);
-        }
-        // Si la requete a une facture (request(facture)) et qu'il y a des factures en BD
-        if ($facture && $fact) {
-            $numfacture = $fact->id;
-            $numfacture++;
-            $facture = Facture::create([
-                'numero' => 'V/' . $annee . '/'.$numfacture,
-                'date' => request('date'),
-                'vente_id' => $vente->id,
-            ]);
-        } 
-          
-        // Boucle pour les ajouts de postes de vente
-        for ($i=1; $i <= $nbPoste; $i++) {           
-            $poste = Poste::where('numero', request('numeroposte'.$i))->first();
-            $vente->postes()->attach($poste, [
-                'quantite' => request('quantite'.$i),
-                'prix_unitaire' => request('prixtvac'.$i),
-                'detail' => 'Aucun détail',
-            ]);
-            // Si une quantité (en stock) existe pour ce poste 
-            if ($poste->quantite) {
-                // diminue la quantite du poste de vente en stock
-                $quantitemaj = $poste->quantite - request('quantite'.$i);
-                $poste->update([
-                    'quantite' => $quantitemaj,
+
+        DB::transaction(function() use($nbPoste ,$client, $afacturer, $paye, $b, $modereglement, $facture) {
+            if (!$client) {
+                $vente = Vente::create([
+                    'a_facturer' => $afacturer,
+                    'est_paye' => $paye,
+                    'a_un_bon_commande' => $b,
+                    'date' => request('date'),
+                    'modereglement_id' => $modereglement->id, 
+                ]);
+            } else {
+                $vente = Vente::create([
+                    'a_facturer' => $afacturer,
+                    'est_paye' => $paye,
+                    'a_un_bon_commande' => $b,
+                    'date' => request('date'),
+                    'client_id' => request('client'),
+                    'modereglement_id' => $modereglement->id, 
                 ]);
             }
-        }
+            // année facture
+            $timestamp = strtotime(request('date'));
+            $annee = date("y", $timestamp);
+            $fact = DB::table('factures')->select('id')->latest()->first();
+            // Si la requete a une facture (request(facture)) et pas de facture en BD
+            if ($facture && !$fact) {
+                $numfacture = 1;
+                $facture = Facture::create([
+                    'numero' => 'V/' . $annee . '/'.$numfacture,
+                    'date' => request('date'),
+                    'vente_id' => $vente->id,
+                ]);
+            }
+            // Si la requete a une facture (request(facture)) et qu'il y a des factures en BD
+            if ($facture && $fact) {
+                $numfacture = $fact->id;
+                $numfacture++;
+                $facture = Facture::create([
+                    'numero' => 'V/' . $annee . '/'.$numfacture,
+                    'date' => request('date'),
+                    'vente_id' => $vente->id,
+                ]);
+            } 
+              
+            // Boucle pour les ajouts de postes de vente
+            for ($i=1; $i <= $nbPoste; $i++) {           
+                $poste = Poste::where('numero', request('numeroposte'.$i))->first();
+                $vente->postes()->attach($poste, [
+                    'quantite' => request('quantite'.$i),
+                    'prix_unitaire' => request('prixtvac'.$i),
+                    'detail' => 'Aucun détail',
+                ]);
+                // Si une quantité (en stock) existe pour ce poste 
+                if ($poste->quantite) {
+                    // diminue la quantite du poste de vente en stock
+                    $quantitemaj = $poste->quantite - request('quantite'.$i);
+                    $poste->update([
+                        'quantite' => $quantitemaj,
+                    ]);
+                }
+            }
+        });
+        
         flash('La vente a bien été enregistrée.')->success();
         return redirect('/ventes');
         
