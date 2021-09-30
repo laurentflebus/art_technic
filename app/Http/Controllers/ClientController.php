@@ -229,29 +229,11 @@ class ClientController extends Controller
             $compare = Crypt::decrypt($assujetti->intitule);
         }
 
-        $pays = DB::table('clients')->select('pays')->get();        
-        foreach ($pays as $pay) { 
-            if ($compare == Crypt::decrypt($pay->pays)) {
-                $pays->forget($pays->search($pay));
-            }
-            $compare = Crypt::decrypt($pay->pays);
-        }
-
-        $civilites = DB::table('clients')->select('civilite')->get();
-        foreach ($civilites as $item) { 
-            if ($compare == Crypt::decrypt($item->civilite)) {
-                $civilites->forget($civilites->search($item));
-            }
-            $compare = Crypt::decrypt($item->civilite);
-        }
-
         $client = Client::find($id);
 
         return view('clients.edit', [
             'client' => $client,
-            'pays' => $pays,
             'assujettis' => $assujettis,
-            'civilites' => $civilites,
         ]);
     }
 

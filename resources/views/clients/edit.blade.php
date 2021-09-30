@@ -15,18 +15,33 @@
                     <fieldset class="form-group">
                         <div class="row">
                           <legend class="col-form-label col-sm-4 pt-0">Civilité</legend>
-                            <div class="col-sm-8">
-                                @foreach ($civilites as $item)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="civilite" value="{{ Crypt::decrypt($item->civilite) }}"
-                                        @if (Crypt::decrypt($client->civilite) == Crypt::decrypt($item->civilite))
+                            <div class="col-md-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Monsieur"
+                                        @if (Crypt::decrypt($client->civilite) == "Monsieur")
+                                                checked
+                                        @endif
+                                    >
+                                    <label class="form-check-label">Mr.</label>
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Madame"
+                                        @if (Crypt::decrypt($client->civilite) == "Madame")
                                             checked
                                         @endif
-                                        >
-                                        <label class="form-check-label">{{ Crypt::decrypt($item->civilite) }}</label>
-                                    </div>
-                                @endforeach
-                                
+                                    >
+                                    <label class="form-check-label">Mme</label>
+                                </div>
+        
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Mademoiselle"
+                                        @if (Crypt::decrypt($client->civilite) == "Mademoiselle")
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="form-check-label">Mlle</label>
+                                </div>
                                 
                             </div>
                         </div>
@@ -113,13 +128,21 @@
                 <div class="form-group col-md-4">
                     <label>Pays</label>
                     <select id="pays" name="pays" class="form-control">
-                        @foreach ($pays as $item)
-                            <option value="{{ Crypt::decrypt($item->pays) }}"
-                                @if (Crypt::decrypt($client->pays) == Crypt::decrypt($item->pays))
-                                    selected="selected"
-                                @endif
-                            >{{ Crypt::decrypt($item->pays) }}</option>
-                        @endforeach
+                        <option
+                        @if (Crypt::decrypt($client->pays) == "Belgique")
+                            selected
+                        @endif
+                        >Belgique</option>
+                        <option
+                        @if (Crypt::decrypt($client->pays) == "France")
+                            selected
+                        @endif
+                        >France</option>
+                        <option
+                        @if (Crypt::decrypt($client->pays) == "Luxembourg")
+                            selected
+                        @endif
+                        >Luxembourg</option>
                     </select>
                     @if ($errors->has('pays'))
                         <p class="alert alert-danger">{{ $errors->first('pays') }}</p>

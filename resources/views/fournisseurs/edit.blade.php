@@ -16,22 +16,45 @@
                         <div class="row">
                           <legend class="col-form-label col-sm-4 pt-0">Civilité</legend>
                             <div class="col-sm-8">
-                                @foreach ($civilites as $item)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="civilite" value="{{ Crypt::decrypt($item->civilite) }}"
-                                        @if (Crypt::decrypt($fournisseur->civilite) == Crypt::decrypt($item->civilite))
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Aucune"
+                                        @if (Crypt::decrypt($fournisseur->civilite) == "Aucune")
                                             checked
                                         @endif
-                                        >
-                                          <label class="form-check-label">{{ Crypt::decrypt($item->civilite) }}</label>   
-                                    </div>
-                                @endforeach
+                                    >
+                                    <label class="form-check-label">Aucune</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Monsieur"
+                                        @if (Crypt::decrypt($fournisseur->civilite) == "Monsieur")
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="form-check-label">Mr.</label>
+                                </div>
                                 
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Madame"
+                                        @if (Crypt::decrypt($fournisseur->civilite) == "Madame")
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="form-check-label">Mme</label>
+                                </div>
+        
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="civilite" value="Mademoiselle"
+                                        @if (Crypt::decrypt($fournisseur->civilite) == "Mademoiselle")
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="form-check-label">Mlle</label>
+                                </div>
                                 
                             </div>
                         </div>
                     </fieldset>
-                </div> 
+                </div>
                 
               <div class="form-group col-md-4">
                 <label>Nom</label>
@@ -113,13 +136,22 @@
                 <div class="form-group col-md-4">
                     <label>Pays</label>
                     <select id="pays" name="pays" class="form-control">
-                        @foreach ($pays as $item)
-                            <option value="{{ Crypt::decrypt($item->pays) }}"
-                                @if (Crypt::decrypt($fournisseur->pays) == Crypt::decrypt($item->pays))
-                                    selected="selected"
-                                @endif
-                            >{{ Crypt::decrypt($item->pays) }}</option>
-                        @endforeach
+                        <option
+                        @if (Crypt::decrypt($fournisseur->pays) == "Belgique")
+                            selected
+                        @endif
+                        >Belgique</option>
+                        <option 
+                        @if (Crypt::decrypt($fournisseur->pays) == "France")
+                            selected
+                        @endif
+                        >France</option>
+                        <option
+                        
+                        @if (Crypt::decrypt($fournisseur->pays) == "Luxembourg")
+                            selected
+                        @endif
+                        >Luxembourg</option>
                     </select>
                     @if ($errors->has('pays'))
                         <p class="alert alert-danger">{{ $errors->first('pays') }}</p>
@@ -165,18 +197,43 @@
                     <label>Référence personnel</label>
                     <input type="text" name="reference" class="form-control" value="{{ Crypt::decrypt($fournisseur->reference_personnel) }}">
                 </div>
-                <div class="form-group col-md-4">
-                    <label>Délai de paiement</label>
-                    <select id="delai" name="delai" class="form-control">
-                        @foreach ($delais as $item)
-                            <option value="{{ Crypt::decrypt($item->delai_paiement) }}"
-                                @if (Crypt::decrypt($fournisseur->delai_paiement) == Crypt::decrypt($item->delai_paiement))
-                                    selected="selected"
-                                @endif
-                            >{{ Crypt::decrypt($item->delai_paiement) }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <select id="delai" name="delai" class="form-control">
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "30 jours fin de mois")
+                        selected
+                    @endif
+                    >30 jours fin de mois</option>
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "60 jours fin de mois")
+                        selected
+                    @endif
+                    >60 jours fin de mois</option>
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "90 jours fin de mois")
+                        selected
+                    @endif
+                    >90 jours fin de mois</option>
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "120 jours fin de mois")
+                        selected
+                    @endif
+                    >120 jours fin de mois</option>
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "Comptant")
+                        selected
+                    @endif
+                    >Comptant</option>
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "15 jours")
+                        selected
+                    @endif
+                    >15 jours</option>
+                    <option
+                    @if (Crypt::decrypt($fournisseur->delai_paiement) == "30 jours")
+                        selected
+                    @endif
+                    >30 jours</option>
+                </select>
             </div>
                 
             <div class="mb-3">

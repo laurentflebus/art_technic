@@ -233,38 +233,11 @@ class FournisseurController extends Controller
             $compare = Crypt::decrypt($assujetti->intitule);
         }
 
-        $pays = DB::table('fournisseurs')->select('pays')->get();        
-        foreach ($pays as $pay) { 
-            if ($compare == Crypt::decrypt($pay->pays)) {
-                $pays->forget($pays->search($pay));
-            }
-            $compare = Crypt::decrypt($pay->pays);
-        }
-
-        $civilites = DB::table('fournisseurs')->select('civilite')->get();
-        foreach ($civilites as $item) { 
-            if ($compare == Crypt::decrypt($item->civilite)) {
-                $civilites->forget($civilites->search($item));
-            }
-            $compare = Crypt::decrypt($item->civilite);
-        }
-        
-
-        $delais = DB::table('fournisseurs')->select('delai_paiement')->get();
-        foreach ($delais as $item) {
-            if ($compare == Crypt::decrypt($item->delai_paiement)) {
-                $delais->forget($delais->search($item));
-            }
-            $compare = Crypt::decrypt($item->delai_paiement);
-        }
         $fournisseur = Fournisseur::find($id);
 
         return view('fournisseurs.edit', [
             'fournisseur' => $fournisseur,
-            'pays' => $pays,
             'assujettis' => $assujettis,
-            'civilites' => $civilites,
-            'delais' => $delais,
         ]);
     }
 
