@@ -67,7 +67,7 @@ class SocieteController extends Controller
             ]);
         });
         flash('Les informations de la société ' . Crypt::decrypt($societe->nom) .  ' ont bien été enregistrées.')->success();
-        return redirect('/parametres/edit');
+        return redirect('/');
     }
     public function edit()
     {

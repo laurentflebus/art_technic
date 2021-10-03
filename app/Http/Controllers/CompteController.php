@@ -56,7 +56,7 @@ class CompteController extends Controller
             'admin' => request('admin')
         ]);
         flash('Le nouvel utilisateur a bien été enregistré.')->success();
-        return redirect('/accueil');
+        return redirect('/');
     }
 
     // afficher le formulaire de connexion
