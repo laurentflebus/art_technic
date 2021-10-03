@@ -24,9 +24,9 @@ class SocieteController extends Controller
          // Validation des champs du formulaire info société
          request()->validate([
             'nom' => ['required', 'regex:/^[a-z éèàùç,.\'-]+$/i'],
-            'numtva' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'numtva' => ['required', 'regex:/^[a-z0-9 -]+$/i'],
             'registre' => ['nullable', 'regex:/^[a-z0-9]+$/i'],
-            'numcompte' => ['nullable', 'regex:/^[a-z0-9]+$/i'],
+            'numcompte' => ['nullable', 'regex:/^[a-z0-9 ]+$/i'],
             'telephone' => ['nullable', 'numeric', 'min:8'],
             'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'nrue' => ['required', 'alpha_num'],
@@ -87,9 +87,9 @@ class SocieteController extends Controller
         // Validation des champs du formulaire info société
         request()->validate([
             'nom' => ['required', 'regex:/^[a-z éèàùç,.\'-]+$/i'],
-            'numtva' => ['required', 'regex:/^[a-z0-9]+$/i'],
+            'numtva' => ['required', 'regex:/^[a-z0-9 -]+$/i'],
             'registre' => ['nullable', 'regex:/^[a-z0-9]+$/i'],
-            'numcompte' => ['nullable', 'regex:/^[a-z0-9]+$/i'],
+            'numcompte' => ['nullable', 'regex:/^[a-z0-9 ]+$/i'],
             'telephone' => ['nullable', 'numeric', 'min:8'],
             'rue' => ['required', 'regex:/^[a-z éèàùç.,\'-]+$/i'],
             'nrue' => ['required', 'alpha_num'],
